@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    modularization_statistics (1.33.0)
+    modularization_statistics (1.33.1)
       bigrails-teams
       code_ownership
       dogapi
