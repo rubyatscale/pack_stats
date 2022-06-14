@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'modularization_statistics'
-  spec.version       = '1.33.1'
+  spec.version       = '1.34.0'
   spec.authors       = ['Gusto Engineers']
   spec.email         = ['dev@gusto.com']
 
