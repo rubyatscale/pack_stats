@@ -83,7 +83,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
       let(:metrics) { subject }
 
       before do
-        Teams.bust_caches!
+        CodeTeams.bust_caches!
         CodeOwnership.bust_caches!
       end
 

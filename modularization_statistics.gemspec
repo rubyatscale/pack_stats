@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'modularization_statistics'
-  spec.version       = '1.33.1'
+  spec.version       = '1.34.0'
   spec.authors       = ['Gusto Engineers']
   spec.email         = ['dev@gusto.com']
 
@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'bigrails-teams'
+  spec.add_dependency 'code_teams'
   spec.add_dependency 'code_ownership'
   spec.add_dependency 'dogapi'
   spec.add_dependency 'package_protections'
