@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'bigrails-teams'
+  spec.add_dependency 'code_teams'
   spec.add_dependency 'code_ownership'
   spec.add_dependency 'dogapi'
   spec.add_dependency 'package_protections'

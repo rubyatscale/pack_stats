@@ -44,7 +44,7 @@ RSpec.shared_context 'team names are based off of file names' do
       match = filename.match(/_(\d+)/)
       if match
         team_number = match[1]
-        sorbet_double(Teams::Team, name: "Team #{team_number}")
+        sorbet_double(CodeTeams::Team, name: "Team #{team_number}")
       end
     end
   end
@@ -52,6 +52,6 @@ end
 
 RSpec.shared_context 'only one team' do
   before do
-    allow(CodeOwnership).to receive(:for_file).and_return(sorbet_double(Teams::Team, name: 'Some team'))
+    allow(CodeOwnership).to receive(:for_file).and_return(sorbet_double(CodeTeams::Team, name: 'Some team'))
   end
 end

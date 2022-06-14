@@ -7,7 +7,7 @@ module ModularizationStatistics
 
       const :is_componentized_file, T::Boolean
       const :is_packaged_file, T::Boolean
-      const :team_owner, T.nilable(Teams::Team)
+      const :team_owner, T.nilable(CodeTeams::Team)
       const :pathname, Pathname
 
       sig { returns(T::Boolean) }

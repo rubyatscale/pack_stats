@@ -12,18 +12,18 @@ module CodeOwnership
   sig do
     params(
       backtrace: T.nilable(T::Array[::String]),
-      excluded_teams: T::Array[::Teams::Team]
-    ).returns(T.nilable(::Teams::Team))
+      excluded_teams: T::Array[::CodeTeams::Team]
+    ).returns(T.nilable(::CodeTeams::Team))
   end
   def for_backtrace(backtrace, excluded_teams: T.unsafe(nil)); end
 
-  sig { params(klass: T.nilable(T.any(::Class, ::Module))).returns(T.nilable(::Teams::Team)) }
+  sig { params(klass: T.nilable(T.any(::Class, ::Module))).returns(T.nilable(::CodeTeams::Team)) }
   def for_class(klass); end
 
-  sig { params(file: ::String).returns(T.nilable(::Teams::Team)) }
+  sig { params(file: ::String).returns(T.nilable(::CodeTeams::Team)) }
   def for_file(file); end
 
-  sig { params(package: ::ParsePackwerk::Package).returns(T.nilable(::Teams::Team)) }
+  sig { params(package: ::ParsePackwerk::Package).returns(T.nilable(::CodeTeams::Team)) }
   def for_package(package); end
 
   sig { params(files: T::Array[::String], autocorrect: T::Boolean, stage_changes: T::Boolean).void }
@@ -40,6 +40,7 @@ end
 
 class CodeOwnership::Cli
   class << self
+    def for_file(argv); end
     def run!(argv); end
 
     private
@@ -64,7 +65,7 @@ module CodeOwnership::Private
     sig { params(files: T::Array[::String]).returns(T::Hash[::String, T::Array[::String]]) }
     def files_by_mapper(files); end
 
-    sig { params(team_name: ::String, location_of_reference: ::String).returns(::Teams::Team) }
+    sig { params(team_name: ::String, location_of_reference: ::String).returns(::CodeTeams::Team) }
     def find_team!(team_name, location_of_reference); end
 
     sig { returns(T::Array[::CodeOwnership::Private::OwnershipMappers::Interface]) }
@@ -107,19 +108,19 @@ class CodeOwnership::Private::OwnershipMappers::FileAnnotations
   sig { override.void }
   def bust_caches!; end
 
-  sig { override.returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { override.returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def codeowners_lines_to_owners; end
 
   sig { override.returns(::String) }
   def description; end
 
-  sig { params(filename: ::String).returns(T.nilable(::Teams::Team)) }
+  sig { params(filename: ::String).returns(T.nilable(::CodeTeams::Team)) }
   def file_annotation_based_owner(filename); end
 
-  sig { override.params(file: ::String).returns(T.nilable(::Teams::Team)) }
+  sig { override.params(file: ::String).returns(T.nilable(::CodeTeams::Team)) }
   def map_file_to_owner(file); end
 
-  sig { override.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { override.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def map_files_to_owners(files); end
 
   sig { params(filename: ::String).void }
@@ -134,16 +135,16 @@ module CodeOwnership::Private::OwnershipMappers::Interface
   sig { abstract.void }
   def bust_caches!; end
 
-  sig { abstract.returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { abstract.returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def codeowners_lines_to_owners; end
 
   sig { abstract.returns(::String) }
   def description; end
 
-  sig { abstract.params(file: ::String).returns(T.nilable(::Teams::Team)) }
+  sig { abstract.params(file: ::String).returns(T.nilable(::CodeTeams::Team)) }
   def map_file_to_owner(file); end
 
-  sig { abstract.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { abstract.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def map_files_to_owners(files); end
 end
 
@@ -153,19 +154,19 @@ class CodeOwnership::Private::OwnershipMappers::JsPackageOwnership
   sig { override.void }
   def bust_caches!; end
 
-  sig { override.returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { override.returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def codeowners_lines_to_owners; end
 
   sig { override.returns(::String) }
   def description; end
 
-  sig { override.params(file: ::String).returns(T.nilable(::Teams::Team)) }
+  sig { override.params(file: ::String).returns(T.nilable(::CodeTeams::Team)) }
   def map_file_to_owner(file); end
 
-  sig { override.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { override.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def map_files_to_owners(files); end
 
-  sig { params(package: ::CodeOwnership::Private::ParseJsPackages::Package).returns(T.nilable(::Teams::Team)) }
+  sig { params(package: ::CodeOwnership::Private::ParseJsPackages::Package).returns(T.nilable(::CodeTeams::Team)) }
   def owner_for_package(package); end
 
   private
@@ -180,19 +181,19 @@ class CodeOwnership::Private::OwnershipMappers::PackageOwnership
   sig { override.void }
   def bust_caches!; end
 
-  sig { override.returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { override.returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def codeowners_lines_to_owners; end
 
   sig { override.returns(::String) }
   def description; end
 
-  sig { override.params(file: ::String).returns(T.nilable(::Teams::Team)) }
+  sig { override.params(file: ::String).returns(T.nilable(::CodeTeams::Team)) }
   def map_file_to_owner(file); end
 
-  sig { override.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { override.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def map_files_to_owners(files); end
 
-  sig { params(package: ::ParsePackwerk::Package).returns(T.nilable(::Teams::Team)) }
+  sig { params(package: ::ParsePackwerk::Package).returns(T.nilable(::CodeTeams::Team)) }
   def owner_for_package(package); end
 
   private
@@ -207,16 +208,16 @@ class CodeOwnership::Private::OwnershipMappers::TeamGlobs
   sig { override.void }
   def bust_caches!; end
 
-  sig { override.returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { override.returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def codeowners_lines_to_owners; end
 
   sig { override.returns(::String) }
   def description; end
 
-  sig { override.params(file: ::String).returns(T.nilable(::Teams::Team)) }
+  sig { override.params(file: ::String).returns(T.nilable(::CodeTeams::Team)) }
   def map_file_to_owner(file); end
 
-  sig { override.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::Teams::Team)]) }
+  sig { override.params(files: T::Array[::String]).returns(T::Hash[::String, T.nilable(::CodeTeams::Team)]) }
   def map_files_to_owners(files); end
 end
 
@@ -248,7 +249,7 @@ end
 CodeOwnership::Private::ParseJsPackages::ROOT_PACKAGE_NAME = T.let(T.unsafe(nil), String)
 module CodeOwnership::Private::TeamPlugins; end
 
-class CodeOwnership::Private::TeamPlugins::Github < ::Teams::Plugin
+class CodeOwnership::Private::TeamPlugins::Github < ::CodeTeams::Plugin
   sig { returns(::CodeOwnership::Private::TeamPlugins::Github::GithubStruct) }
   def github; end
 end
@@ -267,7 +268,7 @@ class CodeOwnership::Private::TeamPlugins::Github::GithubStruct < ::Struct
   end
 end
 
-class CodeOwnership::Private::TeamPlugins::Ownership < ::Teams::Plugin
+class CodeOwnership::Private::TeamPlugins::Ownership < ::CodeTeams::Plugin
   sig { returns(T::Array[::String]) }
   def owned_globs; end
 end

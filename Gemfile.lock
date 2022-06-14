@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     modularization_statistics (1.33.1)
-      bigrails-teams
       code_ownership
+      code_teams
       dogapi
       package_protections
       parse_packwerk
@@ -18,11 +18,11 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     ast (2.4.2)
-    bigrails-teams (0.1.0)
-      sorbet-runtime
-    code_ownership (1.23.0)
-      bigrails-teams
+    code_ownership (1.28.0)
+      code_teams (~> 1.0)
       parse_packwerk
+      sorbet-runtime
+    code_teams (1.0.0)
       sorbet-runtime
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
