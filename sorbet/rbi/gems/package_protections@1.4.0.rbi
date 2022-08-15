@@ -12,6 +12,9 @@ module PackageProtections
     sig { void }
     def bust_cache!; end
 
+    sig { params(blk: T.proc.params(arg0: ::PackageProtections::Private::Configuration).void).void }
+    def configure(&blk); end
+
     sig do
       params(
         packages: T::Array[::ParsePackwerk::Package],
@@ -19,14 +22,6 @@ module PackageProtections
       ).returns(T::Array[::PackageProtections::Offense])
     end
     def get_offenses(packages:, new_violations:); end
-
-    sig do
-      params(
-        package_names: T::Array[::String],
-        all_packages: T::Array[::ParsePackwerk::Package]
-      ).returns(T::Array[::ParsePackwerk::Package])
-    end
-    def packages_for_names(package_names, all_packages); end
 
     sig { params(identifier: ::String).returns(T::Hash[T.untyped, T.untyped]) }
     def private_cop_config(identifier); end
@@ -102,6 +97,9 @@ module PackageProtections::Private
     sig { void }
     def bust_cache!; end
 
+    sig { returns(::PackageProtections::Private::Configuration) }
+    def config; end
+
     sig do
       params(
         packages: T::Array[::ParsePackwerk::Package],
@@ -112,14 +110,6 @@ module PackageProtections::Private
 
     sig { params(name: ::String).returns(::PackageProtections::ProtectedPackage) }
     def get_package_with_name(name); end
-
-    sig do
-      params(
-        package_names: T::Array[::String],
-        all_packages: T::Array[::ParsePackwerk::Package]
-      ).returns(T::Array[::ParsePackwerk::Package])
-    end
-    def packages_for_names(package_names, all_packages); end
 
     sig { params(identifier: ::String).returns(T::Hash[T.untyped, T.untyped]) }
     def private_cop_config(identifier); end
@@ -195,6 +185,23 @@ class PackageProtections::Private::ColorizedString::Color < ::T::Enum
   end
 end
 
+class PackageProtections::Private::Configuration
+  sig { void }
+  def initialize; end
+
+  sig { void }
+  def bust_cache!; end
+
+  sig { returns(T::Array[::PackageProtections::ProtectionInterface]) }
+  def default_protections; end
+
+  sig { returns(T::Array[::PackageProtections::ProtectionInterface]) }
+  def protections; end
+
+  sig { params(protections: T::Array[::PackageProtections::ProtectionInterface]).void }
+  def protections=(protections); end
+end
+
 class PackageProtections::Private::IncomingPrivacyProtection
   include ::PackageProtections::ProtectionInterface
 
@@ -256,51 +263,6 @@ class PackageProtections::Private::MetadataModifiers
   end
 end
 
-class PackageProtections::Private::MultipleNamespacesProtection
-  include ::PackageProtections::ProtectionInterface
-  include ::PackageProtections::RubocopProtectionInterface
-
-  sig do
-    override
-      .params(
-        packages: T::Array[::PackageProtections::ProtectedPackage]
-      ).returns(T::Array[::PackageProtections::RubocopProtectionInterface::CopConfig])
-  end
-  def cop_configs(packages); end
-
-  sig { params(package: ::PackageProtections::ProtectedPackage).returns(T::Hash[T.untyped, T.untyped]) }
-  def custom_cop_config(package); end
-
-  sig do
-    override
-      .params(
-        protected_packages: T::Array[::PackageProtections::ProtectedPackage]
-      ).returns(T::Array[::PackageProtections::Offense])
-  end
-  def get_offenses_for_existing_violations(protected_packages); end
-
-  sig { override.returns(::String) }
-  def humanized_protection_description; end
-
-  sig { override.returns(::String) }
-  def humanized_protection_name; end
-
-  sig { override.returns(::String) }
-  def identifier; end
-
-  sig do
-    override
-      .params(
-        behavior: ::PackageProtections::ViolationBehavior,
-        package: ::ParsePackwerk::Package
-      ).returns(T.nilable(::String))
-  end
-  def unmet_preconditions_for_behavior(behavior, package); end
-end
-
-PackageProtections::Private::MultipleNamespacesProtection::COP_NAME = T.let(T.unsafe(nil), String)
-PackageProtections::Private::MultipleNamespacesProtection::IDENTIFIER = T.let(T.unsafe(nil), String)
-
 class PackageProtections::Private::OutgoingDependencyProtection
   include ::PackageProtections::ProtectionInterface
 
@@ -358,48 +320,6 @@ class PackageProtections::Private::Output
     def p_colorized(str, colorized:); end
   end
 end
-
-class PackageProtections::Private::TypedApiProtection
-  include ::PackageProtections::ProtectionInterface
-  include ::PackageProtections::RubocopProtectionInterface
-
-  sig do
-    override
-      .params(
-        packages: T::Array[::PackageProtections::ProtectedPackage]
-      ).returns(T::Array[::PackageProtections::RubocopProtectionInterface::CopConfig])
-  end
-  def cop_configs(packages); end
-
-  sig do
-    override
-      .params(
-        protected_packages: T::Array[::PackageProtections::ProtectedPackage]
-      ).returns(T::Array[::PackageProtections::Offense])
-  end
-  def get_offenses_for_existing_violations(protected_packages); end
-
-  sig { override.returns(::String) }
-  def humanized_protection_description; end
-
-  sig { override.returns(::String) }
-  def humanized_protection_name; end
-
-  sig { override.returns(::String) }
-  def identifier; end
-
-  sig do
-    override
-      .params(
-        behavior: ::PackageProtections::ViolationBehavior,
-        package: ::ParsePackwerk::Package
-      ).returns(T.nilable(::String))
-  end
-  def unmet_preconditions_for_behavior(behavior, package); end
-end
-
-PackageProtections::Private::TypedApiProtection::COP_NAME = T.let(T.unsafe(nil), String)
-PackageProtections::Private::TypedApiProtection::IDENTIFIER = T.let(T.unsafe(nil), String)
 
 class PackageProtections::Private::VisibilityProtection
   include ::PackageProtections::ProtectionInterface
@@ -560,15 +480,25 @@ module PackageProtections::RubocopProtectionInterface
   abstract!
 
   sig do
-    abstract
-      .params(
-        packages: T::Array[::PackageProtections::ProtectedPackage]
-      ).returns(T::Array[::PackageProtections::RubocopProtectionInterface::CopConfig])
+    params(
+      packages: T::Array[::PackageProtections::ProtectedPackage]
+    ).returns(T::Array[::PackageProtections::RubocopProtectionInterface::CopConfig])
   end
   def cop_configs(packages); end
 
+  sig { abstract.returns(::String) }
+  def cop_name; end
+
   sig { params(package: ::PackageProtections::ProtectedPackage).returns(T::Hash[T.untyped, T.untyped]) }
   def custom_cop_config(package); end
+
+  sig do
+    override
+      .params(
+        protected_packages: T::Array[::PackageProtections::ProtectedPackage]
+      ).returns(T::Array[::PackageProtections::Offense])
+  end
+  def get_offenses_for_existing_violations(protected_packages); end
 
   sig do
     override
@@ -577,6 +507,21 @@ module PackageProtections::RubocopProtectionInterface
       ).returns(T::Array[::PackageProtections::Offense])
   end
   def get_offenses_for_new_violations(new_violations); end
+
+  sig { abstract.returns(T::Array[::String]) }
+  def included_globs_for_pack; end
+
+  sig { abstract.params(file: ::String).returns(::String) }
+  def message_for_fail_on_any(file); end
+
+  sig do
+    override
+      .params(
+        behavior: ::PackageProtections::ViolationBehavior,
+        package: ::ParsePackwerk::Package
+      ).returns(T.nilable(::String))
+  end
+  def unmet_preconditions_for_behavior(behavior, package); end
 
   private
 
@@ -630,3 +575,90 @@ class PackageProtections::ViolationBehavior < ::T::Enum
     def from_raw_value(value); end
   end
 end
+
+module RuboCop; end
+module RuboCop::Cop; end
+module RuboCop::Cop::PackageProtections; end
+
+class RuboCop::Cop::PackageProtections::NamespacedUnderPackageName < ::RuboCop::Cop::Base
+  include ::RuboCop::Cop::RangeHelp
+  include ::PackageProtections::ProtectionInterface
+  include ::PackageProtections::RubocopProtectionInterface
+
+  sig { override.returns(::String) }
+  def cop_name; end
+
+  sig { params(package: ::PackageProtections::ProtectedPackage).returns(T::Hash[T.untyped, T.untyped]) }
+  def custom_cop_config(package); end
+
+  sig { override.returns(::String) }
+  def humanized_protection_description; end
+
+  sig { override.returns(::String) }
+  def humanized_protection_name; end
+
+  sig { override.returns(::String) }
+  def identifier; end
+
+  sig { override.returns(T::Array[::String]) }
+  def included_globs_for_pack; end
+
+  sig { override.params(file: ::String).returns(::String) }
+  def message_for_fail_on_any(file); end
+
+  def on_new_investigation; end
+
+  sig do
+    override
+      .params(
+        behavior: ::PackageProtections::ViolationBehavior,
+        package: ::ParsePackwerk::Package
+      ).returns(T.nilable(::String))
+  end
+  def unmet_preconditions_for_behavior(behavior, package); end
+
+  private
+
+  def get_actual_namespace(remaining_file_path, relative_filepath, package_name); end
+  def get_allowed_namespaces(package_name); end
+  def root_pathname; end
+end
+
+RuboCop::Cop::PackageProtections::NamespacedUnderPackageName::IDENTIFIER = T.let(T.unsafe(nil), String)
+
+class RuboCop::Cop::PackageProtections::TypedPublicApi < ::RuboCop::Cop::Sorbet::StrictSigil
+  include ::PackageProtections::ProtectionInterface
+  include ::PackageProtections::RubocopProtectionInterface
+
+  sig { override.returns(::String) }
+  def cop_name; end
+
+  sig { override.returns(::String) }
+  def humanized_protection_description; end
+
+  sig { override.returns(::String) }
+  def humanized_protection_name; end
+
+  sig { override.returns(::String) }
+  def identifier; end
+
+  sig { override.returns(T::Array[::String]) }
+  def included_globs_for_pack; end
+
+  sig { override.params(file: ::String).returns(::String) }
+  def message_for_fail_on_any(file); end
+
+  sig do
+    override
+      .params(
+        behavior: ::PackageProtections::ViolationBehavior,
+        package: ::ParsePackwerk::Package
+      ).returns(T.nilable(::String))
+  end
+  def unmet_preconditions_for_behavior(behavior, package); end
+end
+
+RuboCop::Cop::PackageProtections::TypedPublicApi::IDENTIFIER = T.let(T.unsafe(nil), String)
+RuboCop::NodePattern = RuboCop::AST::NodePattern
+RuboCop::ProcessedSource = RuboCop::AST::ProcessedSource
+RuboCop::Token = RuboCop::AST::Token

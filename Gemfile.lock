@@ -34,14 +34,14 @@ GEM
     method_source (1.0.0)
     minitest (5.15.0)
     multi_json (1.15.0)
-    package_protections (0.64.0)
+    package_protections (1.4.0)
       activesupport
       parse_packwerk
       rubocop
       rubocop-sorbet
       sorbet-runtime
     parallel (1.22.1)
-    parse_packwerk (0.10.0)
+    parse_packwerk (0.12.0)
       sorbet-runtime
     parser (3.1.1.0)
       ast (~> 2.4.1)
