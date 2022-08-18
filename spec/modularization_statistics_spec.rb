@@ -42,36 +42,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
     end
 
     describe 'ModularizationStatistics.get_metrics' do
-      RSpec::Matchers.define(:include_metric) do |expected_metric|
-        match do |actual_metrics|
-          @actual_metrics = actual_metrics
-          @expected_metric = expected_metric
-          @matching_metrics = actual_metrics.select { |actual_metric| actual_metric.name == expected_metric.name }
-          @actual_metric = @matching_metrics.find { |matching_metric| matching_metric.count == expected_metric.count && expected_metric.tags.sort_by(&:key) == matching_metric.tags.sort_by(&:key) }
-          @matching_metrics.any? && !@actual_metric.nil?
-        end
-
-        description do
-          "to have a metric named `#{expected_metric.name}` with count of #{expected_metric.count} and tags of #{expected_metric.tags.map(&:to_s)}"
-        end
-
-        failure_message do
-          if @matching_metrics.none?
-            "Could not find metric with name `#{expected_metric.name}` Could only find metrics with names: #{@actual_metrics.map(&:name)}"
-          else
-            count_diff = "Actual count: #{@matching_metrics.map(&:count)}\nExpected count: #{expected_metric.count}"
-            actual_tags = @matching_metrics.map { |matching_metric| matching_metric.tags.map(&:to_s) }
-            expected_tags = expected_metric.tags.map(&:to_s)
-            tags_diff = "Actual tags (not in expected): #{actual_tags.map { |actual| actual - expected_tags }}\nExpected tags (not in actual): #{expected_tags - actual_tags}"
-            <<~FAILURE_MESSAGE
-              Expected and actual metric `#{expected_metric.name}` are not equal. Found #{@matching_metrics.count} metrics with matching name `#{@expected_metric.name}`, but the properties are different
-              #{count_diff}
-              #{tags_diff}
-            FAILURE_MESSAGE
-          end
-        end
-      end
-
       let(:subject) do
         ModularizationStatistics.get_metrics(
           app_name: 'MyApp',
