@@ -95,3 +95,42 @@ RSpec::Matchers.define(:include_metric) do |expected_metric|
     end
   end
 end
+
+def write_package_yml(
+  pack_name,
+  dependencies: [],
+  enforce_dependencies: true,
+  enforce_privacy: true,
+  protections: {},
+  global_namespaces: [],
+  visible_to: [],
+  owner: nil
+)
+  defaults = {
+    'prevent_this_package_from_violating_its_stated_dependencies' => 'fail_on_new',
+    'prevent_other_packages_from_using_this_packages_internals' => 'fail_on_new',
+    'prevent_this_package_from_exposing_an_untyped_api' => 'fail_on_new',
+    'prevent_this_package_from_creating_other_namespaces' => 'fail_on_new',
+    'prevent_other_packages_from_using_this_package_without_explicit_visibility' => 'fail_never',
+  }
+  protections_with_defaults = defaults.merge(protections)
+  metadata = { 'protections' => protections_with_defaults }
+
+  if owner
+    metadata.merge({ 'owner' => owner })
+  end
+
+  if global_namespaces
+    metadata.merge({ 'global_namespaces' => global_namespaces })
+  end
+
+  package = ParsePackwerk::Package.new(
+    name: pack_name,
+    dependencies: dependencies,
+    enforce_dependencies: enforce_dependencies,
+    enforce_privacy: enforce_privacy,
+    metadata: metadata
+  )
+
+  ParsePackwerk.write_package_yml!(package)
+end

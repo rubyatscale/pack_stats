@@ -3,9 +3,7 @@
 module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrapping
   RSpec.describe ModularizationStatistics do
     before do
-      # We clear the packwerk cache so that we can test new sets of packages each time
-      # We should probably think of a better design to accomplish this!
-      ParsePackwerk.instance_variable_set(:@packages_by_name, nil)
+      ParsePackwerk.bust_cache!
     end
 
     describe 'ModularizationStatistics.report_to_datadog!' do
@@ -58,12 +56,9 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
       end
 
       context 'in empty app' do
-        # This number will increase whenever a new protection is added
         before do
           write_file('empty_file.rb')
         end
-
-        it { expect(metrics.count).to eq 35 }
 
         it 'emits the right metrics' do
           expect(metrics).to include_metric GaugeMetric.for('component_files.by_team', 0, Tags.for(['team:Unknown', 'app:MyApp']))
@@ -1009,6 +1004,118 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_new_violations.count', 1, Tags.for(['team:Artists', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_package_yml_changes.count', 1, Tags.for(['team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_new_violations.count', 1, Tags.for(['team:Unknown', 'app:MyApp']))
+        end
+      end
+
+      context 'in an app with nested packs' do
+        before do
+          write_package_yml('.')
+          write_package_yml('packs/fruits')
+          write_package_yml('packs/fruits/apples')
+          write_package_yml('packs/fruits/pears')
+
+          write_package_yml('packs/vegetables')
+          write_package_yml('packs/vegetables/broccoli')
+
+          write_package_yml('packs/peanuts')
+          write_package_yml('packs/cashews')
+
+          # Represents TWO privacy and TWO dependency violations across pack groups
+          write_file('deprecated_references.yml', <<~CONTENTS)
+            # This file contains a list of dependencies that are not part of the long term plan for ..
+            # We should generally work to reduce this list, but not at the expense of actually getting work done.
+            #
+            # You can regenerate this file using the following command:
+            #
+            # bundle exec packwerk update-deprecations .
+            ---
+            packs/fruits:
+              "FruitsConstant":
+                violations:
+                - dependency
+                - privacy
+                files:
+                - some_file1.rb
+                - some_file2.rb
+          CONTENTS
+
+          # Represents ONE privacy and ZERO dependency violations across pack groups
+          write_file('packs/fruits/deprecated_references.yml', <<~CONTENTS)
+            # This file contains a list of dependencies that are not part of the long term plan for ..
+            # We should generally work to reduce this list, but not at the expense of actually getting work done.
+            #
+            # You can regenerate this file using the following command:
+            #
+            # bundle exec packwerk update-deprecations .
+            ---
+            packs/fruits/apples:
+              "ApplesConstant":
+                violations:
+                - dependency
+                - privacy
+                files:
+                - some_file1.rb
+                - some_file2.rb
+            packs/peanuts:
+              "PeanutsConstant":
+                violations:
+                - privacy
+                files:
+                - some_file1.rb
+          CONTENTS
+
+          # Represents ZERO violations across pack groups
+          write_file('packs/fruits/apples/deprecated_references.yml', <<~CONTENTS)
+            # This file contains a list of dependencies that are not part of the long term plan for ..
+            # We should generally work to reduce this list, but not at the expense of actually getting work done.
+            #
+            # You can regenerate this file using the following command:
+            #
+            # bundle exec packwerk update-deprecations .
+            ---
+            packs/fruits:
+              "FruitsConstant":
+                violations:
+                - dependency
+                - privacy
+                files:
+                - packs/fruits/apples/some_file1.rb
+                - packs/fruits/apples/some_file2.rb
+                - packs/fruits/apples/some_file3.rb
+                - packs/fruits/apples/some_file4.rb
+            packs/fruits/pears:
+              "PearsConstant":
+                violations:
+                - dependency
+                - privacy
+                files:
+                - packs/fruits/apples/some_file1.rb
+                - packs/fruits/apples/some_file2.rb
+                - packs/fruits/apples/some_file3.rb
+                - packs/fruits/apples/some_file4.rb
+            packs/peanuts:
+              "PeanutsConstant":
+                violations:
+                - dependency
+                files:
+                - packs/fruits/apples/some_file1.rb
+          CONTENTS
+        end
+
+        it 'emits the right metrics' do
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.count', 8, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_pack_groups.count', 5, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('child_packs.count', 3, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('parent_packs.count', 2, Tags.for(['app:MyApp']))
+
+          # Notice that this does not use a tag to specify the pack group -- the metric itself only sends information about cross-pack group violations
+          expect(metrics).to include_metric GaugeMetric.for('all_pack_groups.privacy_violations.count', 3, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_pack_groups.dependency_violations.count', 3, Tags.for(['app:MyApp']))
+
+          # This does have a tag for pack group, but the metric itself also only sends information about cross-pack group violations.
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.per_pack_group.count', 2, Tags.for(['app:MyApp', 'pack_group:root', 'to_pack_group:packs/fruits']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_privacy_violations.per_pack_group.count', 2, Tags.for(['app:MyApp', 'pack_group:root', 'to_pack_group:packs/fruits']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.per_pack_group.count', 1, Tags.for(['app:MyApp', 'pack_group:packs/fruits', 'to_pack_group:packs/peanuts']))
         end
       end
     end
