@@ -3,9 +3,7 @@
 module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrapping
   RSpec.describe ModularizationStatistics do
     before do
-      # We clear the packwerk cache so that we can test new sets of packages each time
-      # We should probably think of a better design to accomplish this!
-      ParsePackwerk.instance_variable_set(:@packages_by_name, nil)
+      ParsePackwerk.bust_cache!
     end
 
     describe 'ModularizationStatistics.report_to_datadog!' do
