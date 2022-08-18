@@ -1,15 +1,11 @@
 # typed: strict
 # frozen_string_literal: true
 
-require 'dogapi'
-
 module ModularizationStatistics
   module Private
     module Metrics
       class Files
         extend T::Sig
-
-        UNKNOWN_OWNER = T.let('Unknown', String)
 
         sig do
           params(
