@@ -56,12 +56,9 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
       end
 
       context 'in empty app' do
-        # This number will increase whenever a new protection is added
         before do
           write_file('empty_file.rb')
         end
-
-        it { expect(metrics.count).to eq 35 }
 
         it 'emits the right metrics' do
           expect(metrics).to include_metric GaugeMetric.for('component_files.by_team', 0, Tags.for(['team:Unknown', 'app:MyApp']))
