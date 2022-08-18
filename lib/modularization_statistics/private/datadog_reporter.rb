@@ -2,13 +2,13 @@
 # frozen_string_literal: true
 
 require 'dogapi'
+require 'modularization_statistics/private/metrics'
+require 'modularization_statistics/private/metrics/files'
 
 module ModularizationStatistics
   module Private
     class DatadogReporter
       extend T::Sig
-
-      UNKNOWN_OWNER = T.let('Unknown', String)
 
       sig do
         params(
@@ -18,16 +18,7 @@ module ModularizationStatistics
       end
       def self.get_metrics(source_code_files:, app_name:)
         all_metrics = T.let([], T::Array[GaugeMetric])
-        app_level_tag = Tag.for('app', app_name)
-
-        source_code_files.group_by { |file| file.team_owner&.name }.each do |team_name, files_for_team|
-          file_tags = tags_for_team(team_name) + [app_level_tag]
-          all_metrics += get_file_metrics('by_team', file_tags, files_for_team)
-        end
-
-        file_tags = [app_level_tag]
-        all_metrics += get_file_metrics('totals', file_tags, source_code_files)
-
+        all_metrics += Metrics::Files.get_metrics(source_code_files, app_name)
         packages = ParsePackwerk.all
         all_metrics += get_package_metrics(packages, app_name)
         all_metrics += get_package_metrics_by_team(packages, app_name)
@@ -64,18 +55,13 @@ module ModularizationStatistics
         [
           Tag.new(key: 'package', value: humanized_package_name(package.name)),
           Tag.new(key: 'app', value: app_name),
-          *tags_for_team(CodeOwnership.for_package(package)&.name),
+          *Metrics.tags_for_team(CodeOwnership.for_package(package)&.name),
         ]
       end
 
       sig { params(team_name: T.nilable(String)).returns(T::Array[Tag]) }
-      def self.tags_for_team(team_name)
-        [Tag.for('team', team_name || UNKNOWN_OWNER)]
-      end
-
-      sig { params(team_name: T.nilable(String)).returns(T::Array[Tag]) }
       def self.tags_for_to_team(team_name)
-        [Tag.for('to_team', team_name || UNKNOWN_OWNER)]
+        [Tag.for('to_team', team_name || Metrics::UNKNOWN_OWNER)]
       end
 
       private_class_method :tags_for_package
@@ -191,7 +177,7 @@ module ModularizationStatistics
           # We look at `all_packages` because we care about ALL inbound violations across all teams
           inbound_violations_by_package = all_protected_packages.flat_map(&:violations).group_by(&:to_package_name)
 
-          team_tags = tags_for_team(team_name) + [app_level_tag]
+          team_tags = Metrics.tags_for_team(team_name) + [app_level_tag]
           all_metrics << GaugeMetric.for('by_team.all_packages.count', protected_packages_by_team.count, team_tags)
           all_metrics += self.get_protections_metrics('by_team', protected_packages_by_team, team_tags)
           all_metrics += self.get_public_usage_metrics('by_team', protected_packages_by_team.map(&:original_package), team_tags)
