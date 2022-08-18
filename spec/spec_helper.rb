@@ -60,9 +60,9 @@ RSpec::Matchers.define(:include_metric) do |expected_metric|
   match do |actual_metrics|
     @actual_metrics = actual_metrics
     @expected_metric = expected_metric
-    @matching_metrics = actual_metrics.select { |actual_metric| actual_metric.name == expected_metric.name }
-    @actual_metric = @matching_metrics.find { |matching_metric| matching_metric.count == expected_metric.count && expected_metric.tags.sort_by(&:key) == matching_metric.tags.sort_by(&:key) }
-    @matching_metrics.any? && !@actual_metric.nil?
+    @metrics_with_same_name = actual_metrics.select { |actual_metric| actual_metric.name == expected_metric.name }
+    @matching_metric = @metrics_with_same_name.find { |matching_metric| matching_metric.count == expected_metric.count && expected_metric.tags.sort_by(&:key) == matching_metric.tags.sort_by(&:key) }
+    @metrics_with_same_name.any? && !@matching_metric.nil?
   end
 
   description do
@@ -70,18 +70,10 @@ RSpec::Matchers.define(:include_metric) do |expected_metric|
   end
 
   failure_message do
-    if @matching_metrics.none?
-      "Could not find metric with name `#{expected_metric.name}` Could only find metrics with names: \n\n#{@actual_metrics.sort_by(&:name).uniq.join("\n")}"
+    if @metrics_with_same_name.none?
+      "Could not find metric:\n\n#{expected_metric}\n\nCould only find metrics with names: \n\n#{@actual_metrics.sort_by(&:name).uniq.join("\n")}"
     else
-      count_diff = "Actual count: #{@matching_metrics.map(&:count)}\nExpected count: #{expected_metric.count}"
-      actual_tags = @matching_metrics.map { |matching_metric| matching_metric.tags.map(&:to_s) }
-      expected_tags = expected_metric.tags.map(&:to_s)
-      tags_diff = "Actual tags (not in expected): #{actual_tags.map { |actual| actual - expected_tags }}\nExpected tags (not in actual): #{expected_tags - actual_tags}"
-      <<~FAILURE_MESSAGE
-        Expected and actual metric `#{expected_metric.name}` are not equal. Found #{@matching_metrics.count} metrics with matching name `#{@expected_metric.name}`, but the properties are different
-        #{count_diff}
-        #{tags_diff}
-      FAILURE_MESSAGE
+      "Could not find metric:\n\n#{expected_metric}\n\nCould only find metrics with counts: \n\n#{@metrics_with_same_name.sort_by(&:name).uniq.join("\n")}"
     end
   end
 end
