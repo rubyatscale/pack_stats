@@ -83,13 +83,34 @@ module ModularizationStatistics
           all_metrics << GaugeMetric.for('child_packs.count', child_pack_count, package_tags)
           all_metrics << GaugeMetric.for('parent_packs.count', parent_pack_count, package_tags)
           all_metrics << GaugeMetric.for('all_pack_groups.privacy_violations.count', Metrics.file_count(all_cross_pack_group_violations.select(&:privacy?)), package_tags)
-          all_metrics << GaugeMetric.for('all_pack_groups.dependency_violations.count', Metrics.file_count(all_cross_pack_group_violations.select(&:dependency?)), package_tags)
+          all_metrics << GaugeMetric.for('all_pack_groups.dependency_violations.count', Metrics.file_count(all_cross_pack_group_violations.select(&:dependency?)), package_tags)\
 
           packs_by_group = {}
           pack_groups.each do |pack_group|
             pack_group.members.each do |member|
               packs_by_group[member.name] = pack_group.name
             end
+          end
+
+          inbound_violations_by_pack_group = {}
+          all_cross_pack_group_violations.group_by(&:to_package_name).each do |to_package_name, violations|
+            violations.each do |violation|
+              pack_group_for_violation = packs_by_group[violation.to_package_name]
+              inbound_violations_by_pack_group[pack_group_for_violation] ||= []
+              inbound_violations_by_pack_group[pack_group_for_violation] << violation
+            end
+          end
+
+          pack_groups.each do |pack_group|
+            tags = [
+              *package_tags,
+              Tag.for('pack_group', Metrics.humanized_package_name(pack_group.name)),
+            ]
+
+            outbound_dependency_violations = pack_group.cross_group_violations.select(&:dependency?)
+            inbound_privacy_violations = inbound_violations_by_pack_group.fetch(pack_group.name, []).select(&:privacy?)
+            all_metrics << GaugeMetric.for('by_pack_group.outbound_dependency_violations.count', Metrics.file_count(outbound_dependency_violations), tags)
+            all_metrics << GaugeMetric.for('by_pack_group.inbound_privacy_violations.count', Metrics.file_count(inbound_privacy_violations), tags)
           end
 
           pack_groups.each do |from_pack_group|

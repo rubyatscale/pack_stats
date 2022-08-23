@@ -1112,6 +1112,18 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_pack_groups.privacy_violations.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_pack_groups.dependency_violations.count', 3, Tags.for(['app:MyApp']))
 
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.count', 2, Tags.for(['app:MyApp', 'pack_group:root']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.count', 1, Tags.for(['app:MyApp', 'pack_group:packs/fruits']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.count', 0, Tags.for(['app:MyApp', 'pack_group:packs/vegetables']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.count', 0, Tags.for(['app:MyApp', 'pack_group:packs/peanuts']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.count', 0, Tags.for(['app:MyApp', 'pack_group:packs/cashews']))
+
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.inbound_privacy_violations.count', 0, Tags.for(['app:MyApp', 'pack_group:root']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.inbound_privacy_violations.count', 2, Tags.for(['app:MyApp', 'pack_group:packs/fruits']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.inbound_privacy_violations.count', 0, Tags.for(['app:MyApp', 'pack_group:packs/vegetables']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.inbound_privacy_violations.count', 1, Tags.for(['app:MyApp', 'pack_group:packs/peanuts']))
+          expect(metrics).to include_metric GaugeMetric.for('by_pack_group.inbound_privacy_violations.count', 0, Tags.for(['app:MyApp', 'pack_group:packs/cashews']))
+
           # This does have a tag for pack group, but the metric itself also only sends information about cross-pack group violations.
           expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.per_pack_group.count', 2, Tags.for(['app:MyApp', 'pack_group:root', 'to_pack_group:packs/fruits']))
           expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_privacy_violations.per_pack_group.count', 2, Tags.for(['app:MyApp', 'pack_group:root', 'to_pack_group:packs/fruits']))
