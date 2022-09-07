@@ -91,6 +91,11 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_packages.all_files.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.public_files.count', 0, Tags.for(['app:MyApp']))
         end
+
+        it 'emits no metrics about rubocop exclusions' do
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.rubocop_exclusions.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.rubocop_exclusions.count', 0, Tags.for(['app:MyApp']))
+        end
       end
 
       context 'in app with a simple package owned by one team' do
@@ -1128,6 +1133,53 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.per_pack_group.count', 2, Tags.for(['app:MyApp', 'pack_group:root', 'to_pack_group:packs/fruits']))
           expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_privacy_violations.per_pack_group.count', 2, Tags.for(['app:MyApp', 'pack_group:root', 'to_pack_group:packs/fruits']))
           expect(metrics).to include_metric GaugeMetric.for('by_pack_group.outbound_dependency_violations.per_pack_group.count', 1, Tags.for(['app:MyApp', 'pack_group:packs/fruits', 'to_pack_group:packs/peanuts']))
+        end
+      end
+
+      context 'in an app with exclusions for rubocop based protections' do
+        before do
+          write_package_yml('.')
+          write_package_yml('packs/foo')
+          write_package_yml('packs/foo/bar')
+          write_package_yml('packs/foo/baz')
+          write_package_yml('packs/apples')
+          write_file('.rubocop_todo.yml', <<~YML)
+            PackageProtections/NamespacedUnderPackageName:
+              Exclude:
+                - app/services/my_file1.rb
+                - app/services/my_file2.rb
+            PackageProtections/TypedPublicApi:
+              Exclude:
+                - app/services/my_file1.rb
+                - app/services/my_file2.rb
+          YML
+
+          write_file('packs/foo/.rubocop_todo.yml', <<~YML)
+            PackageProtections/NamespacedUnderPackageName:
+              Exclude:
+                - packs/foo/app/services/my_file1.rb
+                - packs/foo/app/services/my_file2.rb
+            PackageProtections/TypedPublicApi:
+              Exclude:
+                - packs/foo/app/services/my_file1.rb
+                - packs/foo/app/services/my_file2.rb
+          YML
+
+          write_file('packs/foo/bar/.rubocop_todo.yml', <<~YML)
+            PackageProtections/NamespacedUnderPackageName:
+              Exclude:
+                - packs/foo/bar/app/services/my_file1.rb
+                - packs/foo/bar/app/services/my_file2.rb
+            PackageProtections/TypedPublicApi:
+              Exclude:
+                - packs/foo/bar/app/services/my_file1.rb
+                - packs/foo/bar/app/services/my_file2.rb
+          YML
+        end
+
+        it 'emits metrics about rubocop exclusions' do
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.rubocop_exclusions.count', 6, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.rubocop_exclusions.count', 6, Tags.for(['app:MyApp']))
         end
       end
     end
