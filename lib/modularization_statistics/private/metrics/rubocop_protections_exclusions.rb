@@ -4,6 +4,8 @@
 module ModularizationStatistics
   module Private
     module Metrics
+      # TODO:
+      # Should we create API in `rubocop-packs` for some of this?
       class RubocopProtectionsExclusions
         extend T::Sig
 

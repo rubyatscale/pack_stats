@@ -107,12 +107,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_file('packs/only_package/package.yml', <<~CONTENTS)
             enforce_dependencies: false
             enforce_privacy: false
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/only_package/spec/some_package_file_spec.rb')

@@ -9,8 +9,21 @@ module ModularizationStatistics
 
         sig { params(prefix: String, packages: T::Array[ParsePackwerk::Package], package_tags: T::Array[Tag]).returns(T::Array[GaugeMetric]) }
         def self.get_protections_metrics(prefix, packages, package_tags)
+          # These should look at native packwerk...?
+          # Perhaps two implementations:
+          # If the package has a protections key, use the old implementation.
+          # If it doesn't, use the "new" implementation, which checks `enforce_privacy` and `enforce_dependencies`, `.pack_rubocop.yml`,
+          # `metadata.enforce_privacy_strictly: true, metadata.enforce_dependencies_strictly: true`
           protected_packages = packages.map { |p| PackageProtections::ProtectedPackage.from(p) }
-
+          # [
+          #   'prevent_this_package_from_violating_its_stated_dependencies',
+          #   'prevent_other_packages_from_using_this_packages_internals',
+          #   'prevent_this_package_from_exposing_an_untyped_api',
+          #   'prevent_this_package_from_creating_other_namespaces',
+          #   'prevent_other_packages_from_using_this_package_without_explicit_visibility',
+          #   'prevent_this_package_from_exposing_instance_method_public_apis',
+          #   'prevent_this_package_from_exposing_undocumented_public_apis'
+          # ]
           PackageProtections.all.flat_map do |protection|
             PackageProtections::ViolationBehavior.each_value.map do |violation_behavior|
               # https://github.com/Gusto/package_protections/pull/42 changed the public API of these violation behaviors.
