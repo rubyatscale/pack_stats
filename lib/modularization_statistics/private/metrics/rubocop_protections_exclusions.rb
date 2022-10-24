@@ -4,8 +4,6 @@
 module ModularizationStatistics
   module Private
     module Metrics
-      # TODO:
-      # Should we create API in `rubocop-packs` for some of this?
       class RubocopProtectionsExclusions
         extend T::Sig
 
@@ -21,6 +19,7 @@ module ModularizationStatistics
           end
         end
 
+        # TODO: `rubocop-packs` may want to expose API for this
         sig { params(package: ParsePackwerk::Package, protection: PackageProtections::RubocopProtectionInterface).returns(Integer) }
         def self.exclude_count_for_package_and_protection(package, protection)
           rubocop_todo = package.directory.join('.rubocop_todo.yml')
