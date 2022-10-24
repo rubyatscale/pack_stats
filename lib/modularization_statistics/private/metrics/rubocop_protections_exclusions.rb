@@ -7,8 +7,10 @@ module ModularizationStatistics
       class RubocopProtectionsExclusions
         extend T::Sig
 
-        sig { params(prefix: String, protected_packages: T::Array[PackageProtections::ProtectedPackage], package_tags: T::Array[Tag]).returns(T::Array[GaugeMetric]) }
-        def self.get_rubocop_exclusions(prefix, protected_packages, package_tags)
+        sig { params(prefix: String, packages: T::Array[ParsePackwerk::Package], package_tags: T::Array[Tag]).returns(T::Array[GaugeMetric]) }
+        def self.get_rubocop_exclusions(prefix, packages, package_tags)
+          protected_packages = packages.map { |p| PackageProtections::ProtectedPackage.from(p) }
+
           rubocop_based_package_protections = T.cast(PackageProtections.all.select { |p| p.is_a?(PackageProtections::RubocopProtectionInterface) }, T::Array[PackageProtections::RubocopProtectionInterface])
           rubocop_based_package_protections.flat_map do |rubocop_based_package_protection|
             metric_name = "#{prefix}.#{rubocop_based_package_protection.identifier}.rubocop_exclusions.count"
