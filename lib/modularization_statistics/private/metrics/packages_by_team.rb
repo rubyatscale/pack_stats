@@ -16,25 +16,25 @@ module ModularizationStatistics
         def self.get_package_metrics_by_team(all_packages, app_name)
           all_metrics = T.let([], T::Array[GaugeMetric])
           app_level_tag = Tag.for('app', app_name)
-          all_protected_packages = all_packages.map { |p| PackageProtections::ProtectedPackage.from(p) }
-          all_protected_packages.group_by { |protected_package| CodeOwnership.for_package(protected_package.original_package)&.name }.each do |team_name, protected_packages_by_team|
+
+          all_packages.group_by { |package| CodeOwnership.for_package(package)&.name }.each do |team_name, packages_by_team|
             # We look at `all_packages` because we care about ALL inbound violations across all teams
-            inbound_violations_by_package = all_protected_packages.flat_map(&:violations).group_by(&:to_package_name)
+            inbound_violations_by_package = all_packages.flat_map(&:violations).group_by(&:to_package_name)
 
             team_tags = Metrics.tags_for_team(team_name) + [app_level_tag]
-            all_metrics << GaugeMetric.for('by_team.all_packages.count', protected_packages_by_team.count, team_tags)
-            all_metrics += Metrics::ProtectionUsage.get_protections_metrics('by_team', protected_packages_by_team, team_tags)
-            all_metrics += Metrics::PublicUsage.get_public_usage_metrics('by_team', protected_packages_by_team.map(&:original_package), team_tags)
+            all_metrics << GaugeMetric.for('by_team.all_packages.count', packages_by_team.count, team_tags)
+            all_metrics += Metrics::ProtectionUsage.get_protections_metrics('by_team', packages_by_team, team_tags)
+            all_metrics += Metrics::PublicUsage.get_public_usage_metrics('by_team', packages_by_team, team_tags)
 
-            all_metrics << GaugeMetric.for('by_team.notify_on_package_yml_changes.count', protected_packages_by_team.count { |p| p.metadata['notify_on_package_yml_changes'] }, team_tags)
-            all_metrics << GaugeMetric.for('by_team.notify_on_new_violations.count', protected_packages_by_team.count { |p| p.metadata['notify_on_new_violations'] }, team_tags)
+            all_metrics << GaugeMetric.for('by_team.notify_on_package_yml_changes.count', packages_by_team.count { |p| p.metadata['notify_on_package_yml_changes'] }, team_tags)
+            all_metrics << GaugeMetric.for('by_team.notify_on_new_violations.count', packages_by_team.count { |p| p.metadata['notify_on_new_violations'] }, team_tags)
 
             #
             # VIOLATIONS (implicit dependencies)
             #
-            outbound_violations = protected_packages_by_team.flat_map(&:violations)
+            outbound_violations = packages_by_team.flat_map(&:violations)
             # Here we only look at packages_by_team because we only care about inbound violations onto packages for this team
-            inbound_violations = protected_packages_by_team.flat_map { |package| inbound_violations_by_package[package.name] || [] }
+            inbound_violations = packages_by_team.flat_map { |package| inbound_violations_by_package[package.name] || [] }
             all_dependency_violations = (outbound_violations + inbound_violations).select(&:dependency?)
             all_privacy_violations = (outbound_violations + inbound_violations).select(&:privacy?)
 
@@ -47,7 +47,7 @@ module ModularizationStatistics
             all_metrics << GaugeMetric.for('by_team.outbound_privacy_violations.count', Metrics.file_count(outbound_violations.select(&:privacy?)), team_tags)
             all_metrics << GaugeMetric.for('by_team.inbound_privacy_violations.count', Metrics.file_count(inbound_violations.select(&:privacy?)), team_tags)
 
-            all_metrics << GaugeMetric.for('by_team.has_readme.count', protected_packages_by_team.count { |protected_package| Metrics.has_readme?(protected_package.original_package) }, team_tags)
+            all_metrics << GaugeMetric.for('by_team.has_readme.count', packages_by_team.count { |package| Metrics.has_readme?(package) }, team_tags)
 
             grouped_outbound_violations = outbound_violations.group_by do |violation|
               to_package = ParsePackwerk.find(violation.to_package_name)

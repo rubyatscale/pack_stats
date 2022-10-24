@@ -7,8 +7,10 @@ module ModularizationStatistics
       class ProtectionUsage
         extend T::Sig
 
-        sig { params(prefix: String, protected_packages: T::Array[PackageProtections::ProtectedPackage], package_tags: T::Array[Tag]).returns(T::Array[GaugeMetric]) }
-        def self.get_protections_metrics(prefix, protected_packages, package_tags)
+        sig { params(prefix: String, packages: T::Array[ParsePackwerk::Package], package_tags: T::Array[Tag]).returns(T::Array[GaugeMetric]) }
+        def self.get_protections_metrics(prefix, packages, package_tags)
+          protected_packages = packages.map { |p| PackageProtections::ProtectedPackage.from(p) }
+
           PackageProtections.all.flat_map do |protection|
             PackageProtections::ViolationBehavior.each_value.map do |violation_behavior|
               # https://github.com/Gusto/package_protections/pull/42 changed the public API of these violation behaviors.
