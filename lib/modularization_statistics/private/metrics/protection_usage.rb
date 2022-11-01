@@ -37,34 +37,109 @@ module ModularizationStatistics
                 if p.metadata['protections']
                   p.violation_behavior_for(protection.identifier) == violation_behavior
                 else
-                  case violation_behavior
-                  when PackageProtections::ViolationBehavior::FailOnAny
-                    # There is not yet an implementation for `FailOnAny` for systems that don't use package protections
-                    false
-                  when PackageProtections::ViolationBehavior::FailNever
-                    if protection.identifier == 'prevent_this_package_from_violating_its_stated_dependencies'
-                      !p.original_package.enforces_dependencies?
-                    elsif protection.identifier == 'prevent_other_packages_from_using_this_packages_internals'
-                      !p.original_package.enforces_privacy?
-                    else
-                      # This is not applicable if you're not using package protections
-                      true
-                    end
-                  when PackageProtections::ViolationBehavior::FailOnNew
-                    if protection.identifier == 'prevent_this_package_from_violating_its_stated_dependencies'
-                      p.original_package.enforces_dependencies?
-                    elsif protection.identifier == 'prevent_other_packages_from_using_this_packages_internals'
-                      p.original_package.enforces_privacy?
-                    else
-                      # This is not applicable if you're not using package protections
-                      false
-                    end
-                  else
-                    T.absurd(violation_behavior)
-                  end
+                  should_count_package?(p.original_package, protection, violation_behavior)
                 end
               end
               GaugeMetric.for(metric_name, count_of_packages, package_tags)
+            end
+          end
+        end
+
+        #
+        # Later, when we remove package protections, we can make this simpler by iterating over
+        # packwerk checkers and rubocop packs specifically. That would let us use a common, simple
+        # strategy to get metrics for both of them. For the first iteration, we'll want to continue
+        # to map the old names of things to the "protection" names. After that, I think we will want to
+        # extract that mapping into a tool that transforms the metrics that can be optionally turned off
+        # so that we can see metrics that are more closely connected to the new API.
+        # e.g. instead of `all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_on_any.count`, we'd see
+        # e.g. instead of `all_packages.checkers.enforce_dependencies.strict.count`, we'd see
+        # e.g. instead of `all_packages.prevent_this_package_from_creating_other_namespaces.fail_on_new.count`, we'd see
+        # e.g. instead of `all_packages.cops.packs_namespaceconvention.true.count`, we'd see
+        # 
+        sig do
+          params(
+            package: ParsePackwerk::Package,
+            protection: PackageProtections::ProtectionInterface,
+            violation_behavior: PackageProtections::ViolationBehavior
+          ).returns(T::Boolean)
+        end
+        def self.should_count_package?(package, protection, violation_behavior)
+          if protection.identifier == 'prevent_this_package_from_violating_its_stated_dependencies'
+            strict_mode = package.metadata['strictly_enforce_dependencies']
+            enabled = package.enforces_dependencies?
+
+            case violation_behavior
+            when PackageProtections::ViolationBehavior::FailOnAny
+              !!strict_mode
+            when PackageProtections::ViolationBehavior::FailNever
+              !enabled
+            when PackageProtections::ViolationBehavior::FailOnNew
+              enabled && !strict_mode
+            else
+              T.absurd(violation_behavior)
+            end
+          elsif protection.identifier == 'prevent_other_packages_from_using_this_packages_internals'
+            strict_mode = package.metadata['strictly_enforce_privacy']
+            enabled = package.enforces_privacy?
+
+            case violation_behavior
+            when PackageProtections::ViolationBehavior::FailOnAny
+              !!strict_mode
+            when PackageProtections::ViolationBehavior::FailNever
+              !enabled
+            when PackageProtections::ViolationBehavior::FailOnNew
+              enabled && !strict_mode
+            else
+              T.absurd(violation_behavior)
+            end
+          elsif protection.identifier == 'prevent_other_packages_from_using_this_package_without_explicit_visibility'
+            case violation_behavior
+            when PackageProtections::ViolationBehavior::FailOnAny
+              # We'd probably not want to support this right away
+              false
+            when PackageProtections::ViolationBehavior::FailNever
+              # We'd need to add this to `parse_packwerk` so that we can get other arbitrary top-level keys.
+              # Alternatively we can put this in `metadata` for the time being to unblock us.
+              # package.config['enforce_visibility']
+              !package.metadata['enforce_visibility']
+            when PackageProtections::ViolationBehavior::FailOnNew
+              !!package.metadata['enforce_visibility']
+            else
+              T.absurd(violation_behavior)
+            end
+          else
+            # Otherwise, we're in a rubocop case
+            rubocop_yml_file = package.directory.join('.rubocop.yml')
+            return false if !rubocop_yml_file.exist?
+            rubocop_yml = YAML.load_file(rubocop_yml_file)
+            protection = T.cast(protection, PackageProtections::RubocopProtectionInterface)
+            # We will likely want a rubocop-packs API for this, to be able to ask if a cop is enabled for a pack.
+            # It's possible we will want to allow these to be enabled at the top-level `.rubocop.yml`,
+            # in which case we wouldn't get the right metrics with this approach. However, we can also accept
+            # that as a current limitation.
+            cop_map = {
+              'PackageProtections/TypedPublicApi' => 'Packs/TypedPublicApi',
+              'PackageProtections/NamespacedUnderPackageName' => 'Packs/NamespaceConvention',
+              'PackageProtections/OnlyClassMethods' => 'Packs/ClassMethodsAsPublicApis',
+              'PackageProtections/RequireDocumentedPublicApis' => 'Packs/RequireDocumentedPublicApis',
+            }
+            # We want to use the cop names from `rubocop-packs`. Eventually, we'll just literate over these
+            # cop names directly, or ask `rubocop-packs` for the list of cops to care about.
+            cop_config = rubocop_yml[cop_map[protection.cop_name]]
+            return false if cop_config.nil?
+            enabled = cop_config['Enabled']
+            strict_mode = cop_config['FailureMode'] == 'strict'
+
+            case violation_behavior
+            when PackageProtections::ViolationBehavior::FailOnAny
+              !!strict_mode
+            when PackageProtections::ViolationBehavior::FailNever
+              !enabled
+            when PackageProtections::ViolationBehavior::FailOnNew
+              enabled && !strict_mode
+            else
+              T.absurd(violation_behavior)
             end
           end
         end

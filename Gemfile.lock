@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    modularization_statistics (1.38.0)
+    modularization_statistics (1.39.0)
       code_ownership
       code_teams
       dogapi
