@@ -27,7 +27,7 @@ module ModularizationStatistics
                 #
                 # This is temporarily in place until we migrate off of `package_protections` in favor of `rubocop-packs`.
                 # At that point, we want to delete this branch and instead it we'd probably have two separate branches.
-                # One branch would look at `enforce_x` and `metadata.strictly_enforce_x`.
+                # One branch would look at `enforce_x` and `metadata.enforce_x_strictly`.
                 # The other branch would look at `.pack_rubocop.yml`.
                 # Later on, we could generalize this so that it automatically incorporates new cops from `rubocop-packs`,
                 # or even new packwerk plugins.
@@ -66,7 +66,7 @@ module ModularizationStatistics
         end
         def self.should_count_package?(package, protection, violation_behavior)
           if protection.identifier == 'prevent_this_package_from_violating_its_stated_dependencies'
-            strict_mode = package.metadata['strictly_enforce_dependencies']
+            strict_mode = package.metadata['enforce_dependencies_strictly']
             enabled = package.enforces_dependencies?
 
             case violation_behavior
@@ -80,7 +80,7 @@ module ModularizationStatistics
               T.absurd(violation_behavior)
             end
           elsif protection.identifier == 'prevent_other_packages_from_using_this_packages_internals'
-            strict_mode = package.metadata['strictly_enforce_privacy']
+            strict_mode = package.metadata['enforce_privacy_strictly']
             enabled = package.enforces_privacy?
 
             case violation_behavior

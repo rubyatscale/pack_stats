@@ -684,15 +684,15 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: true
             metadata:
               other_stuff: is_irrelevant
-              strictly_enforce_privacy: true
+              enforce_privacy_strictly: true
           CONTENTS
 
           write_file('packs/package_1/package.yml', <<~CONTENTS)
             enforce_dependencies: true
             enforce_privacy: true
             metadata:
-              strictly_enforce_privacy: true
-              strictly_enforce_dependencies: true
+              enforce_privacy_strictly: true
+              enforce_dependencies_strictly: true
           CONTENTS
 
           write_file('packs/package_1/.rubocop.yml', <<~CONTENTS)
