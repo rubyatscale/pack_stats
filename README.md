@@ -2,30 +2,12 @@
 
 This gem is used to report opinionated statistics about modularization to DataDog and other observability systems.
 
-# Setup and package.yml file standard
+# Configuring Ownership
+The gem reports metrics per-team, where each team is configured based on metadata included in Packwerk package.yml files.
 
-The gem reports metrics per-team, where each team is configured based on metadata included in package.yml files.
-Each `package.yml` file in your codebase will need a `metadata` containing an owner field as follows:
-
-`package.yml`
-```
-metadata:
-  owner: Operations
-```
-
-Additionally, this gem depends on the [Code Teams](https://github.com/rubyatscale/code_teams) gem.
-So before continuing, you'll need to have one configured code-team for each team in the codebase.
-
- Using the team name `operations` as
-a minimally-formed example:
-
-`config/teams/operations.yml`
-```yml
-name: Operations
-```
+Define your teams as described in the [Code Team - Package Based Ownership](https://github.com/rubyatscale/code_ownership#package-based-ownership) documentation.
 
 # Usage
-
 The main method to this gem is `ModularizationStatistics#report_to_datadog!`. Refer to the Sorbet signature for this method for the exact types to be passed in.
 
 This is an example of how to use this API:
@@ -42,8 +24,8 @@ ModularizationStatistics.report_to_datadog!(
   # Example: Time.now
   #
   report_time: report_time
-  # 
-  # This is used to determine what files to look at for building statistics about what types of files are packaged, componentized, or unpackaged. 
+  #
+  # This is used to determine what files to look at for building statistics about what types of files are packaged, componentized, or unpackaged.
   # This is an array of `Pathname`. `Pathname` can be relative or absolute paths.
   #
   # Example: source_code_pathnames = Pathname.glob('./**/**.rb')
@@ -56,7 +38,7 @@ ModularizationStatistics.report_to_datadog!(
   # Example: [Pathname.new("./gems")]
   #
   componentized_source_code_locations: componentized_source_code_locations,
-  # 
+  #
   # A file is determined to be packaged if it exists in any of these directories.
   # This is an array of `Pathname`. `Pathname` can be relative or absolute paths.
   #
@@ -143,16 +125,3 @@ This helps answer questions like:
 - Which pack/team does my pack/team have the most dependency/privacy violations on?
 
 [Dashboard JSON](docs/per_package_and_per_team.json)
-
-# Common Problems
-
-## Could not find team
-
-If you receive the message below there is a mismatch between the `owner` tags in your package.yml
-and the configuration of the Code Teams gem. Please see the setup instructions in this document and
-configure Code Teams appropriately.
-
-```
-app_name: Rails.application.class.module_parent_name,
-StandardError: Could not find team with name: `....` in components/alerting/slack/package.yml. Make sure the team is one of `[]`
-```
