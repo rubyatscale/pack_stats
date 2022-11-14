@@ -2,6 +2,11 @@
 
 This gem is used to report opinionated statistics about modularization to DataDog and other observability systems.
 
+# Configuring Ownership
+The gem reports metrics per-team, where each team is configured based on metadata included in Packwerk package.yml files.
+
+Define your teams as described in the [Code Team - Package Based Ownership](https://github.com/rubyatscale/code_ownership#package-based-ownership) documentation.
+
 # Usage
 The main method to this gem is `ModularizationStatistics#report_to_datadog!`. Refer to the Sorbet signature for this method for the exact types to be passed in.
 
@@ -19,8 +24,8 @@ ModularizationStatistics.report_to_datadog!(
   # Example: Time.now
   #
   report_time: report_time
-  # 
-  # This is used to determine what files to look at for building statistics about what types of files are packaged, componentized, or unpackaged. 
+  #
+  # This is used to determine what files to look at for building statistics about what types of files are packaged, componentized, or unpackaged.
   # This is an array of `Pathname`. `Pathname` can be relative or absolute paths.
   #
   # Example: source_code_pathnames = Pathname.glob('./**/**.rb')
@@ -33,7 +38,7 @@ ModularizationStatistics.report_to_datadog!(
   # Example: [Pathname.new("./gems")]
   #
   componentized_source_code_locations: componentized_source_code_locations,
-  # 
+  #
   # A file is determined to be packaged if it exists in any of these directories.
   # This is an array of `Pathname`. `Pathname` can be relative or absolute paths.
   #
