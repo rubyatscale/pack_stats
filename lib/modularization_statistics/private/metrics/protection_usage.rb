@@ -119,10 +119,10 @@ module ModularizationStatistics
             # in which case we wouldn't get the right metrics with this approach. However, we can also accept
             # that as a current limitation.
             cop_map = {
-              'PackageProtections/TypedPublicApi' => 'Packs/TypedPublicApi',
-              'PackageProtections/NamespacedUnderPackageName' => 'Packs/NamespaceConvention',
+              'PackageProtections/TypedPublicApi' => 'Packs/TypedPublicApis',
+              'PackageProtections/NamespacedUnderPackageName' => 'Packs/RootNamespaceIsPackName',
               'PackageProtections/OnlyClassMethods' => 'Packs/ClassMethodsAsPublicApis',
-              'PackageProtections/RequireDocumentedPublicApis' => 'Packs/RequireDocumentedPublicApis',
+              'PackageProtections/RequireDocumentedPublicApis' => 'Packs/DocumentedPublicApis',
             }
             # We want to use the cop names from `rubocop-packs`. Eventually, we'll just literate over these
             # cop names directly, or ask `rubocop-packs` for the list of cops to care about.
