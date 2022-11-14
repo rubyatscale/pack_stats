@@ -675,7 +675,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           CONTENTS
 
           write_file('packs/package_2/.rubocop.yml', <<~CONTENTS)
-            Packs/TypedPublicApi:
+            Packs/TypedPublicApis:
               Enabled: true
           CONTENTS
 
@@ -696,11 +696,11 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           CONTENTS
 
           write_file('packs/package_1/.rubocop.yml', <<~CONTENTS)
-            Packs/TypedPublicApi:
+            Packs/TypedPublicApis:
               Enabled: true
               FailureMode: strict
 
-            Packs/NamespaceConvention:
+            Packs/RootNamespaceIsPackName:
               Enabled: true
               FailureMode: strict
           CONTENTS
