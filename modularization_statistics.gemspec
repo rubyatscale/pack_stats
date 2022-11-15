@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'modularization_statistics'
-  spec.version       = '1.42.0'
+  spec.version       = '1.43.0'
   spec.authors       = ['Gusto Engineers']
   spec.email         = ['dev@gusto.com']
 
@@ -29,9 +29,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'code_teams'
   spec.add_dependency 'code_ownership'
   spec.add_dependency 'dogapi'
-  spec.add_dependency 'package_protections'
   spec.add_dependency 'parse_packwerk'
   spec.add_dependency 'sorbet-runtime'
+  spec.add_dependency 'rubocop-packs'
 
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'pry'

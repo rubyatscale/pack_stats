@@ -32,8 +32,8 @@ module ModularizationStatistics
           all_metrics += Metrics::PublicUsage.get_public_usage_metrics('all_packages', packages, package_tags)
           all_metrics << GaugeMetric.for('all_packages.has_readme.count', packages.count { |package| Metrics.has_readme?(package) }, package_tags)
 
-          all_metrics += Metrics::ProtectionUsage.get_protections_metrics('all_packages', packages, package_tags)
-          all_metrics += Metrics::RubocopProtectionsExclusions.get_rubocop_exclusions('all_packages', packages, package_tags)
+          all_metrics += Metrics::PackwerkCheckerUsage.get_checker_metrics('all_packages', packages, package_tags)
+          all_metrics += Metrics::RubocopUsage.get_metrics('all_packages', packages, package_tags)
           all_metrics << GaugeMetric.for('all_packages.package_based_file_ownership.count', packages.count { |package| !package.metadata['owner'].nil? }, package_tags)
 
           inbound_violations_by_package = packages.flat_map(&:violations).group_by(&:to_package_name)

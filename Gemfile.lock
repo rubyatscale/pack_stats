@@ -1,12 +1,12 @@
 PATH
   remote: .
   specs:
-    modularization_statistics (1.42.0)
+    modularization_statistics (1.43.0)
       code_ownership
       code_teams
       dogapi
-      package_protections
       parse_packwerk
+      rubocop-packs
       sorbet-runtime
 
 GEM
@@ -35,13 +35,6 @@ GEM
     method_source (1.0.0)
     minitest (5.16.3)
     multi_json (1.15.0)
-    package_protections (4.0.1)
-      activesupport
-      parse_packwerk
-      rubocop
-      rubocop-packs
-      rubocop-sorbet
-      sorbet-runtime
     parallel (1.22.1)
     parse_packwerk (0.14.0)
       sorbet-runtime
@@ -84,7 +77,7 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.23.0)
       parser (>= 3.1.1.0)
-    rubocop-packs (0.0.20)
+    rubocop-packs (0.0.22)
       activesupport
       parse_packwerk
       rubocop
@@ -141,7 +134,6 @@ PLATFORMS
 DEPENDENCIES
   code_ownership
   modularization_statistics!
-  package_protections
   parse_packwerk
   pry
   rake

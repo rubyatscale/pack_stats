@@ -4,5 +4,4 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'code_ownership'
-gem 'package_protections'
 gem 'parse_packwerk'
