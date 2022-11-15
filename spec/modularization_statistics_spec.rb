@@ -904,56 +904,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
         end
       end
 
-      context 'in an app with users who set up their packages to get notified' do
-        before do
-          write_file('config/teams/art/artists.yml', <<~CONTENTS)
-            name: Artists
-          CONTENTS
-
-          write_file('config/teams/food/chefs.yml', <<~CONTENTS)
-            name: Chefs
-          CONTENTS
-
-          write_file('empty_file.rb')
-          write_file('package.yml', <<~CONTENTS)
-            enforce_dependencies: false
-            enforce_privacy: false
-            metadata:
-              notify_on_package_yml_changes: true
-              notify_on_new_violations: true
-          CONTENTS
-
-          write_file('packs/artists_package_1/package.yml', <<~CONTENTS)
-            enforce_dependencies: false
-            enforce_privacy: false
-            metadata:
-              owner: Artists
-              notify_on_package_yml_changes: true
-              notify_on_new_violations: true
-          CONTENTS
-
-          write_file('packs/chefs_package_2/package.yml', <<~CONTENTS)
-            enforce_dependencies: false
-            enforce_privacy: false
-            metadata:
-              owner: Chefs
-              notify_on_package_yml_changes: true
-              notify_on_new_violations: true
-          CONTENTS
-        end
-
-        it 'emits the right metrics' do
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.notify_on_package_yml_changes.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.notify_on_new_violations.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_package_yml_changes.count', 1, Tags.for(['team:Chefs', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_new_violations.count', 1, Tags.for(['team:Chefs', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_package_yml_changes.count', 1, Tags.for(['team:Artists', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_new_violations.count', 1, Tags.for(['team:Artists', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_package_yml_changes.count', 1, Tags.for(['team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.notify_on_new_violations.count', 1, Tags.for(['team:Unknown', 'app:MyApp']))
-        end
-      end
-
       context 'in an app with nested packs' do
         before do
           write_package_yml('.')

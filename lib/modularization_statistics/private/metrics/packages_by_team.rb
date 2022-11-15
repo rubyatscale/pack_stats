@@ -25,10 +25,6 @@ module ModularizationStatistics
             all_metrics << GaugeMetric.for('by_team.all_packages.count', packages_by_team.count, team_tags)
             all_metrics += Metrics::PackwerkCheckerUsage.get_checker_metrics('by_team', packages_by_team, team_tags)
             all_metrics += Metrics::PublicUsage.get_public_usage_metrics('by_team', packages_by_team, team_tags)
-
-            all_metrics << GaugeMetric.for('by_team.notify_on_package_yml_changes.count', packages_by_team.count { |p| p.metadata['notify_on_package_yml_changes'] }, team_tags)
-            all_metrics << GaugeMetric.for('by_team.notify_on_new_violations.count', packages_by_team.count { |p| p.metadata['notify_on_new_violations'] }, team_tags)
-
             #
             # VIOLATIONS (implicit dependencies)
             #

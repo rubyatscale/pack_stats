@@ -25,9 +25,6 @@ module ModularizationStatistics
           all_metrics << GaugeMetric.for('all_packages.enforcing_dependencies.count', packages.count(&:enforces_dependencies?), package_tags)
           all_metrics << GaugeMetric.for('all_packages.enforcing_privacy.count', packages.count(&:enforces_privacy?), package_tags)
 
-          all_metrics << GaugeMetric.for('all_packages.notify_on_package_yml_changes.count', packages.count { |p| p.metadata['notify_on_package_yml_changes'] }, package_tags)
-          all_metrics << GaugeMetric.for('all_packages.notify_on_new_violations.count', packages.count { |p| p.metadata['notify_on_new_violations'] }, package_tags)
-
           all_metrics << GaugeMetric.for('all_packages.with_violations.count', packages.count { |package| package.violations.any? }, package_tags)
           all_metrics += Metrics::PublicUsage.get_public_usage_metrics('all_packages', packages, package_tags)
           all_metrics << GaugeMetric.for('all_packages.has_readme.count', packages.count { |package| Metrics.has_readme?(package) }, package_tags)
