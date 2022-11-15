@@ -107,12 +107,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_file('packs/only_package/package.yml', <<~CONTENTS)
             enforce_dependencies: false
             enforce_privacy: false
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/only_package/spec/some_package_file_spec.rb')
@@ -226,12 +220,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_file('packs/package_2/package.yml', <<~CONTENTS)
             enforce_dependencies: false
             enforce_privacy: false
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/package_2/spec/some_package_file_spec.rb')
@@ -239,12 +227,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_file('packs/package_1/package.yml', <<~CONTENTS)
             enforce_dependencies: false
             enforce_privacy: false
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/package_1/spec/some_package_file_spec.rb')
@@ -351,12 +333,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             dependencies:
               - packs/package_1
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_on_new
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('empty_file_to_keep_directory.rb')
@@ -393,11 +369,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Chefs
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_on_new
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/package_2/spec/some_package_file_spec.rb')
@@ -409,11 +380,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
               - packs/package_2
             metadata:
               owner: Artists
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_on_new
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/package_1/spec/some_package_file_spec.rb')
@@ -551,12 +517,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             dependencies:
               - packs/package_1
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_on_new
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('empty_file_to_keep_directory.rb')
@@ -597,12 +557,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_file('packs/package_2/package.yml', <<~CONTENTS)
             enforce_dependencies: true
             enforce_privacy: true
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_on_new
-                prevent_other_packages_from_using_this_packages_internals: fail_on_new
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/package_2/spec/some_package_file_spec.rb')
@@ -628,12 +582,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: true
             dependencies:
               - packs/package_2
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_on_new
-                prevent_other_packages_from_using_this_packages_internals: fail_on_new
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/package_1/spec/some_package_file_spec.rb')
@@ -724,12 +672,11 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_file('packs/package_2/package.yml', <<~CONTENTS)
             enforce_dependencies: true
             enforce_privacy: true
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_on_new
-                prevent_other_packages_from_using_this_packages_internals: fail_on_new
-                prevent_this_package_from_exposing_an_untyped_api: fail_on_new
-                prevent_this_package_from_creating_other_namespaces: fail_never
+          CONTENTS
+
+          write_file('packs/package_2/package_rubocop.yml', <<~CONTENTS)
+            Packs/TypedPublicApis:
+              Enabled: true
           CONTENTS
 
           write_file('packs/package_3/package.yml', <<~CONTENTS)
@@ -737,22 +684,25 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: true
             metadata:
               other_stuff: is_irrelevant
-              protections:
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_on_any
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
+              enforce_privacy_strictly: true
           CONTENTS
 
           write_file('packs/package_1/package.yml', <<~CONTENTS)
             enforce_dependencies: true
             enforce_privacy: true
             metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_on_any
-                prevent_other_packages_from_using_this_packages_internals: fail_on_any
-                prevent_this_package_from_exposing_an_untyped_api: fail_on_any
-                prevent_this_package_from_creating_other_namespaces: fail_on_any
+              enforce_privacy_strictly: true
+              enforce_dependencies_strictly: true
+          CONTENTS
+
+          write_file('packs/package_1/package_rubocop.yml', <<~CONTENTS)
+            Packs/TypedPublicApis:
+              Enabled: true
+              FailureMode: strict
+
+            Packs/RootNamespaceIsPackName:
+              Enabled: true
+              FailureMode: strict
           CONTENTS
         end
 
@@ -817,12 +767,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_file('package.yml', <<~CONTENTS)
             enforce_dependencies: false
             enforce_privacy: false
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/artists_package_1/app/public/some_subdir/some_public_api_1.rb')
@@ -833,11 +777,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Artists
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/chefs_package_2/app/some_package_file.rb')
@@ -846,11 +785,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Chefs
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/artists_package_2/app/public/README.md', <<~CONTENTS)
@@ -863,11 +797,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Artists
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/chefs_package_1/app/public/some_public_api_1.rb')
@@ -882,11 +811,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Chefs
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
         end
 
@@ -926,12 +850,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_file('package.yml', <<~CONTENTS)
             enforce_dependencies: false
             enforce_privacy: false
-            metadata:
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/artists_package_1/package.yml', <<~CONTENTS)
@@ -939,11 +857,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Artists
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/artists_package_1/README.md', <<~CONTENTS)
@@ -955,11 +868,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Chefs
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/artists_package_2/package.yml', <<~CONTENTS)
@@ -967,11 +875,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Artists
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/artists_package_2/README.md', <<~CONTENTS)
@@ -983,11 +886,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: false
             metadata:
               owner: Chefs
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/chefs_package_1/README.md', <<~CONTENTS)
@@ -1021,11 +919,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             metadata:
               notify_on_package_yml_changes: true
               notify_on_new_violations: true
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/artists_package_1/package.yml', <<~CONTENTS)
@@ -1035,11 +928,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
               owner: Artists
               notify_on_package_yml_changes: true
               notify_on_new_violations: true
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
 
           write_file('packs/chefs_package_2/package.yml', <<~CONTENTS)
@@ -1049,11 +937,6 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
               owner: Chefs
               notify_on_package_yml_changes: true
               notify_on_new_violations: true
-              protections:
-                prevent_this_package_from_violating_its_stated_dependencies: fail_never
-                prevent_other_packages_from_using_this_packages_internals: fail_never
-                prevent_this_package_from_exposing_an_untyped_api: fail_never
-                prevent_this_package_from_creating_other_namespaces: fail_never
           CONTENTS
         end
 
@@ -1201,33 +1084,33 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           write_package_yml('packs/foo/baz')
           write_package_yml('packs/apples')
           write_file('.rubocop_todo.yml', <<~YML)
-            PackageProtections/NamespacedUnderPackageName:
+            Packs/RootNamespaceIsPackName:
               Exclude:
                 - app/services/my_file1.rb
                 - app/services/my_file2.rb
-            PackageProtections/TypedPublicApi:
+            Packs/TypedPublicApis:
               Exclude:
                 - app/services/my_file1.rb
                 - app/services/my_file2.rb
           YML
 
           write_file('packs/foo/package_rubocop_todo.yml', <<~YML)
-            PackageProtections/NamespacedUnderPackageName:
+            Packs/RootNamespaceIsPackName:
               Exclude:
                 - packs/foo/app/services/my_file1.rb
                 - packs/foo/app/services/my_file2.rb
-            PackageProtections/TypedPublicApi:
+            Packs/TypedPublicApis:
               Exclude:
                 - packs/foo/app/services/my_file1.rb
                 - packs/foo/app/services/my_file2.rb
           YML
 
           write_file('packs/foo/bar/package_rubocop_todo.yml', <<~YML)
-            PackageProtections/NamespacedUnderPackageName:
+            Packs/RootNamespaceIsPackName:
               Exclude:
                 - packs/foo/bar/app/services/my_file1.rb
                 - packs/foo/bar/app/services/my_file2.rb
-            PackageProtections/TypedPublicApi:
+            Packs/TypedPublicApis:
               Exclude:
                 - packs/foo/bar/app/services/my_file1.rb
                 - packs/foo/bar/app/services/my_file2.rb

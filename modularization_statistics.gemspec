@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'dogapi'
   spec.add_dependency 'parse_packwerk'
   spec.add_dependency 'sorbet-runtime'
+  spec.add_dependency 'rubocop-packs'
 
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'pry'
