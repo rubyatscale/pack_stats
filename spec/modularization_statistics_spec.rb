@@ -12,7 +12,8 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           app_name: 'MyApp',
           source_code_pathnames: Pathname.glob('**/**.rb'),
           datadog_client: datadog_client,
-          report_time: report_time
+          report_time: report_time,
+          use_gusto_legacy_names: true,
         )
       end
 
@@ -45,7 +46,8 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           app_name: 'MyApp',
           source_code_pathnames: Pathname.glob('**/**.rb'),
           componentized_source_code_locations: [Pathname.new('components')],
-          packaged_source_code_locations: [Pathname.new('packs')]
+          packaged_source_code_locations: [Pathname.new('packs')],
+          use_gusto_legacy_names: true,
         )
       end
       let(:metrics) { subject }

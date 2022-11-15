@@ -7,6 +7,7 @@ require 'benchmark'
 require 'code_teams'
 require 'code_ownership'
 require 'pathname'
+require 'modularization_statistics/private'
 require 'modularization_statistics/private/source_code_file'
 require 'modularization_statistics/private/datadog_reporter'
 require 'parse_packwerk'
@@ -41,7 +42,9 @@ module ModularizationStatistics
       componentized_source_code_locations: T::Array[Pathname],
       packaged_source_code_locations: T::Array[Pathname],
       report_time: Time,
-      verbose: T::Boolean
+      verbose: T::Boolean,
+      # See note on get_metrics
+      use_gusto_legacy_names: T::Boolean
     ).void
   end
   def self.report_to_datadog!(
@@ -51,14 +54,16 @@ module ModularizationStatistics
     componentized_source_code_locations: DEFAULT_COMPONENTIZED_SOURCE_CODE_LOCATIONS,
     packaged_source_code_locations: DEFAULT_PACKAGED_SOURCE_CODE_LOCATIONS,
     report_time: Time.now, # rubocop:disable Rails/TimeZone
-    verbose: false
+    verbose: false,
+    use_gusto_legacy_names: false
   )
 
     all_metrics = self.get_metrics(
       source_code_pathnames: source_code_pathnames,
       componentized_source_code_locations: componentized_source_code_locations,
       packaged_source_code_locations: packaged_source_code_locations,
-      app_name: app_name
+      app_name: app_name,
+      use_gusto_legacy_names: use_gusto_legacy_names,
     )
 
     # This helps us debug what metrics are being sent
@@ -66,6 +71,10 @@ module ModularizationStatistics
       all_metrics.each do |metric|
         puts "Sending metric: #{metric}"
       end
+    end
+
+    if use_gusto_legacy_names
+      all_metrics = Private.convert_metrics_to_legacy(all_metrics)
     end
 
     Private::DatadogReporter.report!(
@@ -80,16 +89,22 @@ module ModularizationStatistics
       source_code_pathnames: T::Array[Pathname],
       componentized_source_code_locations: T::Array[Pathname],
       packaged_source_code_locations: T::Array[Pathname],
-      app_name: String
+      app_name: String,
+      # It is not recommended to set this to true.
+      # Gusto uses this to preserve historical trends in Dashboards as the names of
+      # things changed, but new dashboards can use names that better match current tooling conventions.
+      # The behavior of setting this parameter to true might change without warning
+      use_gusto_legacy_names: T::Boolean
     ).returns(T::Array[GaugeMetric])
   end
   def self.get_metrics(
     source_code_pathnames:,
     componentized_source_code_locations:,
     packaged_source_code_locations:,
-    app_name:
+    app_name:,
+    use_gusto_legacy_names: false
   )
-    Private::DatadogReporter.get_metrics(
+    all_metrics = Private::DatadogReporter.get_metrics(
       source_code_files: source_code_files(
         source_code_pathnames: source_code_pathnames,
         componentized_source_code_locations: componentized_source_code_locations,
@@ -97,6 +112,12 @@ module ModularizationStatistics
       ),
       app_name: app_name
     )
+
+    if use_gusto_legacy_names
+      all_metrics = Private.convert_metrics_to_legacy(all_metrics)
+    end
+
+    all_metrics
   end
 
   sig do
