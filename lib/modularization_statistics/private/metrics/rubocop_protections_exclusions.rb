@@ -22,7 +22,12 @@ module ModularizationStatistics
         # TODO: `rubocop-packs` may want to expose API for this
         sig { params(package: ParsePackwerk::Package, protection: PackageProtections::RubocopProtectionInterface).returns(Integer) }
         def self.exclude_count_for_package_and_protection(package, protection)
-          rubocop_todo = package.directory.join('.rubocop_todo.yml')
+          if package.name == ParsePackwerk::ROOT_PACKAGE_NAME
+            rubocop_todo = package.directory.join('.rubocop_todo.yml')
+          else
+            rubocop_todo = package.directory.join(RuboCop::Packs::PACK_LEVEL_RUBOCOP_TODO_YML)
+          end
+
           if rubocop_todo.exist?
             loaded_rubocop_todo = YAML.load_file(rubocop_todo)
             cop_config = loaded_rubocop_todo.fetch(protection.cop_name, {})

@@ -93,24 +93,9 @@ module ModularizationStatistics
             else
               T.absurd(violation_behavior)
             end
-          elsif protection.identifier == 'prevent_other_packages_from_using_this_package_without_explicit_visibility'
-            case violation_behavior
-            when PackageProtections::ViolationBehavior::FailOnAny
-              # We'd probably not want to support this right away
-              false
-            when PackageProtections::ViolationBehavior::FailNever
-              # We'd need to add this to `parse_packwerk` so that we can get other arbitrary top-level keys.
-              # Alternatively we can put this in `metadata` for the time being to unblock us.
-              # package.config['enforce_visibility']
-              !package.metadata['enforce_visibility']
-            when PackageProtections::ViolationBehavior::FailOnNew
-              !!package.metadata['enforce_visibility']
-            else
-              T.absurd(violation_behavior)
-            end
           else
             # Otherwise, we're in a rubocop case
-            rubocop_yml_file = package.directory.join('.rubocop.yml')
+            rubocop_yml_file = package.directory.join(RuboCop::Packs::PACK_LEVEL_RUBOCOP_YML)
             return false if !rubocop_yml_file.exist?
             rubocop_yml = YAML.load_file(rubocop_yml_file)
             protection = T.cast(protection, PackageProtections::RubocopProtectionInterface)

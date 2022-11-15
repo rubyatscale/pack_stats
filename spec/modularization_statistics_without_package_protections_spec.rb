@@ -674,7 +674,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
             enforce_privacy: true
           CONTENTS
 
-          write_file('packs/package_2/.rubocop.yml', <<~CONTENTS)
+          write_file('packs/package_2/package_rubocop.yml', <<~CONTENTS)
             Packs/TypedPublicApis:
               Enabled: true
           CONTENTS
@@ -695,7 +695,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
               enforce_dependencies_strictly: true
           CONTENTS
 
-          write_file('packs/package_1/.rubocop.yml', <<~CONTENTS)
+          write_file('packs/package_1/package_rubocop.yml', <<~CONTENTS)
             Packs/TypedPublicApis:
               Enabled: true
               FailureMode: strict
@@ -1094,7 +1094,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
                 - app/services/my_file2.rb
           YML
 
-          write_file('packs/foo/.rubocop_todo.yml', <<~YML)
+          write_file('packs/foo/package_rubocop_todo.yml', <<~YML)
             PackageProtections/NamespacedUnderPackageName:
               Exclude:
                 - packs/foo/app/services/my_file1.rb
@@ -1105,7 +1105,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
                 - packs/foo/app/services/my_file2.rb
           YML
 
-          write_file('packs/foo/bar/.rubocop_todo.yml', <<~YML)
+          write_file('packs/foo/bar/package_rubocop_todo.yml', <<~YML)
             PackageProtections/NamespacedUnderPackageName:
               Exclude:
                 - packs/foo/bar/app/services/my_file1.rb
