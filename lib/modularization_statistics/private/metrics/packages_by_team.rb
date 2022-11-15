@@ -24,7 +24,6 @@ module ModularizationStatistics
             team_tags = Metrics.tags_for_team(team_name) + [app_level_tag]
             all_metrics << GaugeMetric.for('by_team.all_packages.count', packages_by_team.count, team_tags)
             all_metrics += Metrics::PackwerkCheckerUsage.get_checker_metrics('by_team', packages_by_team, team_tags)
-            all_metrics += Metrics::RubocopUsage.get_metrics('by_team', packages_by_team, team_tags)
             all_metrics += Metrics::PublicUsage.get_public_usage_metrics('by_team', packages_by_team, team_tags)
             #
             # VIOLATIONS (implicit dependencies)
