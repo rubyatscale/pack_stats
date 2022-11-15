@@ -13,11 +13,6 @@ module ModularizationStatistics
         class PackwerkChecker < T::Struct
           const :setting, String
           const :strict_mode, String
-          # Later, we might convert to legacy metric names later so new clients get more sensible metric names
-          # That is, we might want to see metrics that are more closely connected to the new API.
-          # e.g. instead of `all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_on_any.count`, we'd see `all_packages.checkers.enforce_dependencies.strict.count`
-          # e.g. instead of `all_packages.prevent_this_package_from_creating_other_namespaces.fail_on_new.count`, `all_packages.cops.packs_namespaceconvention.true.count`
-          const :legacy_metric_name, String
         end
 
         sig { params(prefix: String, packages: T::Array[ParsePackwerk::Package], package_tags: T::Array[Tag]).returns(T::Array[GaugeMetric]) }
@@ -25,26 +20,26 @@ module ModularizationStatistics
           metrics = T.let([], T::Array[GaugeMetric])
 
           checkers = [
-            PackwerkChecker.new(setting: 'enforce_dependencies', strict_mode: 'enforce_dependencies_strictly', legacy_metric_name: 'prevent_this_package_from_violating_its_stated_dependencies'),
-            PackwerkChecker.new(setting: 'enforce_privacy', strict_mode: 'enforce_privacy_strictly', legacy_metric_name: 'prevent_other_packages_from_using_this_packages_internals')
+            PackwerkChecker.new(setting: 'enforce_dependencies', strict_mode: 'enforce_dependencies_strictly'),
+            PackwerkChecker.new(setting: 'enforce_privacy', strict_mode: 'enforce_privacy_strictly')
           ]
 
           checkers.each do |checker|
-            ['no', 'fail_the_build_if_new_instances_appear', 'fail_the_build_on_any_instances'].each do |violation_behavior|
+            ['false', 'true', 'strict'].each do |enabled_mode|
               count_of_packages = ParsePackwerk.all.count do |package|
                 strict_mode = package.metadata[checker.strict_mode]
                 enabled = YAML.load_file(package.yml)[checker.setting]
-                case violation_behavior
-                when 'fail_the_build_on_any_instances'
-                  !!strict_mode
-                when 'no'
+                case enabled_mode
+                when 'false'
                   !enabled
-                when 'fail_the_build_if_new_instances_appear'
+                when 'true'
                   enabled && !strict_mode
+                when 'strict'
+                  !!strict_mode
                 end
               end
 
-              metric_name = "#{prefix}.#{checker.legacy_metric_name}.#{violation_behavior}.count"
+              metric_name = "#{prefix}.packwerk_checkers.#{checker.setting}.#{enabled_mode}.count"
               metrics << GaugeMetric.for(metric_name, count_of_packages, package_tags)
             end
           end

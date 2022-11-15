@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# This test exists to ensure that Gusto metrics continue to work as expected
+#
 module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrapping
   RSpec.describe ModularizationStatistics do
     before do
@@ -13,6 +16,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           source_code_pathnames: Pathname.glob('**/**.rb'),
           datadog_client: datadog_client,
           report_time: report_time,
+          use_gusto_legacy_names: true,
         )
       end
 
@@ -46,6 +50,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           source_code_pathnames: Pathname.glob('**/**.rb'),
           componentized_source_code_locations: [Pathname.new('components')],
           packaged_source_code_locations: [Pathname.new('packs')],
+          use_gusto_legacy_names: true,
         )
       end
       let(:metrics) { subject }
@@ -74,18 +79,18 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_privacy.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.false.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.false.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.false.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.false.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.no.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.no.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.no.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.no.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.all_files.count', 0, Tags.for(['app:MyApp']))
@@ -93,8 +98,8 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
         end
 
         it 'emits no metrics about rubocop exclusions' do
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.exclusions.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.exclusions.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.rubocop_exclusions.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.rubocop_exclusions.count', 0, Tags.for(['app:MyApp']))
         end
       end
 
@@ -126,13 +131,13 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_privacy.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
@@ -183,13 +188,13 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_privacy.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
@@ -252,13 +257,13 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_privacy.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
@@ -405,13 +410,13 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_dependencies.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_privacy.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 2, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_if_new_instances_appear.count', 3, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 5, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
@@ -616,13 +621,13 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_dependencies.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_privacy.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 2, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_if_new_instances_appear.count', 3, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_if_new_instances_appear.count', 2, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_if_new_instances_appear.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.fail_the_build_on_any_instances.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 6, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
@@ -717,13 +722,13 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_dependencies.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.enforcing_privacy.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 2, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_on_any_instances.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_violating_its_stated_dependencies.fail_the_build_if_new_instances_appear.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_on_any_instances.count', 2, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_other_packages_from_using_this_packages_internals.fail_the_build_if_new_instances_appear.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_on_any_instances.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.fail_the_build_if_new_instances_appear.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.fail_the_build_on_any_instances.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
@@ -1068,8 +1073,8 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
         end
 
         it 'emits metrics about rubocop exclusions' do
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.exclusions.count', 6, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.exclusions.count', 6, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_exposing_an_untyped_api.rubocop_exclusions.count', 6, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.prevent_this_package_from_creating_other_namespaces.rubocop_exclusions.count', 6, Tags.for(['app:MyApp']))
         end
       end
     end
