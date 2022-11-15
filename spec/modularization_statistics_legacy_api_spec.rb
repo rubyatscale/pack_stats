@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+#
+# This test exists to ensure that Gusto metrics continue to work as expected
+#
 module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrapping
   RSpec.describe ModularizationStatistics do
     before do
@@ -13,6 +16,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           source_code_pathnames: Pathname.glob('**/**.rb'),
           datadog_client: datadog_client,
           report_time: report_time,
+          use_gusto_legacy_names: true,
         )
       end
 
@@ -46,6 +50,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
           source_code_pathnames: Pathname.glob('**/**.rb'),
           componentized_source_code_locations: [Pathname.new('components')],
           packaged_source_code_locations: [Pathname.new('packs')],
+          use_gusto_legacy_names: true,
         )
       end
       let(:metrics) { subject }
