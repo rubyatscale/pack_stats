@@ -1,6 +1,6 @@
 # typed: strict
 
-module ModularizationStatistics
+module PackStats
   module Private
     class SourceCodeFile < T::Struct
       extend T::Sig

@@ -3,15 +3,15 @@
 #
 # This test exists to ensure that Gusto metrics continue to work as expected
 #
-module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrapping
-  RSpec.describe ModularizationStatistics do
+module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
+  RSpec.describe PackStats do
     before do
       ParsePackwerk.bust_cache!
     end
 
-    describe 'ModularizationStatistics.report_to_datadog!' do
+    describe 'PackStats.report_to_datadog!' do
       let(:report_to_datadog) do
-        ModularizationStatistics.report_to_datadog!(
+        PackStats.report_to_datadog!(
           app_name: 'MyApp',
           source_code_pathnames: Pathname.glob('**/**.rb'),
           datadog_client: datadog_client,
@@ -28,7 +28,7 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
       end
 
       before do
-        allow(ModularizationStatistics).to receive(:get_metrics).and_return([expected_metric])
+        allow(PackStats).to receive(:get_metrics).and_return([expected_metric])
       end
 
       it 'emits to datadog' do
@@ -43,9 +43,9 @@ module ModularizationStatistics # rubocop:disable RSpec/DescribedClassModuleWrap
       end
     end
 
-    describe 'ModularizationStatistics.get_metrics' do
+    describe 'PackStats.get_metrics' do
       let(:subject) do
-        ModularizationStatistics.get_metrics(
+        PackStats.get_metrics(
           app_name: 'MyApp',
           source_code_pathnames: Pathname.glob('**/**.rb'),
           componentized_source_code_locations: [Pathname.new('components')],

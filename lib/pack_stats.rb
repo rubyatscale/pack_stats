@@ -15,7 +15,7 @@ require 'pack_stats/tag'
 require 'pack_stats/tags'
 require 'pack_stats/gauge_metric'
 
-module ModularizationStatistics
+module PackStats
   extend T::Sig
 
   ROOT_PACKAGE_NAME = T.let('root'.freeze, String)

@@ -11,7 +11,7 @@ require 'pack_stats/private/metrics/packages'
 require 'pack_stats/private/metrics/packages_by_team'
 require 'pack_stats/private/metrics/nested_packs'
 
-module ModularizationStatistics
+module PackStats
   module Private
     class DatadogReporter
       extend T::Sig
