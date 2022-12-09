@@ -54,7 +54,7 @@ It's recommended to run this in CI on the main/development branch so each new co
 With [`packwerk`](https://github.com/Shopify/packwerk), privacy and dependency violations do not show up until a package has set `enforce_privacy` and `enforce_dependency` (respectively) to `true`. As such, when you're first starting off, you'll see no violations, and then periodic large increases as teams start using these protections. If you're interested in looking at privacy and dependency violations over time as if all packages were enforcing dependencies and privacy the whole time, we recommend setting these values to be true before running modularization statistics in your CI.
 
 ```ruby
-require 'modularization_statistics'
+require 'pack_stats'
 
 namespace(:modularization) do
   desc(

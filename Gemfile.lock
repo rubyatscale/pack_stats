@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    modularization_statistics (0.0.1)
+    pack_stats (0.0.1)
       code_ownership
       code_teams
       dogapi
@@ -133,7 +133,7 @@ PLATFORMS
 
 DEPENDENCIES
   code_ownership
-  modularization_statistics!
+  pack_stats!
   parse_packwerk
   pry
   rake

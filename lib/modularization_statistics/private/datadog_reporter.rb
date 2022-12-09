@@ -2,14 +2,14 @@
 # frozen_string_literal: true
 
 require 'dogapi'
-require 'modularization_statistics/private/metrics'
-require 'modularization_statistics/private/metrics/files'
-require 'modularization_statistics/private/metrics/public_usage'
-require 'modularization_statistics/private/metrics/packwerk_checker_usage'
-require 'modularization_statistics/private/metrics/rubocop_usage'
-require 'modularization_statistics/private/metrics/packages'
-require 'modularization_statistics/private/metrics/packages_by_team'
-require 'modularization_statistics/private/metrics/nested_packs'
+require 'pack_stats/private/metrics'
+require 'pack_stats/private/metrics/files'
+require 'pack_stats/private/metrics/public_usage'
+require 'pack_stats/private/metrics/packwerk_checker_usage'
+require 'pack_stats/private/metrics/rubocop_usage'
+require 'pack_stats/private/metrics/packages'
+require 'pack_stats/private/metrics/packages_by_team'
+require 'pack_stats/private/metrics/nested_packs'
 
 module ModularizationStatistics
   module Private

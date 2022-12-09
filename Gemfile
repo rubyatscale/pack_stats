@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in modularization_statistics.gemspec
+# Specify your gem's dependencies in pack_stats.gemspec
 gemspec
 
 gem 'code_ownership'
