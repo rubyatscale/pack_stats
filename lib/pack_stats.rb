@@ -7,15 +7,15 @@ require 'benchmark'
 require 'code_teams'
 require 'code_ownership'
 require 'pathname'
-require 'modularization_statistics/private'
-require 'modularization_statistics/private/source_code_file'
-require 'modularization_statistics/private/datadog_reporter'
+require 'pack_stats/private'
+require 'pack_stats/private/source_code_file'
+require 'pack_stats/private/datadog_reporter'
 require 'parse_packwerk'
-require 'modularization_statistics/tag'
-require 'modularization_statistics/tags'
-require 'modularization_statistics/gauge_metric'
+require 'pack_stats/tag'
+require 'pack_stats/tags'
+require 'pack_stats/gauge_metric'
 
-module ModularizationStatistics
+module PackStats
   extend T::Sig
 
   ROOT_PACKAGE_NAME = T.let('root'.freeze, String)

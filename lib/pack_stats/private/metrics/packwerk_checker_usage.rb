@@ -3,7 +3,7 @@
 
 require 'rubocop-packs'
 
-module ModularizationStatistics
+module PackStats
   module Private
     module Metrics
       class PackwerkCheckerUsage

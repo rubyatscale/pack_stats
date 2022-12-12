@@ -1,7 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-module ModularizationStatistics
+module PackStats
   module Private
     module Metrics
       class PackagesByTeam

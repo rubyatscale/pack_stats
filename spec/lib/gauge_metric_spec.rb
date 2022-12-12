@@ -1,4 +1,4 @@
-module ModularizationStatistics
+module PackStats
   RSpec.describe GaugeMetric do
     it 'errors when metric length is greater than 200' do
       expect { GaugeMetric.for('a' * 250, 0, []) }.to raise_error do |e|

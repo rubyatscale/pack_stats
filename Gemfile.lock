@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    modularization_statistics (2.0.2)
+    pack_stats (0.0.1)
       code_ownership
       code_teams
       dogapi
@@ -31,7 +31,7 @@ GEM
       multi_json
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    json (2.6.2)
+    json (2.6.3)
     method_source (1.0.0)
     minitest (5.16.3)
     multi_json (1.15.0)
@@ -50,7 +50,7 @@ GEM
       parser (>= 2.6.4.0)
       sorbet-runtime (>= 0.5.9204)
       unparser
-    regexp_parser (2.6.0)
+    regexp_parser (2.6.1)
     rexml (3.2.5)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
@@ -75,9 +75,9 @@ GEM
       rubocop-ast (>= 1.19.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.23.0)
+    rubocop-ast (1.24.0)
       parser (>= 3.1.1.0)
-    rubocop-packs (0.0.22)
+    rubocop-packs (0.0.30)
       activesupport
       parse_packwerk
       rubocop
@@ -133,7 +133,7 @@ PLATFORMS
 
 DEPENDENCIES
   code_ownership
-  modularization_statistics!
+  pack_stats!
   parse_packwerk
   pry
   rake

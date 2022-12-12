@@ -1,4 +1,4 @@
-# ModularizationStatistics
+# PackStats
 
 This gem is used to report opinionated statistics about modularization to DataDog and other observability systems.
 
@@ -8,12 +8,12 @@ The gem reports metrics per-team, where each team is configured based on metadat
 Define your teams as described in the [Code Team - Package Based Ownership](https://github.com/rubyatscale/code_ownership#package-based-ownership) documentation.
 
 # Usage
-The main method to this gem is `ModularizationStatistics#report_to_datadog!`. Refer to the Sorbet signature for this method for the exact types to be passed in.
+The main method to this gem is `PackStats#report_to_datadog!`. Refer to the Sorbet signature for this method for the exact types to be passed in.
 
 This is an example of how to use this API:
 
 ```ruby
-ModularizationStatistics.report_to_datadog!(
+PackStats.report_to_datadog!(
   #
   # A properly initialized `Dogapi::Client`
   # Example: Dogapi::Client.new(ENV.fetch('DATADOG_API_KEY')
@@ -54,7 +54,7 @@ It's recommended to run this in CI on the main/development branch so each new co
 With [`packwerk`](https://github.com/Shopify/packwerk), privacy and dependency violations do not show up until a package has set `enforce_privacy` and `enforce_dependency` (respectively) to `true`. As such, when you're first starting off, you'll see no violations, and then periodic large increases as teams start using these protections. If you're interested in looking at privacy and dependency violations over time as if all packages were enforcing dependencies and privacy the whole time, we recommend setting these values to be true before running modularization statistics in your CI.
 
 ```ruby
-require 'modularization_statistics'
+require 'pack_stats'
 
 namespace(:modularization) do
   desc(
@@ -93,7 +93,7 @@ namespace(:modularization) do
       ParsePackwerk.write_package_yml!(new_package)
     end
 
-    ModularizationStatistics.report_to_datadog!(
+    PackStats.report_to_datadog!(
       datadog_client: Dogapi::Client.new(ENV.fetch('DATADOG_API_KEY')),
       app_name: Rails.application.class.module_parent_name,
       source_code_pathnames: source_code_pathnames,
@@ -105,7 +105,7 @@ end
 
 # Using Other Observability Tools
 
-Right now this tool sends metrics to DataDog early. However, if you want to use this with other tools, you can call `ModularizationStatistics.get_metrics(...)` to get generic metrics that you can then send to whatever observability provider you use.
+Right now this tool sends metrics to DataDog early. However, if you want to use this with other tools, you can call `PackStats.get_metrics(...)` to get generic metrics that you can then send to whatever observability provider you use.
 
 # Setting Up Your Dashboards
 

@@ -1,6 +1,6 @@
 # typed: strict
 
-module ModularizationStatistics
+module PackStats
   class Tag < T::Struct
     extend T::Sig
     const :key, String

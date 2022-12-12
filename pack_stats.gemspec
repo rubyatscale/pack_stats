@@ -1,18 +1,18 @@
 Gem::Specification.new do |spec|
-  spec.name          = 'modularization_statistics'
-  spec.version       = '2.0.2'
+  spec.name          = 'pack_stats'
+  spec.version       = '0.0.1'
   spec.authors       = ['Gusto Engineers']
   spec.email         = ['dev@gusto.com']
 
   spec.summary       = 'A gem to collect statistics about modularization progress in a Rails application using packwerk.'
   spec.description   = 'A gem to collect statistics about modularization progress in a Rails application using packwerk.'
-  spec.homepage      = 'https://github.com/rubyatscale/modularization_statistics'
+  spec.homepage      = 'https://github.com/rubyatscale/pack_stats'
   spec.license       = 'MIT'
 
   if spec.respond_to?(:metadata)
     spec.metadata['homepage_uri'] = spec.homepage
-    spec.metadata['source_code_uri'] = 'https://github.com/rubyatscale/modularization_statistics'
-    spec.metadata['changelog_uri'] = 'https://github.com/rubyatscale/modularization_statistics/releases'
+    spec.metadata['source_code_uri'] = 'https://github.com/rubyatscale/pack_stats'
+    spec.metadata['changelog_uri'] = 'https://github.com/rubyatscale/pack_stats/releases'
     spec.metadata['allowed_push_host'] = 'https://rubygems.org'
   else
     raise 'RubyGems 2.0 or newer is required to protect against ' \

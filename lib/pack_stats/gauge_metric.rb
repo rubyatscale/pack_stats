@@ -1,6 +1,6 @@
 # typed: strict
 
-module ModularizationStatistics
+module PackStats
   class GaugeMetric < T::Struct
     extend T::Sig
 
