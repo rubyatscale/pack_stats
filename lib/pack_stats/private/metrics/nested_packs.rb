@@ -53,7 +53,7 @@ module PackStats
           sig { returns(T::Array[ParsePackwerk::Violation]) }
           def cross_group_violations
             all_violations = members.flat_map do |member|
-              ParsePackwerk::DeprecatedReferences.for(member).violations
+              ParsePackwerk::PackageTodo.for(member).violations
             end
 
             all_violations.select do |violation|

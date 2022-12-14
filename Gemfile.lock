@@ -35,8 +35,9 @@ GEM
     method_source (1.0.0)
     minitest (5.16.3)
     multi_json (1.15.0)
+    netrc (0.11.0)
     parallel (1.22.1)
-    parse_packwerk (0.14.0)
+    parse_packwerk (0.16.0)
       sorbet-runtime
     parser (3.1.1.0)
       ast (~> 2.4.1)
@@ -98,16 +99,20 @@ GEM
     sorbet-static (0.5.9924-universal-darwin-20)
     sorbet-static (0.5.9924-universal-darwin-21)
     sorbet-static (0.5.9924-x86_64-linux)
+    sorbet-static-and-runtime (0.5.9924)
+      sorbet (= 0.5.9924)
+      sorbet-runtime (= 0.5.9924)
     spoom (1.1.11)
       sorbet (>= 0.5.9204)
       sorbet-runtime (>= 0.5.9204)
       thor (>= 0.19.2)
-    tapioca (0.7.2)
+    tapioca (0.10.2)
       bundler (>= 1.17.3)
+      netrc (>= 0.11.0)
+      parallel (>= 1.21.0)
       pry (>= 0.12.2)
       rbi (~> 0.0.0, >= 0.0.14)
-      sorbet-runtime (>= 0.5.9204)
-      sorbet-static (>= 0.5.9204)
+      sorbet-static-and-runtime (>= 0.5.9204)
       spoom (~> 1.1.0, >= 1.1.11)
       thor (>= 1.2.0)
       yard-sorbet
@@ -132,9 +137,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  code_ownership
   pack_stats!
-  parse_packwerk
   pry
   rake
   rspec (~> 3.0)
