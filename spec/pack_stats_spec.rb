@@ -299,7 +299,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
         include_context 'team names are based off of file names'
 
         before do
-          write_file('deprecated_references.yml', <<~CONTENTS)
+          write_file('package_todo.yml', <<~CONTENTS)
             # This file contains a list of dependencies that are not part of the long term plan for ..
             # We should generally work to reduce this list, but not at the expense of actually getting work done.
             #
@@ -336,7 +336,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           CONTENTS
 
           write_file('empty_file_to_keep_directory.rb')
-          write_file('packs/package_2/deprecated_references.yml', <<~CONTENTS)
+          write_file('packs/package_2/package_todo.yml', <<~CONTENTS)
             # This file contains a list of dependencies that are not part of the long term plan for ..
             # We should generally work to reduce this list, but not at the expense of actually getting work done.
             #
@@ -484,7 +484,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
         include_context 'team names are based off of file names'
 
         before do
-          write_file('deprecated_references.yml', <<~CONTENTS)
+          write_file('package_todo.yml', <<~CONTENTS)
             # This file contains a list of dependencies that are not part of the long term plan for ..
             # We should generally work to reduce this list, but not at the expense of actually getting work done.
             #
@@ -520,7 +520,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           CONTENTS
 
           write_file('empty_file_to_keep_directory.rb')
-          write_file('packs/package_2/deprecated_references.yml', <<~CONTENTS)
+          write_file('packs/package_2/package_todo.yml', <<~CONTENTS)
             # This file contains a list of dependencies that are not part of the long term plan for ..
             # We should generally work to reduce this list, but not at the expense of actually getting work done.
             #
@@ -560,7 +560,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           CONTENTS
 
           write_file('packs/package_2/spec/some_package_file_spec.rb')
-          write_file('packs/package_1/deprecated_references.yml', <<~CONTENTS)
+          write_file('packs/package_1/package_todo.yml', <<~CONTENTS)
             # This file contains a list of dependencies that are not part of the long term plan for ..
             # We should generally work to reduce this list, but not at the expense of actually getting work done.
             #
@@ -916,7 +916,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           write_package_yml('packs/cashews')
 
           # Represents TWO privacy and TWO dependency violations across pack groups
-          write_file('deprecated_references.yml', <<~CONTENTS)
+          write_file('package_todo.yml', <<~CONTENTS)
             # This file contains a list of dependencies that are not part of the long term plan for ..
             # We should generally work to reduce this list, but not at the expense of actually getting work done.
             #
@@ -935,7 +935,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           CONTENTS
 
           # Represents ONE privacy and ZERO dependency violations across pack groups
-          write_file('packs/fruits/deprecated_references.yml', <<~CONTENTS)
+          write_file('packs/fruits/package_todo.yml', <<~CONTENTS)
             # This file contains a list of dependencies that are not part of the long term plan for ..
             # We should generally work to reduce this list, but not at the expense of actually getting work done.
             #
@@ -960,7 +960,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           CONTENTS
 
           # Represents ZERO violations across pack groups
-          write_file('packs/fruits/apples/deprecated_references.yml', <<~CONTENTS)
+          write_file('packs/fruits/apples/package_todo.yml', <<~CONTENTS)
             # This file contains a list of dependencies that are not part of the long term plan for ..
             # We should generally work to reduce this list, but not at the expense of actually getting work done.
             #
