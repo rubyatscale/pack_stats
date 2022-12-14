@@ -682,18 +682,14 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
 
           write_file('packs/package_3/package.yml', <<~CONTENTS)
             enforce_dependencies: false
-            enforce_privacy: true
+            enforce_privacy: strict
             metadata:
               other_stuff: is_irrelevant
-              enforce_privacy_strictly: true
           CONTENTS
 
           write_file('packs/package_1/package.yml', <<~CONTENTS)
-            enforce_dependencies: true
-            enforce_privacy: true
-            metadata:
-              enforce_privacy_strictly: true
-              enforce_dependencies_strictly: true
+            enforce_dependencies: strict
+            enforce_privacy: strict
           CONTENTS
 
           write_file('packs/package_1/package_rubocop.yml', <<~CONTENTS)
