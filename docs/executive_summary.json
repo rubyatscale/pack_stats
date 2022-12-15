@@ -1403,17 +1403,17 @@
                   "response_format": "timeseries",
                   "queries": [
                     {
-                      "query": "avg:modularization.all_packages.privacy_violations.count{$app,app:zenpayroll} by {app}",
+                      "query": "avg:modularization.all_packages.privacy_violations.count{$app} by {app}",
                       "data_source": "metrics",
                       "name": "query2"
                     },
                     {
-                      "query": "avg:modularization.all_packages.dependency_violations.count{$app,app:zenpayroll} by {app}",
+                      "query": "avg:modularization.all_packages.dependency_violations.count{$app} by {app}",
                       "data_source": "metrics",
                       "name": "query1"
                     },
                     {
-                      "query": "avg:modularization.all_files.totals{$app,app:zenpayroll} by {app}",
+                      "query": "avg:modularization.all_files.totals{$app} by {app}",
                       "data_source": "metrics",
                       "name": "query3"
                     }
