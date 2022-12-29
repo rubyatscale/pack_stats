@@ -7,45 +7,45 @@
 # source://packs//lib/packs/pack.rb#3
 module Packs
   class << self
-    # source://packs//lib/packs.rb#15
+    # source://packs//lib/packs.rb#16
     sig { returns(T::Array[::Packs::Pack]) }
     def all; end
 
-    # source://packs//lib/packs.rb#33
+    # source://packs//lib/packs.rb#34
     sig { void }
     def bust_cache!; end
 
-    # source://packs//lib/packs.rb#40
+    # source://packs//lib/packs.rb#41
     sig { returns(::Packs::Private::Configuration) }
     def config; end
 
     # @yield [config]
     #
-    # source://packs//lib/packs.rb#46
+    # source://packs//lib/packs.rb#47
     sig { params(blk: T.proc.params(arg0: ::Packs::Private::Configuration).void).void }
     def configure(&blk); end
 
-    # source://packs//lib/packs.rb#20
+    # source://packs//lib/packs.rb#21
     sig { params(name: ::String).returns(T.nilable(::Packs::Pack)) }
     def find(name); end
 
-    # source://packs//lib/packs.rb#25
+    # source://packs//lib/packs.rb#26
     sig { params(file_path: T.any(::Pathname, ::String)).returns(T.nilable(::Packs::Pack)) }
     def for_file(file_path); end
 
     private
 
-    # source://packs//lib/packs.rb#72
+    # source://packs//lib/packs.rb#73
     sig { returns(T::Array[::Pathname]) }
     def package_glob_patterns; end
 
-    # source://packs//lib/packs.rb#58
+    # source://packs//lib/packs.rb#59
     sig { returns(T::Hash[::String, ::Packs::Pack]) }
     def packs_by_name; end
   end
 end
 
-# source://packs//lib/packs.rb#9
+# source://packs//lib/packs.rb#10
 Packs::PACKAGE_FILE = T.let(T.unsafe(nil), String)
 
 # source://packs//lib/packs/pack.rb#4

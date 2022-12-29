@@ -3,6 +3,7 @@
 require 'bundler/setup'
 require 'pack_stats'
 require 'pry'
+require 'packs/rspec/support'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -14,22 +15,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-
-  config.around do |example|
-    prefix = [File.basename($0), Process.pid].join('-') # rubocop:disable Style/SpecialGlobalVars
-    tmpdir = Dir.mktmpdir(prefix)
-    Dir.chdir(tmpdir) do
-      example.run
-    end
-  ensure
-    FileUtils.rm_rf(tmpdir)
-  end
-end
-
-def write_file(path, content = '')
-  pathname = Pathname.new(path)
-  FileUtils.mkdir_p(pathname.dirname)
-  pathname.write(content)
 end
 
 def sorbet_double(stubbed_class, attr_map = {})
@@ -97,40 +82,10 @@ RSpec::Matchers.define(:include_metric) do |expected_metric|
 end
 
 def write_package_yml(
-  pack_name,
-  dependencies: [],
-  enforce_dependencies: true,
-  enforce_privacy: true,
-  protections: {},
-  global_namespaces: [],
-  visible_to: [],
-  owner: nil
+  name
 )
-  defaults = {
-    'prevent_this_package_from_violating_its_stated_dependencies' => 'fail_on_new',
-    'prevent_other_packages_from_using_this_packages_internals' => 'fail_on_new',
-    'prevent_this_package_from_exposing_an_untyped_api' => 'fail_on_new',
-    'prevent_this_package_from_creating_other_namespaces' => 'fail_on_new',
-  }
-  protections_with_defaults = defaults.merge(protections)
-  metadata = { 'protections' => protections_with_defaults }
-
-  if owner
-    metadata.merge({ 'owner' => owner })
-  end
-
-  if global_namespaces
-    metadata.merge({ 'global_namespaces' => global_namespaces })
-  end
-
-  package = ParsePackwerk::Package.new(
-    name: pack_name,
-    dependencies: dependencies,
-    enforce_dependencies: enforce_dependencies,
-    enforce_privacy: enforce_privacy,
-    metadata: metadata,
-    config: {},
-  )
-
-  ParsePackwerk.write_package_yml!(package)
+  write_pack(name, {
+    'enforce_dependencies' => true,
+    'enforce_privacy' => true,
+  })
 end
