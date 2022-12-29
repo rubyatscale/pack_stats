@@ -38,13 +38,6 @@ PackStats.report_to_datadog!(
   # Example: [Pathname.new("./gems")]
   #
   componentized_source_code_locations: componentized_source_code_locations,
-  #
-  # A file is determined to be packaged if it exists in any of these directories.
-  # This is an array of `Pathname`. `Pathname` can be relative or absolute paths.
-  #
-  # Example: [Pathname.new("./packs")]
-  #
-  packaged_source_code_locations: packaged_source_code_locations,
 )
 ```
 

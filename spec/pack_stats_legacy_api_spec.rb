@@ -49,16 +49,21 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           app_name: 'MyApp',
           source_code_pathnames: Pathname.glob('**/**.rb'),
           componentized_source_code_locations: [Pathname.new('components')],
-          packaged_source_code_locations: [Pathname.new('packs')],
           use_gusto_legacy_names: true,
         )
       end
       let(:metrics) { subject }
 
       before do
+        Packs.bust_cache!
         CodeTeams.bust_caches!
         CodeOwnership.bust_caches!
         write_package_yml('.')
+        write_file('packs.yml', <<~YML)
+        pack_paths:
+          - packs/*
+          - packs/*/*
+        YML
       end
 
       context 'in empty app' do

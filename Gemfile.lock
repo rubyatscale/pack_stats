@@ -1,10 +1,11 @@
 PATH
   remote: .
   specs:
-    pack_stats (0.0.2)
+    pack_stats (0.0.3)
       code_ownership
       code_teams
       dogapi
+      packs
       parse_packwerk
       rubocop-packs
       sorbet-runtime
@@ -18,9 +19,9 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     ast (2.4.2)
-    code_ownership (1.29.1)
+    code_ownership (1.29.2)
       code_teams (~> 1.0)
-      parse_packwerk
+      packs
       sorbet-runtime
     code_teams (1.0.0)
       sorbet-runtime
@@ -36,8 +37,10 @@ GEM
     minitest (5.16.3)
     multi_json (1.15.0)
     netrc (0.11.0)
+    packs (0.0.4)
+      sorbet-runtime
     parallel (1.22.1)
-    parse_packwerk (0.16.0)
+    parse_packwerk (0.18.0)
       sorbet-runtime
     parser (3.1.1.0)
       ast (~> 2.4.1)
@@ -76,10 +79,11 @@ GEM
       rubocop-ast (>= 1.19.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.24.0)
+    rubocop-ast (1.24.1)
       parser (>= 3.1.1.0)
-    rubocop-packs (0.0.30)
+    rubocop-packs (0.0.33)
       activesupport
+      packs
       parse_packwerk
       rubocop
       rubocop-sorbet

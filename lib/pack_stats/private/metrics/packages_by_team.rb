@@ -17,7 +17,8 @@ module PackStats
           all_metrics = T.let([], T::Array[GaugeMetric])
           app_level_tag = Tag.for('app', app_name)
 
-          all_packages.group_by { |package| CodeOwnership.for_package(package)&.name }.each do |team_name, packages_by_team|
+          
+          all_packages.group_by { |package| Private.package_owner(package) }.each do |team_name, packages_by_team|
             # We look at `all_packages` because we care about ALL inbound violations across all teams
             inbound_violations_by_package = all_packages.flat_map(&:violations).group_by(&:to_package_name)
 
@@ -51,7 +52,7 @@ module PackStats
                 raise StandardError, "Could not find matching package #{violation.to_package_name}"
               end
 
-              CodeOwnership.for_package(to_package)&.name
+              Private.package_owner(to_package)
             end
 
             grouped_outbound_violations.each do |to_team_name, violations|

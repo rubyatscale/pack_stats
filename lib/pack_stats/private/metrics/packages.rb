@@ -63,7 +63,7 @@ module PackStats
                 raise StandardError, "Could not find matching package #{to_package_name}"
               end
 
-              tags = package_tags + [Tag.for('to_package', Metrics.humanized_package_name(to_package_name))] + Metrics.tags_for_to_team(CodeOwnership.for_package(to_package)&.name)
+              tags = package_tags + [Tag.for('to_package', Metrics.humanized_package_name(to_package_name))] + Metrics.tags_for_to_team(Private.package_owner(to_package))
               all_metrics << GaugeMetric.for('by_package.outbound_dependency_violations.per_package.count', Metrics.file_count(violations.select(&:dependency?)), tags)
               all_metrics << GaugeMetric.for('by_package.outbound_privacy_violations.per_package.count', Metrics.file_count(violations.select(&:privacy?)), tags)
             end
@@ -89,7 +89,8 @@ module PackStats
                 raise StandardError, "Could not find matching package #{explicit_dependency}"
               end
 
-              tags = package_tags + [Tag.for('to_package', Metrics.humanized_package_name(explicit_dependency))] + Metrics.tags_for_to_team(CodeOwnership.for_package(to_package)&.name)
+              owner = Private.package_owner(to_package)
+              tags = package_tags + [Tag.for('to_package', Metrics.humanized_package_name(explicit_dependency))] + Metrics.tags_for_to_team(owner)
               all_metrics << GaugeMetric.for('by_package.outbound_explicit_dependencies.per_package.count', 1, tags)
             end
 

@@ -17,7 +17,7 @@ module PackStats
         [
           Tag.new(key: 'package', value: humanized_package_name(package.name)),
           Tag.new(key: 'app', value: app_name),
-          *Metrics.tags_for_team(CodeOwnership.for_package(package)&.name),
+          *Metrics.tags_for_team(Private.package_owner(package)),
         ]
       end
 
