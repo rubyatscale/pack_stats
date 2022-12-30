@@ -85,7 +85,7 @@ end
 
 # Using Other Observability Tools
 
-Right now this tool sends metrics to DataDog early. However, if you want to use this with other tools, you can call `PackStats.get_metrics(...)` to get generic metrics that you can then send to whatever observability provider you use.
+Right now this tool sends metrics to DataDog only. However, if you want to use this with other tools, you can call `PackStats.get_metrics(...)` to get generic metrics that you can then send to whatever observability provider you use.
 
 # Setting Up Your Dashboards
 
