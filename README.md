@@ -62,13 +62,7 @@ namespace(:modularization) do
     # `enforce_dependencies` and `enforce_privacy` set to true, then update deprecations.
     old_packages = ParsePackwerk.all
     old_packages.each do |package|
-      new_package = ParsePackwerk::Package.new(
-        dependencies: package.dependencies,
-        enforce_dependencies: true,
-        enforce_privacy: true,
-        metadata: package.metadata,
-        name: package.name
-      )
+      new_package = package.with(enforce_dependencies: true, enforce_privacy: true)
       ParsePackwerk.write_package_yml!(new_package)
     end
 
@@ -76,14 +70,7 @@ namespace(:modularization) do
 
     # Now we reset it back so that the protection values are the same as the native packwerk configuration
     old_packages.each do |package|
-      new_package = ParsePackwerk::Package.new(
-        dependencies: package.dependencies,
-        enforce_dependencies: package.enforce_dependencies,
-        enforce_privacy: package.enforce_privacy,
-        metadata: package.metadata,
-        name: package.name
-      )
-      ParsePackwerk.write_package_yml!(new_package)
+      ParsePackwerk.write_package_yml!(package)
     end
 
     PackStats.report_to_datadog!(
