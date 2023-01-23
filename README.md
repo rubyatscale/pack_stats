@@ -2,6 +2,9 @@
 
 This gem is used to report opinionated statistics about modularization to DataDog and other observability systems.
 
+# Configuring Packs
+This gem assumes you've correctly configured the [`packs`](https://github.com/rubyatscale/packs#configuration) gem so that `pack_stats` knows where to find your code's packs.
+
 # Configuring Ownership
 The gem reports metrics per-team, where each team is configured based on metadata included in Packwerk package.yml files.
 
