@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'pack_stats'
-  spec.version       = '0.0.3'
+  spec.version       = '0.0.4'
   spec.authors       = ['Gusto Engineers']
   spec.email         = ['dev@gusto.com']
 
@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = Gem::Requirement.new('>= 2.6.0')
 
   # Specify which files should be added to the gem when it is released.
-  spec.files = Dir['README.md', 'sorbet/**/*', 'lib/**/*']
+  spec.files = Dir['README.md', 'lib/**/*']
 
   spec.require_paths = ['lib']
 
