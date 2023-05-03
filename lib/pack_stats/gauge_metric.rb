@@ -40,12 +40,12 @@ module PackStats
     sig { params(tag_value: T::Boolean).void }
     def self.set_max_enforcements_tag(tag_value)
       @max_enforcements_tag = T.let(@max_enforcements_tag, T.nilable(Tag))
-      @max_enforcements_tag = Tag.new(key: 'max_enforcements', value: tag_value)
+      @max_enforcements_tag = Tag.new(key: 'max_enforcements', value: tag_value ? 'true' : 'false')
     end
 
     sig { returns(Tag) }
     def self.max_enforcements_tag
-      @max_enforcements_tag || Tag.new(key: 'max_enforcements', value: false)
+      @max_enforcements_tag || Tag.new(key: 'max_enforcements', value: 'false')
     end
   end
 end
