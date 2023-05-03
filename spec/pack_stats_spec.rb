@@ -4,6 +4,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
   RSpec.describe PackStats do
     before do
       ParsePackwerk.bust_cache!
+      write_file('config/code_ownership.yml', YAML.dump({}))
     end
 
     describe 'PackStats.report_to_datadog!' do

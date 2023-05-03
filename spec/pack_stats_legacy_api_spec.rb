@@ -64,6 +64,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           - packs/*
           - packs/*/*
         YML
+        write_file('config/code_ownership.yml', YAML.dump({}))
       end
 
       context 'in empty app' do
