@@ -1073,6 +1073,71 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.exclusions.count', 6, Tags.for(['app:MyApp']))
         end
       end
+
+      context 'when getting metrics after turning all protections to max' do
+        let(:subject) do
+          PackStats.get_metrics(
+            app_name: 'MyApp',
+            source_code_pathnames: Pathname.glob('**/**.rb'),
+            componentized_source_code_locations: [Pathname.new('components')],
+            max_enforcements_tag_value: true
+          )
+        end
+
+        include_context 'only one team'
+
+        before do
+          write_file('empty_file.rb')
+          write_file('packs/only_package/app/some_package_file.rb')
+          write_file('packs/only_package/package.yml', <<~CONTENTS)
+            enforce_dependencies: true
+            enforce_privacy: true
+          CONTENTS
+
+          write_file('packs/only_package/spec/some_package_file_spec.rb')
+        end
+
+        it 'emits the right metrics' do
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.component_files.by_team', count: 0, tags: Tags.for(['team:Some team', 'app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.packaged_files.by_team', count: 2, tags: Tags.for(['team:Some team', 'app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_files.by_team', count: 3, tags: Tags.for(['team:Some team', 'app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.component_files.totals', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.packaged_files.totals', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_files.totals', count: 3, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.count', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.dependencies.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.dependency_violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.privacy_violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.enforcing_dependencies.count', count: 1, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.enforcing_privacy.count', count: 1, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.with_violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_dependencies.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_dependencies.true.count', count: 1, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_privacy.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_privacy.true.count', count: 1, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.rubocops.packs_typedpublicapis.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.rubocops.packs_typedpublicapis.true.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.rubocops.packs_rootnamespaceispackname.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.package_based_file_ownership.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.using_public_directory.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.dependency_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.privacy_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.outbound_dependency_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.inbound_dependency_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.outbound_privacy_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.inbound_privacy_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.outbound_explicit_dependencies.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.inbound_explicit_dependencies.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.using_public_directory.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.all_files.count', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.public_files.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_team.using_public_directory.count', count: 0, tags: Tags.for(['app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_team.all_files.count', count: 2, tags: Tags.for(['app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_team.public_files.count', count: 0, tags: Tags.for(['app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.using_public_directory.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.all_files.count', count: 2, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.public_files.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))        end
+      end
     end
   end
 end
