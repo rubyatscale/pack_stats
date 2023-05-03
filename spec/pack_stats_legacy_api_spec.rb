@@ -37,7 +37,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           'modularization.some_metric',
           [[report_time, 11]],
           type: 'gauge',
-          tags: ['mykey:myvalue', 'myotherkey:myothervalue']
+          tags: ['mykey:myvalue', 'myotherkey:myothervalue', 'max_enforcements:false']
         )
         report_to_datadog
       end
@@ -64,6 +64,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           - packs/*
           - packs/*/*
         YML
+        write_file('config/code_ownership.yml', YAML.dump({}))
       end
 
       context 'in empty app' do

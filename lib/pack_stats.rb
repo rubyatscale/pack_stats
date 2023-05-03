@@ -39,7 +39,9 @@ module PackStats
       # See note on get_metrics
       packaged_source_code_locations: T.nilable(T::Array[Pathname]),
       # See note on get_metrics
-      use_gusto_legacy_names: T::Boolean
+      use_gusto_legacy_names: T::Boolean,
+      # See note on get_metrics
+      max_enforcements_tag_value: T::Boolean
     ).void
   end
   def self.report_to_datadog!(
@@ -50,7 +52,8 @@ module PackStats
     report_time: Time.now, # rubocop:disable Rails/TimeZone
     verbose: false,
     packaged_source_code_locations: [],
-    use_gusto_legacy_names: false
+    use_gusto_legacy_names: false,
+    max_enforcements_tag_value: false
   )
 
     all_metrics = self.get_metrics(
@@ -58,6 +61,7 @@ module PackStats
       componentized_source_code_locations: componentized_source_code_locations,
       app_name: app_name,
       use_gusto_legacy_names: use_gusto_legacy_names,
+      max_enforcements_tag_value: max_enforcements_tag_value,
     )
 
     # This helps us debug what metrics are being sent
@@ -89,7 +93,12 @@ module PackStats
       # Gusto uses this to preserve historical trends in Dashboards as the names of
       # things changed, but new dashboards can use names that better match current tooling conventions.
       # The behavior of setting this parameter to true might change without warning
-      use_gusto_legacy_names: T::Boolean
+      use_gusto_legacy_names: T::Boolean,
+      # You can set this to `true` to tag all metrics with `max_enforcements:true`.
+      # This is useful if you want to submit two sets of metrics:
+      # Once with the violation counts as configured in the app
+      # Another time with the violation counts after turning on all enforcements and running `bin/packwerk update`.
+      max_enforcements_tag_value: T::Boolean
     ).returns(T::Array[GaugeMetric])
   end
   def self.get_metrics(
@@ -97,8 +106,12 @@ module PackStats
     componentized_source_code_locations:,
     app_name:,
     packaged_source_code_locations: [],
-    use_gusto_legacy_names: false
+    use_gusto_legacy_names: false,
+    max_enforcements_tag_value: false
   )
+
+    GaugeMetric.set_max_enforcements_tag(max_enforcements_tag_value)
+
     all_metrics = Private::DatadogReporter.get_metrics(
       source_code_files: source_code_files(
         source_code_pathnames: source_code_pathnames,

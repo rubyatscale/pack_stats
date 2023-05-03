@@ -17,10 +17,11 @@ module PackStats
         raise StandardError.new("Metrics names must not exceed 200 characters: #{name}") # rubocop:disable Style/RaiseArgs
       end
 
+      all_tags = [*tags, max_enforcements_tag]
       new(
         name: name,
         count: count,
-        tags: tags
+        tags: all_tags
       )
     end
 
@@ -34,6 +35,17 @@ module PackStats
       other.name == self.name &&
         other.count == self.count &&
         other.tags == self.tags
+    end
+
+    sig { params(tag_value: T::Boolean).void }
+    def self.set_max_enforcements_tag(tag_value)
+      @max_enforcements_tag = T.let(@max_enforcements_tag, T.nilable(Tag))
+      @max_enforcements_tag = Tag.new(key: 'max_enforcements', value: tag_value ? 'true' : 'false')
+    end
+
+    sig { returns(Tag) }
+    def self.max_enforcements_tag
+      @max_enforcements_tag || Tag.new(key: 'max_enforcements', value: 'false')
     end
   end
 end
