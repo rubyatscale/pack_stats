@@ -4,7 +4,7 @@ module PackStats
   class Tag < T::Struct
     extend T::Sig
     const :key, String
-    const :value, T.any(String, T::Boolean)
+    const :value, String
 
     sig { returns(String) }
     def to_s
