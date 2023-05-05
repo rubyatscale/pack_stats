@@ -23,37 +23,44 @@ module PackStats
             all_metrics << GaugeMetric.for('by_team.all_packages.count', packages_by_team.count, team_tags)
             all_metrics += Metrics::PackwerkCheckerUsage.get_checker_metrics('by_team', packages_by_team, team_tags)
             all_metrics += Metrics::PublicUsage.get_public_usage_metrics('by_team', packages_by_team, team_tags)
+            all_metrics << GaugeMetric.for('by_team.has_readme.count', packages_by_team.count { |package| Metrics.has_readme?(package) }, team_tags)
 
             outbound_violations = packages_by_team.flat_map(&:violations)
             # We look at `all_packages` because we care about ALL inbound violations across all teams
             inbound_violations_by_package = all_packages.flat_map(&:violations).group_by(&:to_package_name)
             # Here we only look at packages_by_team because we only care about inbound violations onto packages for this team
             inbound_violations = packages_by_team.flat_map { |package| inbound_violations_by_package[package.name] || [] }
-            all_dependency_violations = outbound_violations.select(&:dependency?)
-            all_privacy_violations = inbound_violations.select(&:privacy?)
 
-            all_metrics << GaugeMetric.for('by_team.dependency_violations.count', Metrics.file_count(all_dependency_violations), team_tags)
-            all_metrics << GaugeMetric.for('by_team.privacy_violations.count', Metrics.file_count(all_privacy_violations), team_tags)
-            all_metrics << GaugeMetric.for('by_team.has_readme.count', packages_by_team.count { |package| Metrics.has_readme?(package) }, team_tags)
+            PackwerkCheckerUsage::CHECKERS.each do |checker|
+              direction = checker.direction
+              case direction
+              when PackwerkCheckerUsage::Direction::Outbound
+                all_violations_of_type = outbound_violations.select { |v| v.type == checker.violation_type } 
 
-            grouped_outbound_violations = outbound_violations.group_by do |violation|
-              to_package = ParsePackwerk.find(violation.to_package_name)
-              if to_package.nil?
-                raise StandardError, "Could not find matching package #{violation.to_package_name}"
+                violation_count = packages_by_team.sum { |package| Metrics.file_count(package.violations.select{|v| v.type == checker.violation_type}) }
+                tags = team_tags + [checker.violation_type_tag]
+                all_metrics << GaugeMetric.for("by_team.violations.count", violation_count, tags)
+
+                all_packages.group_by { |package| Private.package_owner(package) }.each do |other_team_name, packages_by_team|
+                  violations = outbound_violations.select{|v| packages_by_team.map(&:name).include?(v.to_package_name) && v.type == checker.violation_type}
+                  tags = team_tags + Metrics.tags_for_other_team(other_team_name) + [checker.violation_type_tag]
+                  all_metrics << GaugeMetric.for("by_team.violations.per_team.count", Metrics.file_count(violations), tags)
+                end
+              when PackwerkCheckerUsage::Direction::Inbound
+                all_violations_of_type = inbound_violations.select { |v| v.type == checker.violation_type } 
+
+                violation_count = packages_by_team.sum { |package| Metrics.file_count(package.violations.select{|v| v.type == checker.violation_type}) }
+                tags = team_tags + [checker.violation_type_tag]
+                all_metrics << GaugeMetric.for("by_team.violations.count", violation_count, tags)
+
+                all_packages.group_by { |package| Private.package_owner(package) }.each do |other_team_name, packages_by_team|
+                  violations = packages_by_team.flat_map(&:violations).select{|v| packages_by_team.map(&:name).include?(v.to_package_name) && v.type == checker.violation_type}
+                  tags = team_tags + Metrics.tags_for_other_team(other_team_name) + [checker.violation_type_tag]
+                  all_metrics << GaugeMetric.for("by_team.violations.per_team.count", Metrics.file_count(violations), tags)
+                end
+              else
+                T.absurd(direction)
               end
-
-              Private.package_owner(to_package)
-            end
-
-            grouped_outbound_violations.each do |other_team_name, violations|
-              tags = team_tags + Metrics.tags_for_other_team(other_team_name)
-              all_metrics << GaugeMetric.for('by_team.dependency_violations.per_team.count', Metrics.file_count(violations.select(&:dependency?)), tags)
-            end
-
-            all_packages.group_by { |package| Private.package_owner(package) }.each do |other_team_name, packages_by_team|
-              violations = packages_by_team.flat_map(&:violations).select{|v| packages_by_team.map(&:name).include?(v.to_package_name) }
-              tags = team_tags + Metrics.tags_for_other_team(other_team_name)
-              all_metrics << GaugeMetric.for('by_team.privacy_violations.per_team.count', Metrics.file_count(violations.select(&:privacy?)), tags)
             end
           end
 

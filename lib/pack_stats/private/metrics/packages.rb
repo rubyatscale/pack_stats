@@ -20,8 +20,12 @@ module PackStats
 
           all_metrics << GaugeMetric.for('all_packages.count', packages.count, package_tags)
           all_metrics << GaugeMetric.for('all_packages.dependencies.count', packages.sum { |package| package.dependencies.count }, package_tags)
-          all_metrics << GaugeMetric.for('all_packages.dependency_violations.count', packages.sum { |package| Metrics.file_count(package.violations.select(&:dependency?)) }, package_tags)
-          all_metrics << GaugeMetric.for('all_packages.privacy_violations.count', packages.sum { |package| Metrics.file_count(package.violations.select(&:privacy?)) }, package_tags)
+
+          PackwerkCheckerUsage::CHECKERS.each do |checker|
+            violation_count = packages.sum { |package| Metrics.file_count(package.violations.select{|v| v.type == checker.violation_type}) }
+            tags = package_tags + [checker.violation_type_tag]
+            all_metrics << GaugeMetric.for("all_packages.violations.count", violation_count, tags)
+          end
 
           all_metrics += Metrics::PublicUsage.get_public_usage_metrics('all_packages', packages, package_tags)
           all_metrics << GaugeMetric.for('all_packages.has_readme.count', packages.count { |package| Metrics.has_readme?(package) }, package_tags)
@@ -34,33 +38,48 @@ module PackStats
 
           packages.each do |package|
             package_tags = Metrics.tags_for_package(package, app_name)
-
-            #
-            # VIOLATIONS (implicit dependencies)
-            #
-            outbound_violations = package.violations
-            inbound_violations = inbound_violations_by_package[package.name] || []
-            all_dependency_violations = outbound_violations.select(&:dependency?)
-            all_privacy_violations = inbound_violations.select(&:privacy?)
-
-            all_metrics << GaugeMetric.for('by_package.dependency_violations.count', Metrics.file_count(all_dependency_violations), package_tags)
-            all_metrics << GaugeMetric.for('by_package.privacy_violations.count', Metrics.file_count(all_privacy_violations), package_tags)
             all_metrics += Metrics::PublicUsage.get_public_usage_metrics('by_package', [package], package_tags)
 
-            outbound_violations.group_by(&:to_package_name).each do |to_package_name, violations|
-              to_package = ParsePackwerk.find(to_package_name)
-              if to_package.nil?
-                raise StandardError, "Could not find matching package #{to_package_name}"
+            outbound_violations = package.violations
+            inbound_violations = inbound_violations_by_package[package.name] || []
+
+            PackwerkCheckerUsage::CHECKERS.each do |checker|
+              direction = checker.direction
+
+              case direction
+              when PackwerkCheckerUsage::Direction::Outbound
+                all_violations_of_type = outbound_violations.select { |v| v.type == checker.violation_type } 
+
+                packages.each do |other_package|
+                  violations = package.violations.select{|v| v.to_package_name == other_package.name && v.type == checker.violation_type }
+
+                  tags = package_tags + [
+                    Tag.for('other_package', Metrics.humanized_package_name(other_package.name)),
+                    *Metrics.tags_for_other_team(Private.package_owner(other_package)),
+                    checker.violation_type_tag
+                  ]
+
+                  all_metrics << GaugeMetric.for("by_package.violations.per_package.count", Metrics.file_count(violations), tags)
+                end
+              when PackwerkCheckerUsage::Direction::Inbound
+                all_violations_of_type = inbound_violations.select { |v| v.type == checker.violation_type } 
+
+                packages.each do |other_package|
+                  violations = other_package.violations.select{|v| v.to_package_name == other_package.name && v.type == checker.violation_type }
+                  tags = package_tags + [
+                    Tag.for('other_package', Metrics.humanized_package_name(other_package.name)),
+                    *Metrics.tags_for_other_team(Private.package_owner(other_package)),
+                    checker.violation_type_tag
+                  ]
+
+                  all_metrics << GaugeMetric.for("by_package.violations.per_package.count", Metrics.file_count(violations), tags)
+                end
+              else
+                T.absurd(direction)
               end
 
-              tags = package_tags + [Tag.for('other_package', Metrics.humanized_package_name(to_package_name))] + Metrics.tags_for_other_team(Private.package_owner(to_package))
-              all_metrics << GaugeMetric.for('by_package.dependency_violations.per_package.count', Metrics.file_count(violations.select(&:dependency?)), tags)
-            end
-
-            packages.each do |other_package|
-              violations = other_package.violations.select{|v| v.to_package_name == other_package.name}
-              tags = package_tags + [Tag.for('other_package', Metrics.humanized_package_name(other_package.name))] + Metrics.tags_for_other_team(Private.package_owner(other_package))
-              all_metrics << GaugeMetric.for('by_package.privacy_violations.per_package.count', Metrics.file_count(violations.select(&:privacy?)), tags)
+              tags = package_tags + [checker.violation_type_tag]
+              all_metrics << GaugeMetric.for("by_package.violations.count", Metrics.file_count(all_violations_of_type), tags)
             end
           end
 

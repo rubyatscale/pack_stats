@@ -75,14 +75,14 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_files.totals', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.false.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.false.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.false.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.false.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.false.count', 0, Tags.for(['app:MyApp']))
@@ -124,21 +124,21 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_files.totals', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.depended_on.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
@@ -176,21 +176,21 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_files.totals', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.depended_on.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
@@ -240,25 +240,25 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_files.totals', 5, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 1, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.depended_on.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
@@ -386,29 +386,29 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_files.totals', 5, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 2, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 5, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 0, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 5, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 3, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 3, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.per_package.count', 2, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs', 'other_package:packs/package_1', 'other_team:Artists']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.per_package.count', 1, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs', 'other_package:root', 'other_team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 2, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.per_package.count', 2, Tags.for(['package:root', 'app:MyApp', 'team:Unknown', 'other_package:packs/package_2', 'other_team:Chefs']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 3, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 2, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs', 'other_package:packs/package_1', 'other_team:Artists', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 1, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs', 'other_package:root', 'other_team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:root', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 2, Tags.for(['package:root', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:root', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 2, Tags.for(['package:root', 'app:MyApp', 'team:Unknown', 'other_package:packs/package_2', 'other_team:Chefs', 'violation_type:dependency']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.depended_on.count', 1, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.per_package.count', 1, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists', 'other_package:packs/package_2', 'other_team:Chefs']))
@@ -420,20 +420,20 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
 
         it 'emits team based package metrics' do
           expect(metrics).to include_metric GaugeMetric.for('by_team.all_packages.count', 1, Tags.for(['team:Chefs', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Chefs', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.count', 3, Tags.for(['team:Chefs', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Chefs', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.per_team.count', 2, Tags.for(['team:Chefs', 'app:MyApp', 'other_team:Artists']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.per_team.count', 1, Tags.for(['team:Chefs', 'app:MyApp', 'other_team:Unknown']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 0, Tags.for(['team:Chefs', 'app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 3, Tags.for(['team:Chefs', 'app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 0, Tags.for(['team:Chefs', 'app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.per_team.count', 2, Tags.for(['team:Chefs', 'app:MyApp', 'other_team:Artists', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.per_team.count', 1, Tags.for(['team:Chefs', 'app:MyApp', 'other_team:Unknown', 'violation_type:dependency']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.all_packages.count', 1, Tags.for(['team:Artists', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Artists', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.count', 0, Tags.for(['team:Artists', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Artists', 'app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 0, Tags.for(['team:Artists', 'app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 0, Tags.for(['team:Artists', 'app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 0, Tags.for(['team:Artists', 'app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.all_packages.count', 1, Tags.for(['team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.count', 2, Tags.for(['team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.per_team.count', 2, Tags.for(['team:Unknown', 'app:MyApp', 'other_team:Chefs']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 0, Tags.for(['team:Unknown', 'app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 2, Tags.for(['team:Unknown', 'app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 0, Tags.for(['team:Unknown', 'app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.per_team.count', 2, Tags.for(['team:Unknown', 'app:MyApp', 'other_team:Chefs', 'violation_type:dependency']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.using_public_directory.count', 0, Tags.for(['team:Artists', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.using_public_directory.count', 0, Tags.for(['team:Chefs', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.using_public_directory.count', 0, Tags.for(['team:Unknown', 'app:MyApp']))
@@ -562,16 +562,11 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
             modularization.all_packages.all_files.count
             modularization.all_packages.count
             modularization.all_packages.dependencies.count
-            modularization.all_packages.dependency_violations.count
             modularization.all_packages.has_readme.count
             modularization.all_packages.package_based_file_ownership.count
-            modularization.all_packages.packwerk_checkers.enforce_dependencies.false.count
-            modularization.all_packages.packwerk_checkers.enforce_dependencies.strict.count
-            modularization.all_packages.packwerk_checkers.enforce_dependencies.true.count
-            modularization.all_packages.packwerk_checkers.enforce_privacy.false.count
-            modularization.all_packages.packwerk_checkers.enforce_privacy.strict.count
-            modularization.all_packages.packwerk_checkers.enforce_privacy.true.count
-            modularization.all_packages.privacy_violations.count
+            modularization.all_packages.packwerk_checkers.false.count
+            modularization.all_packages.packwerk_checkers.strict.count
+            modularization.all_packages.packwerk_checkers.true.count
             modularization.all_packages.public_files.count
             modularization.all_packages.rubocops.packs_classmethodsaspublicapis.exclusions.count
             modularization.all_packages.rubocops.packs_classmethodsaspublicapis.false.count
@@ -590,31 +585,25 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
             modularization.all_packages.rubocops.packs_typedpublicapis.strict.count
             modularization.all_packages.rubocops.packs_typedpublicapis.true.count
             modularization.all_packages.using_public_directory.count
+            modularization.all_packages.violations.count
             modularization.by_package.all_files.count
             modularization.by_package.depended_on.count
             modularization.by_package.dependencies.count
             modularization.by_package.dependencies.per_package.count
-            modularization.by_package.dependency_violations.count
-            modularization.by_package.dependency_violations.per_package.count
-            modularization.by_package.privacy_violations.count
-            modularization.by_package.privacy_violations.per_package.count
             modularization.by_package.public_files.count
             modularization.by_package.using_public_directory.count
+            modularization.by_package.violations.count
+            modularization.by_package.violations.per_package.count
             modularization.by_team.all_files.count
             modularization.by_team.all_packages.count
-            modularization.by_team.dependency_violations.count
-            modularization.by_team.dependency_violations.per_team.count
             modularization.by_team.has_readme.count
-            modularization.by_team.packwerk_checkers.enforce_dependencies.false.count
-            modularization.by_team.packwerk_checkers.enforce_dependencies.strict.count
-            modularization.by_team.packwerk_checkers.enforce_dependencies.true.count
-            modularization.by_team.packwerk_checkers.enforce_privacy.false.count
-            modularization.by_team.packwerk_checkers.enforce_privacy.strict.count
-            modularization.by_team.packwerk_checkers.enforce_privacy.true.count
-            modularization.by_team.privacy_violations.count
-            modularization.by_team.privacy_violations.per_team.count
+            modularization.by_team.packwerk_checkers.false.count
+            modularization.by_team.packwerk_checkers.strict.count
+            modularization.by_team.packwerk_checkers.true.count
             modularization.by_team.public_files.count
             modularization.by_team.using_public_directory.count
+            modularization.by_team.violations.count
+            modularization.by_team.violations.per_team.count
             modularization.component_files.by_team
             modularization.component_files.totals
             modularization.packaged_files.by_team
@@ -640,27 +629,27 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_files.totals', 13, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 2, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 6, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 2, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 6, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 3, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 3, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 2, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 4, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 2, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.per_package.count', 3, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'other_package:packs/package_1', 'other_team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.per_package.count', 1, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'other_package:root', 'other_team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 1, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.per_package.count', 0, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp', 'other_package:packs/package_2', 'other_team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 2, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.per_package.count', 2, Tags.for(['package:root', 'team:Unknown', 'app:MyApp', 'other_package:packs/package_2', 'other_team:Unknown']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 4, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 2, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 3, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'other_package:packs/package_1', 'other_team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 1, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'other_package:root', 'other_team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 1, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 0, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp', 'other_package:packs/package_2', 'other_team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 2, Tags.for(['package:root', 'team:Unknown', 'app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:root', 'team:Unknown', 'app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 2, Tags.for(['package:root', 'team:Unknown', 'app:MyApp', 'other_package:packs/package_2', 'other_team:Unknown', 'violation_type:dependency']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.per_package.count', 1, Tags.for(['package:root', 'team:Unknown', 'app:MyApp', 'other_package:packs/package_1', 'other_team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.count', 1, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.depended_on.count', 0, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
@@ -718,29 +707,28 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_files.totals', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.count', 4, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 2, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 2, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.true.count', 2, Tags.for(['app:MyApp']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 1, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 2, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 2, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 2, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.package_based_file_ownership.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.using_public_directory.count', 1, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.depended_on.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependencies.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
@@ -978,21 +966,21 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_files.totals', count: 3, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.count', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.dependencies.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.dependency_violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.privacy_violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_dependencies.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_dependencies.true.count', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_privacy.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_privacy.true.count', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.true.count', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.true.count', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.rubocops.packs_typedpublicapis.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.rubocops.packs_typedpublicapis.true.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.rubocops.packs_rootnamespaceispackname.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.package_based_file_ownership.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.using_public_directory.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.dependency_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.privacy_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.dependency_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.privacy_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.dependencies.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.depended_on.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.using_public_directory.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
@@ -1004,6 +992,72 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.using_public_directory.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.all_files.count', count: 2, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.public_files.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))        end
+      end
+
+      context 'in app with architectural enforcements' do
+        before do
+          write_file('config/teams/Foo Team.yml', <<~CONTENTS)
+            name: Foo Team
+          CONTENTS
+
+          write_file('config/teams/Bar Team.yml', <<~CONTENTS)
+            name: Bar Team
+          CONTENTS
+
+          write_file('packs/my_pack/package.yml', <<~CONTENTS)
+            enforce_dependencies: false
+            enforce_privacy: false
+            enforce_architecture: true
+            enforce_visibility: true
+            metadata:
+              owner: Bar Team
+          CONTENTS
+
+          write_file('packs/other_pack/package.yml', <<~CONTENTS)
+            enforce_dependencies: false
+            metadata:
+              owner: Foo Team
+          CONTENTS
+
+          write_file('packs/my_pack/package_todo.yml', <<~CONTENTS)
+            ---
+            packs/other_pack:
+              "SomeConstant":
+                violations:
+                - architecture
+                - visibility
+                files:
+                - some_file.rb
+          CONTENTS
+
+        end
+
+        it 'emits the right metrics' do
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:visibility']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:visibility']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:visibility']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 1, Tags.for(['app:MyApp', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 1, Tags.for(['app:MyApp', 'violation_type:visibility']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'violation_type:visibility']))
+
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 1, Tags.for(['app:MyApp', 'package:packs/my_pack', 'team:Bar Team', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 1, Tags.for(['app:MyApp', 'package:packs/my_pack', 'team:Bar Team', 'violation_type:visibility']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['app:MyApp', 'package:packs/other_pack', 'team:Foo Team', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0, Tags.for(['app:MyApp', 'package:packs/other_pack', 'team:Foo Team', 'violation_type:visibility']))
+
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 1, Tags.for(['app:MyApp', 'package:packs/my_pack', 'other_package:packs/other_pack', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 1, Tags.for(['app:MyApp', 'package:packs/my_pack', 'other_package:packs/other_pack', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:visibility']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 0, Tags.for(['app:MyApp', 'package:packs/other_pack', 'other_package:packs/my_pack', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('by_package.violations.per_package.count', 0, Tags.for(['app:MyApp', 'package:packs/other_pack', 'other_package:packs/my_pack', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:visibility']))
+
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.per_team.count', 0, Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.per_team.count', 0, Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:visibility']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.per_team.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:architecture']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.per_team.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:visibility']))
+        end
       end
     end
   end
