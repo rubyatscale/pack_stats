@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pack_stats (0.0.5)
+    pack_stats (0.0.6)
       code_ownership
       code_teams
       dogapi
