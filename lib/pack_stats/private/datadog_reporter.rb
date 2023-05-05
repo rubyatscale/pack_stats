@@ -9,7 +9,6 @@ require 'pack_stats/private/metrics/packwerk_checker_usage'
 require 'pack_stats/private/metrics/rubocop_usage'
 require 'pack_stats/private/metrics/packages'
 require 'pack_stats/private/metrics/packages_by_team'
-require 'pack_stats/private/metrics/nested_packs'
 
 module PackStats
   module Private
@@ -29,7 +28,6 @@ module PackStats
           *Metrics::Files.get_metrics(source_code_files, app_name),
           *Metrics::Packages.get_package_metrics(packages, app_name),
           *Metrics::PackagesByTeam.get_package_metrics_by_team(packages, app_name),
-          *Metrics::NestedPacks.get_nested_package_metrics(packages, app_name)
         ]
       end
 
