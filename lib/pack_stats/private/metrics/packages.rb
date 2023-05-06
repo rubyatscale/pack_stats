@@ -23,7 +23,6 @@ module PackStats
           all_metrics << GaugeMetric.for('all_packages.dependency_violations.count', packages.sum { |package| Metrics.file_count(package.violations.select(&:dependency?)) }, package_tags)
           all_metrics << GaugeMetric.for('all_packages.privacy_violations.count', packages.sum { |package| Metrics.file_count(package.violations.select(&:privacy?)) }, package_tags)
 
-          all_metrics << GaugeMetric.for('all_packages.with_violations.count', packages.count { |package| package.violations.any? }, package_tags)
           all_metrics += Metrics::PublicUsage.get_public_usage_metrics('all_packages', packages, package_tags)
           all_metrics << GaugeMetric.for('all_packages.has_readme.count', packages.count { |package| Metrics.has_readme?(package) }, package_tags)
 

@@ -77,7 +77,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.false.count', 0, Tags.for(['app:MyApp']))
@@ -127,7 +126,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
@@ -180,7 +178,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
@@ -245,7 +242,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
@@ -392,7 +388,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 5, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
@@ -595,7 +590,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
             modularization.all_packages.rubocops.packs_typedpublicapis.strict.count
             modularization.all_packages.rubocops.packs_typedpublicapis.true.count
             modularization.all_packages.using_public_directory.count
-            modularization.all_packages.with_violations.count
             modularization.by_package.all_files.count
             modularization.by_package.dependency_violations.count
             modularization.by_package.inbound_explicit_dependencies.count
@@ -648,7 +642,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 6, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 3, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 3, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 0, Tags.for(['app:MyApp']))
@@ -727,7 +720,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependencies.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.dependency_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.privacy_violations.count', 0, Tags.for(['app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.with_violations.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.strict.count', 1, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_dependencies.true.count', 2, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.enforce_privacy.strict.count', 2, Tags.for(['app:MyApp']))
@@ -988,7 +980,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.dependencies.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.dependency_violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.privacy_violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.with_violations.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_dependencies.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_dependencies.true.count', count: 2, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.all_packages.packwerk_checkers.enforce_privacy.strict.count', count: 0, tags: Tags.for(['app:MyApp', 'max_enforcements:true']))
