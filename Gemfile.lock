@@ -96,6 +96,7 @@ GEM
     sorbet-runtime (0.5.10796)
     sorbet-static (0.5.10796-universal-darwin-20)
     sorbet-static (0.5.10796-universal-darwin-22)
+    sorbet-static (0.5.10796-x86_64-linux)
     sorbet-static-and-runtime (0.5.10796)
       sorbet (= 0.5.10796)
       sorbet-runtime (= 0.5.10796)
@@ -127,6 +128,7 @@ GEM
 PLATFORMS
   arm64-darwin-20
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   pack_stats!
