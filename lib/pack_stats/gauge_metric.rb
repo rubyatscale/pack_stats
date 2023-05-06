@@ -10,7 +10,7 @@ module PackStats
 
     sig { params(metric_name: String, count: Integer, tags: T::Array[Tag]).returns(GaugeMetric) }
     def self.for(metric_name, count, tags)
-      name = "modularization.#{metric_name}"
+      name = "test.modularization.#{metric_name}"
       # https://docs.datadoghq.com/metrics/custom_metrics/#naming-custom-metrics
       # Metric names must not exceed 200 characters. Fewer than 100 is preferred from a UI perspective
       if name.length > 200
