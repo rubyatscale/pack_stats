@@ -22,8 +22,8 @@ module PackStats
       end
 
       sig { params(team_name: T.nilable(String)).returns(T::Array[Tag]) }
-      def self.tags_for_to_team(team_name)
-        [Tag.for('to_team', team_name || Metrics::UNKNOWN_OWNER)]
+      def self.tags_for_other_team(team_name)
+        [Tag.for('other_team', team_name || Metrics::UNKNOWN_OWNER)]
       end
 
       sig { params(name: String).returns(String) }

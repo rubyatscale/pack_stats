@@ -43,27 +43,27 @@ module PackStats
             #
             outbound_violations = package.violations
             inbound_violations = inbound_violations_by_package[package.name] || []
-            all_dependency_violations = (outbound_violations + inbound_violations).select(&:dependency?)
-            all_privacy_violations = (outbound_violations + inbound_violations).select(&:privacy?)
+            all_dependency_violations = outbound_violations.select(&:dependency?)
+            all_privacy_violations = inbound_violations.select(&:privacy?)
 
             all_metrics << GaugeMetric.for('by_package.dependency_violations.count', Metrics.file_count(all_dependency_violations), package_tags)
             all_metrics << GaugeMetric.for('by_package.privacy_violations.count', Metrics.file_count(all_privacy_violations), package_tags)
-
-            all_metrics << GaugeMetric.for('by_package.dependency_violations.count', Metrics.file_count(outbound_violations.select(&:dependency?)), package_tags)
-
-            all_metrics << GaugeMetric.for('by_package.privacy_violations.count', Metrics.file_count(inbound_violations.select(&:privacy?)), package_tags)
-
             all_metrics += Metrics::PublicUsage.get_public_usage_metrics('by_package', [package], package_tags)
 
-            package.violations.group_by(&:to_package_name).each do |to_package_name, violations|
+            outbound_violations.group_by(&:to_package_name).each do |to_package_name, violations|
               to_package = ParsePackwerk.find(to_package_name)
               if to_package.nil?
                 raise StandardError, "Could not find matching package #{to_package_name}"
               end
 
-              tags = package_tags + [Tag.for('to_package', Metrics.humanized_package_name(to_package_name))] + Metrics.tags_for_to_team(Private.package_owner(to_package))
+              tags = package_tags + [Tag.for('other_package', Metrics.humanized_package_name(to_package_name))] + Metrics.tags_for_other_team(Private.package_owner(to_package))
               all_metrics << GaugeMetric.for('by_package.dependency_violations.per_package.count', Metrics.file_count(violations.select(&:dependency?)), tags)
-              all_metrics << GaugeMetric.for('by_package.outbound_privacy_violations.per_package.count', Metrics.file_count(violations.select(&:privacy?)), tags)
+            end
+
+            packages.each do |other_package|
+              violations = other_package.violations.select{|v| v.to_package_name == other_package.name}
+              tags = package_tags + [Tag.for('other_package', Metrics.humanized_package_name(other_package.name))] + Metrics.tags_for_other_team(Private.package_owner(other_package))
+              all_metrics << GaugeMetric.for('by_package.privacy_violations.per_package.count', Metrics.file_count(violations.select(&:privacy?)), tags)
             end
           end
 
@@ -88,7 +88,7 @@ module PackStats
               end
 
               owner = Private.package_owner(to_package)
-              tags = package_tags + [Tag.for('to_package', Metrics.humanized_package_name(explicit_dependency))] + Metrics.tags_for_to_team(owner)
+              tags = package_tags + [Tag.for('other_package', Metrics.humanized_package_name(explicit_dependency))] + Metrics.tags_for_other_team(owner)
               all_metrics << GaugeMetric.for('by_package.outbound_explicit_dependencies.per_package.count', 1, tags)
             end
 
