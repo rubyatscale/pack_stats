@@ -86,10 +86,10 @@ module PackStats
 
               owner = Private.package_owner(to_package)
               tags = package_tags + [Tag.for('other_package', Metrics.humanized_package_name(explicit_dependency))] + Metrics.tags_for_other_team(owner)
-              all_metrics << GaugeMetric.for('by_package.outbound_explicit_dependencies.per_package.count', 1, tags)
+              all_metrics << GaugeMetric.for('by_package.dependencies.per_package.count', 1, tags)
             end
 
-            all_metrics << GaugeMetric.for('by_package.outbound_explicit_dependencies.count', package.dependencies.count, package_tags)
+            all_metrics << GaugeMetric.for('by_package.dependencies.count', package.dependencies.count, package_tags)
             all_metrics << GaugeMetric.for('by_package.inbound_explicit_dependencies.count', inbound_explicit_dependency_by_package[package.name]&.count || 0, package_tags)
           end
 
