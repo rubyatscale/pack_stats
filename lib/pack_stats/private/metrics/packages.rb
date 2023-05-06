@@ -90,7 +90,7 @@ module PackStats
             end
 
             all_metrics << GaugeMetric.for('by_package.dependencies.count', package.dependencies.count, package_tags)
-            all_metrics << GaugeMetric.for('by_package.inbound_explicit_dependencies.count', inbound_explicit_dependency_by_package[package.name]&.count || 0, package_tags)
+            all_metrics << GaugeMetric.for('by_package.depended_on.count', inbound_explicit_dependency_by_package[package.name]&.count || 0, package_tags)
           end
 
           all_metrics
