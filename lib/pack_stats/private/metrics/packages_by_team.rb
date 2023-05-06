@@ -40,7 +40,6 @@ module PackStats
 
             all_metrics << GaugeMetric.for('by_team.dependency_violations.count', Metrics.file_count(outbound_violations.select(&:dependency?)), team_tags)
 
-            all_metrics << GaugeMetric.for('by_team.outbound_privacy_violations.count', Metrics.file_count(outbound_violations.select(&:privacy?)), team_tags)
             all_metrics << GaugeMetric.for('by_team.privacy_violations.count', Metrics.file_count(inbound_violations.select(&:privacy?)), team_tags)
 
             all_metrics << GaugeMetric.for('by_team.has_readme.count', packages_by_team.count { |package| Metrics.has_readme?(package) }, team_tags)

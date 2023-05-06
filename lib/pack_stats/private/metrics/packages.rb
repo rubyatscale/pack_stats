@@ -51,7 +51,6 @@ module PackStats
 
             all_metrics << GaugeMetric.for('by_package.dependency_violations.count', Metrics.file_count(outbound_violations.select(&:dependency?)), package_tags)
 
-            all_metrics << GaugeMetric.for('by_package.outbound_privacy_violations.count', Metrics.file_count(outbound_violations.select(&:privacy?)), package_tags)
             all_metrics << GaugeMetric.for('by_package.privacy_violations.count', Metrics.file_count(inbound_violations.select(&:privacy?)), package_tags)
 
             all_metrics += Metrics::PublicUsage.get_public_usage_metrics('by_package', [package], package_tags)
