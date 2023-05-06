@@ -39,7 +39,6 @@ module PackStats
             all_metrics << GaugeMetric.for('by_team.privacy_violations.count', Metrics.file_count(all_privacy_violations), team_tags)
 
             all_metrics << GaugeMetric.for('by_team.outbound_dependency_violations.count', Metrics.file_count(outbound_violations.select(&:dependency?)), team_tags)
-            all_metrics << GaugeMetric.for('by_team.inbound_dependency_violations.count', Metrics.file_count(inbound_violations.select(&:dependency?)), team_tags)
 
             all_metrics << GaugeMetric.for('by_team.outbound_privacy_violations.count', Metrics.file_count(outbound_violations.select(&:privacy?)), team_tags)
             all_metrics << GaugeMetric.for('by_team.inbound_privacy_violations.count', Metrics.file_count(inbound_violations.select(&:privacy?)), team_tags)

@@ -144,7 +144,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_explicit_dependencies.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
@@ -201,7 +200,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_explicit_dependencies.count', 0, Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown']))
@@ -270,13 +268,11 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_explicit_dependencies.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
@@ -423,7 +419,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 5, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 3, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 2, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.per_package.count', 2, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Chefs', 'to_package:packs/package_1', 'to_team:Artists']))
@@ -433,13 +428,11 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 2, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 2, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Artists']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 3, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 2, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 1, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:root', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.per_package.count', 2, Tags.for(['package:root', 'app:MyApp', 'team:Unknown', 'to_package:packs/package_2', 'to_team:Chefs']))
@@ -458,7 +451,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.count', 5, Tags.for(['team:Chefs', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Chefs', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.outbound_dependency_violations.count', 3, Tags.for(['team:Chefs', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.inbound_dependency_violations.count', 2, Tags.for(['team:Chefs', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.outbound_privacy_violations.count', 0, Tags.for(['team:Chefs', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.inbound_privacy_violations.count', 0, Tags.for(['team:Chefs', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.outbound_dependency_violations.per_team.count', 2, Tags.for(['team:Chefs', 'app:MyApp', 'to_team:Artists']))
@@ -469,14 +461,12 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.count', 2, Tags.for(['team:Artists', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Artists', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.outbound_dependency_violations.count', 0, Tags.for(['team:Artists', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.inbound_dependency_violations.count', 2, Tags.for(['team:Artists', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.outbound_privacy_violations.count', 0, Tags.for(['team:Artists', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.inbound_privacy_violations.count', 0, Tags.for(['team:Artists', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.all_packages.count', 1, Tags.for(['team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.dependency_violations.count', 3, Tags.for(['team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.privacy_violations.count', 0, Tags.for(['team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.outbound_dependency_violations.count', 2, Tags.for(['team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.inbound_dependency_violations.count', 1, Tags.for(['team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.outbound_privacy_violations.count', 0, Tags.for(['team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.inbound_privacy_violations.count', 0, Tags.for(['team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.outbound_dependency_violations.per_team.count', 2, Tags.for(['team:Unknown', 'app:MyApp', 'to_team:Chefs']))
@@ -641,7 +631,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
             modularization.all_packages.with_violations.count
             modularization.by_package.all_files.count
             modularization.by_package.dependency_violations.count
-            modularization.by_package.inbound_dependency_violations.count
             modularization.by_package.inbound_explicit_dependencies.count
             modularization.by_package.inbound_privacy_violations.count
             modularization.by_package.outbound_dependency_violations.count
@@ -657,7 +646,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
             modularization.by_team.all_packages.count
             modularization.by_team.dependency_violations.count
             modularization.by_team.has_readme.count
-            modularization.by_team.inbound_dependency_violations.count
             modularization.by_team.inbound_privacy_violations.count
             modularization.by_team.outbound_dependency_violations.count
             modularization.by_team.outbound_dependency_violations.per_team.count
@@ -714,7 +702,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 6, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 3, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 4, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 2, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 1, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 2, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.per_package.count', 3, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown', 'to_package:packs/package_1', 'to_team:Unknown']))
@@ -724,7 +711,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 3, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 2, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 3, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 1, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 1, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.per_package.count', 0, Tags.for(['package:packs/package_1', 'team:Unknown', 'app:MyApp', 'to_package:packs/package_2', 'to_team:Unknown']))
@@ -732,7 +718,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 3, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 1, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 2, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 1, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 1, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:root', 'team:Unknown', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.per_package.count', 2, Tags.for(['package:root', 'team:Unknown', 'app:MyApp', 'to_package:packs/package_2', 'to_team:Unknown']))
@@ -811,19 +796,16 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/package_3', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
-          expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_dependency_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.inbound_privacy_violations.count', 0, Tags.for(['package:packs/package_1', 'app:MyApp', 'team:Unknown']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.outbound_explicit_dependencies.count', 0, Tags.for(['package:packs/package_2', 'app:MyApp', 'team:Unknown']))
@@ -1080,7 +1062,6 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.dependency_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.privacy_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.outbound_dependency_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
-          expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.inbound_dependency_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.outbound_privacy_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.inbound_privacy_violations.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.outbound_explicit_dependencies.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))
