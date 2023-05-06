@@ -599,6 +599,86 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           write_file('components/my_component_3/lib/my_component_3.rb')
         end
 
+        # The purpose of this spec is to have a clear list of all of the metrics that are supported by pack_stats
+        # We can also look at the diff of this list to easily see what metrics are being added or removed
+        it 'emits only these metrics' do
+          expect(metrics.map(&:name).uniq.sort).to match_array %w(
+            modularization.all_files.by_team
+            modularization.all_files.totals
+            modularization.all_packages.all_files.count
+            modularization.all_packages.count
+            modularization.all_packages.dependencies.count
+            modularization.all_packages.dependency_violations.count
+            modularization.all_packages.enforcing_dependencies.count
+            modularization.all_packages.enforcing_privacy.count
+            modularization.all_packages.has_readme.count
+            modularization.all_packages.package_based_file_ownership.count
+            modularization.all_packages.packwerk_checkers.enforce_dependencies.false.count
+            modularization.all_packages.packwerk_checkers.enforce_dependencies.strict.count
+            modularization.all_packages.packwerk_checkers.enforce_dependencies.true.count
+            modularization.all_packages.packwerk_checkers.enforce_privacy.false.count
+            modularization.all_packages.packwerk_checkers.enforce_privacy.strict.count
+            modularization.all_packages.packwerk_checkers.enforce_privacy.true.count
+            modularization.all_packages.privacy_violations.count
+            modularization.all_packages.public_files.count
+            modularization.all_packages.rubocops.packs_classmethodsaspublicapis.exclusions.count
+            modularization.all_packages.rubocops.packs_classmethodsaspublicapis.false.count
+            modularization.all_packages.rubocops.packs_classmethodsaspublicapis.strict.count
+            modularization.all_packages.rubocops.packs_classmethodsaspublicapis.true.count
+            modularization.all_packages.rubocops.packs_documentedpublicapis.exclusions.count
+            modularization.all_packages.rubocops.packs_documentedpublicapis.false.count
+            modularization.all_packages.rubocops.packs_documentedpublicapis.strict.count
+            modularization.all_packages.rubocops.packs_documentedpublicapis.true.count
+            modularization.all_packages.rubocops.packs_rootnamespaceispackname.exclusions.count
+            modularization.all_packages.rubocops.packs_rootnamespaceispackname.false.count
+            modularization.all_packages.rubocops.packs_rootnamespaceispackname.strict.count
+            modularization.all_packages.rubocops.packs_rootnamespaceispackname.true.count
+            modularization.all_packages.rubocops.packs_typedpublicapis.exclusions.count
+            modularization.all_packages.rubocops.packs_typedpublicapis.false.count
+            modularization.all_packages.rubocops.packs_typedpublicapis.strict.count
+            modularization.all_packages.rubocops.packs_typedpublicapis.true.count
+            modularization.all_packages.using_public_directory.count
+            modularization.all_packages.with_violations.count
+            modularization.by_package.all_files.count
+            modularization.by_package.dependency_violations.count
+            modularization.by_package.inbound_dependency_violations.count
+            modularization.by_package.inbound_explicit_dependencies.count
+            modularization.by_package.inbound_privacy_violations.count
+            modularization.by_package.outbound_dependency_violations.count
+            modularization.by_package.outbound_dependency_violations.per_package.count
+            modularization.by_package.outbound_explicit_dependencies.count
+            modularization.by_package.outbound_explicit_dependencies.per_package.count
+            modularization.by_package.outbound_privacy_violations.count
+            modularization.by_package.outbound_privacy_violations.per_package.count
+            modularization.by_package.privacy_violations.count
+            modularization.by_package.public_files.count
+            modularization.by_package.using_public_directory.count
+            modularization.by_team.all_files.count
+            modularization.by_team.all_packages.count
+            modularization.by_team.dependency_violations.count
+            modularization.by_team.has_readme.count
+            modularization.by_team.inbound_dependency_violations.count
+            modularization.by_team.inbound_privacy_violations.count
+            modularization.by_team.outbound_dependency_violations.count
+            modularization.by_team.outbound_dependency_violations.per_team.count
+            modularization.by_team.outbound_privacy_violations.count
+            modularization.by_team.outbound_privacy_violations.per_team.count
+            modularization.by_team.packwerk_checkers.enforce_dependencies.false.count
+            modularization.by_team.packwerk_checkers.enforce_dependencies.strict.count
+            modularization.by_team.packwerk_checkers.enforce_dependencies.true.count
+            modularization.by_team.packwerk_checkers.enforce_privacy.false.count
+            modularization.by_team.packwerk_checkers.enforce_privacy.strict.count
+            modularization.by_team.packwerk_checkers.enforce_privacy.true.count
+            modularization.by_team.privacy_violations.count
+            modularization.by_team.public_files.count
+            modularization.by_team.using_public_directory.count
+            modularization.component_files.by_team
+            modularization.component_files.totals
+            modularization.packaged_files.by_team
+            modularization.packaged_files.totals
+          )
+        end
+
         it 'emits the right metrics' do
           expect(metrics).to include_metric GaugeMetric.for('component_files.by_team', 3, Tags.for(['team:Team 2', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('packaged_files.by_team', 2, Tags.for(['team:Team 2', 'app:MyApp']))
