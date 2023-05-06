@@ -49,7 +49,7 @@ module PackStats
             all_metrics << GaugeMetric.for('by_package.dependency_violations.count', Metrics.file_count(all_dependency_violations), package_tags)
             all_metrics << GaugeMetric.for('by_package.privacy_violations.count', Metrics.file_count(all_privacy_violations), package_tags)
 
-            all_metrics << GaugeMetric.for('by_package.outbound_dependency_violations.count', Metrics.file_count(outbound_violations.select(&:dependency?)), package_tags)
+            all_metrics << GaugeMetric.for('by_package.dependency_violations.count', Metrics.file_count(outbound_violations.select(&:dependency?)), package_tags)
 
             all_metrics << GaugeMetric.for('by_package.outbound_privacy_violations.count', Metrics.file_count(outbound_violations.select(&:privacy?)), package_tags)
             all_metrics << GaugeMetric.for('by_package.inbound_privacy_violations.count', Metrics.file_count(inbound_violations.select(&:privacy?)), package_tags)
@@ -63,7 +63,7 @@ module PackStats
               end
 
               tags = package_tags + [Tag.for('to_package', Metrics.humanized_package_name(to_package_name))] + Metrics.tags_for_to_team(Private.package_owner(to_package))
-              all_metrics << GaugeMetric.for('by_package.outbound_dependency_violations.per_package.count', Metrics.file_count(violations.select(&:dependency?)), tags)
+              all_metrics << GaugeMetric.for('by_package.dependency_violations.per_package.count', Metrics.file_count(violations.select(&:dependency?)), tags)
               all_metrics << GaugeMetric.for('by_package.outbound_privacy_violations.per_package.count', Metrics.file_count(violations.select(&:privacy?)), tags)
             end
           end
