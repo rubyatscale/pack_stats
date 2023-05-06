@@ -591,21 +591,20 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
             modularization.all_packages.rubocops.packs_typedpublicapis.true.count
             modularization.all_packages.using_public_directory.count
             modularization.by_package.all_files.count
-            modularization.by_package.dependency_violations.count
             modularization.by_package.depended_on.count
-            modularization.by_package.dependency_violations.per_package.count
-            modularization.by_package.privacy_violations.per_package.count
             modularization.by_package.dependencies.count
             modularization.by_package.dependencies.per_package.count
+            modularization.by_package.dependency_violations.count
+            modularization.by_package.dependency_violations.per_package.count
             modularization.by_package.privacy_violations.count
+            modularization.by_package.privacy_violations.per_package.count
             modularization.by_package.public_files.count
             modularization.by_package.using_public_directory.count
             modularization.by_team.all_files.count
             modularization.by_team.all_packages.count
             modularization.by_team.dependency_violations.count
-            modularization.by_team.has_readme.count
             modularization.by_team.dependency_violations.per_team.count
-            modularization.by_team.privacy_violations.per_team.count
+            modularization.by_team.has_readme.count
             modularization.by_team.packwerk_checkers.enforce_dependencies.false.count
             modularization.by_team.packwerk_checkers.enforce_dependencies.strict.count
             modularization.by_team.packwerk_checkers.enforce_dependencies.true.count
@@ -613,6 +612,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
             modularization.by_team.packwerk_checkers.enforce_privacy.strict.count
             modularization.by_team.packwerk_checkers.enforce_privacy.true.count
             modularization.by_team.privacy_violations.count
+            modularization.by_team.privacy_violations.per_team.count
             modularization.by_team.public_files.count
             modularization.by_team.using_public_directory.count
             modularization.component_files.by_team
