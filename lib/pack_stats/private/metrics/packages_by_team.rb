@@ -44,7 +44,7 @@ module PackStats
                 all_packages.group_by { |package| Private.package_owner(package) }.each do |other_team_name, other_teams_packages|
                   violations = outbound_violations.select{|v| other_teams_packages.map(&:name).include?(v.to_package_name) && v.type == checker.violation_type}
                   tags = team_tags + Metrics.tags_for_other_team(other_team_name) + [checker.violation_type_tag]
-                  all_metrics << GaugeMetric.for("by_team.violations.per_team.count", Metrics.file_count(violations), tags)
+                  all_metrics << GaugeMetric.for("by_team.violations.by_other_team.count", Metrics.file_count(violations), tags)
                 end
               when PackwerkCheckerUsage::Direction::Inbound
                 all_violations_of_type = inbound_violations.select { |v| v.type == checker.violation_type } 
@@ -56,7 +56,7 @@ module PackStats
                 all_packages.group_by { |package| Private.package_owner(package) }.each do |other_team_name, other_teams_packages|
                   violations = other_teams_packages.flat_map(&:violations).select{|v| packages_for_team.map(&:name).include?(v.to_package_name) && v.type == checker.violation_type}
                   tags = team_tags + Metrics.tags_for_other_team(other_team_name) + [checker.violation_type_tag]
-                  all_metrics << GaugeMetric.for("by_team.violations.per_team.count", Metrics.file_count(violations), tags)
+                  all_metrics << GaugeMetric.for("by_team.violations.by_other_team.count", Metrics.file_count(violations), tags)
                 end
               else
                 T.absurd(direction)
