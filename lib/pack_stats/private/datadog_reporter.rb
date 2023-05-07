@@ -26,9 +26,9 @@ module PackStats
         packages = ParsePackwerk.all
 
         [
-          *Metrics::Files.get_metrics(source_code_files, app_name),
+          # *Metrics::Files.get_metrics(source_code_files, app_name),
           *Metrics::Packages.get_package_metrics(packages, app_name),
-          *Metrics::PackagesByTeam.get_package_metrics_by_team(packages, app_name),
+          # *Metrics::PackagesByTeam.get_package_metrics_by_team(packages, app_name),
         ]
       end
 
