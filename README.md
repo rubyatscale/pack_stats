@@ -101,19 +101,6 @@ Right now this tool sends metrics to DataDog only. However, if you want to use t
 
 # Setting Up Your Dashboards
 
-Gusto has two dashboards that we've created to view these metrics. We've also exported and released the Dashboard JSON for each of these dashboards. You can create a new dashboard and then click "import dashboard JSON" to get a jump start on tracking your metrics. Note you may want to make some tweaks to these dashboards to better fit your organization's circumstances and goals.
+We recommend the use of the dashboard that is shipped with this gem. You can create a new dashboard and then click "import dashboard JSON" to get a jump start on tracking your metrics. Note you may want to make some tweaks to these dashboards to better fit your organization's circumstances and goals.
 
-## [Modularization] Executive Summary
-
-This helps answer questions like:
-- How are we doing on reducing dependency and privacy violations in your monolith overall?
-- How are we doing overall on adopting packwerk?
-
-[Dashboard JSON](docs/executive_summary.json)
-
-## [Modularization] Per-Package and Per-Team
-- How is each team and package doing on reducing dependency and privacy violations in your monolith?
-- What is the total count of dependency/privacy violations for each pack/team and what's the change since last month?
-- Which pack/team does my pack/team have the most dependency/privacy violations on?
-
-[Dashboard JSON](docs/per_package_and_per_team.json)
+[Dashboard JSON](docs/dashboard.json)
