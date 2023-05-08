@@ -65,7 +65,7 @@ module PackStats
                 all_violations_of_type = inbound_violations.select { |v| v.type == checker.violation_type } 
 
                 packages.each do |other_package|
-                  violations = other_package.violations.select{|v| v.to_package_name == other_package.name && v.type == checker.violation_type }
+                  violations = other_package.violations.select{|v| v.to_package_name == package.name && v.type == checker.violation_type }
                   tags = package_tags + [
                     Tag.for('other_package', Metrics.humanized_package_name(other_package.name)),
                     *Metrics.tags_for_other_team(Private.package_owner(other_package)),
