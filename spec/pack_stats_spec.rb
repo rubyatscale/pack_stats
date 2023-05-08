@@ -351,7 +351,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
 
           write_file('packs/package_2/app/some_package_file.rb')
           write_file('packs/package_2/package.yml', <<~CONTENTS)
-            enforce_dependencies: true
+            enforce_dependencies: false
             enforce_privacy: false
             metadata:
               owner: Chefs
@@ -361,7 +361,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           write_file('packs/package_1/app/some_package_file.rb')
           write_file('packs/package_1/package.yml', <<~CONTENTS)
             enforce_dependencies: true
-            enforce_privacy: false
+            enforce_privacy: true
             dependencies:
               - packs/package_2
             metadata:
@@ -389,9 +389,9 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 5, Tags.for(['app:MyApp', 'violation_type:dependency']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:dependency']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 3, Tags.for(['app:MyApp', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 2, Tags.for(['app:MyApp', 'violation_type:dependency']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
-          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 0, Tags.for(['app:MyApp', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.strict.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_typedpublicapis.true.count', 0, Tags.for(['app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.rubocops.packs_rootnamespaceispackname.strict.count', 0, Tags.for(['app:MyApp']))
@@ -419,6 +419,20 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
         end
 
         it 'emits team based package metrics' do
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'team:Artists', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'team:Artists', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.false.count', 0, Tags.for(['app:MyApp', 'team:Artists', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'team:Artists', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'team:Artists', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.false.count', 0, Tags.for(['app:MyApp', 'team:Artists', 'violation_type:privacy']))
+
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'team:Chefs', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.true.count', 0, Tags.for(['app:MyApp', 'team:Chefs', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.false.count', 1, Tags.for(['app:MyApp', 'team:Chefs', 'violation_type:dependency']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'team:Chefs', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.true.count', 0, Tags.for(['app:MyApp', 'team:Chefs', 'violation_type:privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.packwerk_checkers.false.count', 1, Tags.for(['app:MyApp', 'team:Chefs', 'violation_type:privacy']))
+
           expect(metrics).to include_metric GaugeMetric.for('by_team.all_packages.count', 1, Tags.for(['team:Chefs', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 0, Tags.for(['team:Chefs', 'app:MyApp', 'violation_type:privacy']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 3, Tags.for(['team:Chefs', 'app:MyApp', 'violation_type:dependency']))

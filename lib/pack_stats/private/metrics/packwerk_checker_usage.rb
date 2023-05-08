@@ -47,7 +47,7 @@ module PackStats
           metrics = T.let([], T::Array[GaugeMetric])
 
           CHECKERS.each do |checker|
-            checker_values = ParsePackwerk.all.map do |package|
+            checker_values = packages.map do |package|
               YAML.load_file(package.yml)[checker.key]
             end
 
