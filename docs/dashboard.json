@@ -79,7 +79,7 @@
                       "aggregator": "last",
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.by_package.violations.count{$app,$package,$team,$max_enforcements,$violation_type} by {package,violation_type}"
+                      "query": "avg:modularization.by_package.violations.count{$app,$package,$team,$max_enforcements,$violation_type} by {package,violation_type}"
                     }
                   ],
                   "response_format": "scalar",
@@ -122,7 +122,7 @@
                     {
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.by_package.violations.count{$app,$package,$team,$max_enforcements,$violation_type} by {package,violation_type}"
+                      "query": "avg:modularization.by_package.violations.count{$app,$package,$team,$max_enforcements,$violation_type} by {package,violation_type}"
                     }
                   ],
                   "response_format": "timeseries",
@@ -172,7 +172,7 @@
                       "aggregator": "last",
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.by_package.violations.by_other_package.count{$app,$package,$team,$max_enforcements,$violation_type} by {violation_type,package,other_package}"
+                      "query": "avg:modularization.by_package.violations.by_other_package.count{$app,$package,$team,$max_enforcements,$violation_type} by {violation_type,package,other_package}"
                     }
                   ],
                   "response_format": "scalar"
@@ -233,7 +233,7 @@
                       "aggregator": "last",
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.by_team.violations.count{$app,$package,$team,$max_enforcements,$violation_type} by {team,violation_type}"
+                      "query": "avg:modularization.by_team.violations.count{$app,$package,$team,$max_enforcements,$violation_type} by {team,violation_type}"
                     }
                   ],
                   "response_format": "scalar",
@@ -276,7 +276,7 @@
                     {
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.by_team.violations.count{$app,$package,$team,$max_enforcements,$violation_type} by {team,violation_type}"
+                      "query": "avg:modularization.by_team.violations.count{$app,$package,$team,$max_enforcements,$violation_type} by {team,violation_type}"
                     }
                   ],
                   "response_format": "timeseries",
@@ -326,7 +326,7 @@
                       "aggregator": "last",
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.by_team.violations.by_other_team.count{$app,$package,$team,$max_enforcements,$violation_type} by {violation_type,team,other_team}"
+                      "query": "avg:modularization.by_team.violations.by_other_team.count{$app,$package,$team,$max_enforcements,$violation_type} by {violation_type,team,other_team}"
                     }
                   ],
                   "response_format": "scalar"
@@ -382,7 +382,7 @@
                       "aggregator": "last",
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.by_team.all_packages.count{$app,$package,$team,$max_enforcements} by {team}"
+                      "query": "avg:modularization.by_team.all_packages.count{$app,$package,$team,$max_enforcements} by {team}"
                     }
                   ],
                   "response_format": "scalar"
@@ -420,19 +420,19 @@
                     {
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.by_team.packwerk_checkers.true.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
+                      "query": "avg:modularization.by_team.packwerk_checkers.true.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
                       "aggregator": "avg"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query3",
-                      "query": "avg:test.4.modularization.by_team.packwerk_checkers.strict.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
+                      "query": "avg:modularization.by_team.packwerk_checkers.strict.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
                       "aggregator": "avg"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query2",
-                      "query": "avg:test.4.modularization.by_team.packwerk_checkers.false.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
+                      "query": "avg:modularization.by_team.packwerk_checkers.false.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
                       "aggregator": "avg"
                     }
                   ]
@@ -488,7 +488,7 @@
                     {
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.all_packages.violations.count{$app,$max_enforcements,$violation_type} by {violation_type}"
+                      "query": "avg:modularization.all_packages.violations.count{$app,$max_enforcements,$violation_type} by {violation_type}"
                     }
                   ],
                   "response_format": "timeseries",
@@ -532,22 +532,22 @@
                     {
                       "data_source": "metrics",
                       "name": "query2",
-                      "query": "avg:test.4.modularization.all_packages.packwerk_checkers.true.count{$app,$max_enforcements,$violation_type} by {app,violation_type}"
+                      "query": "avg:modularization.all_packages.packwerk_checkers.true.count{$app,$max_enforcements,$violation_type} by {app,violation_type}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query5",
-                      "query": "avg:test.4.modularization.all_packages.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query4",
-                      "query": "avg:test.4.modularization.all_packages.packwerk_checkers.false.count{$app,$max_enforcements,$violation_type} by {app,violation_type}"
+                      "query": "avg:modularization.all_packages.packwerk_checkers.false.count{$app,$max_enforcements,$violation_type} by {app,violation_type}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query3",
-                      "query": "avg:test.4.modularization.all_packages.packwerk_checkers.strict.count{$app,$max_enforcements,$violation_type} by {app,violation_type}"
+                      "query": "avg:modularization.all_packages.packwerk_checkers.strict.count{$app,$max_enforcements,$violation_type} by {app,violation_type}"
                     }
                   ],
                   "response_format": "timeseries",
@@ -608,47 +608,47 @@
                     {
                       "data_source": "metrics",
                       "name": "query4",
-                      "query": "avg:test.4.modularization.all_packages.rubocops.packs_rootnamespaceispackname.true.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.rubocops.packs_rootnamespaceispackname.true.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.all_packages.rubocops.packs_rootnamespaceispackname.strict.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.rubocops.packs_rootnamespaceispackname.strict.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query2",
-                      "query": "avg:test.4.modularization.all_packages.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query3",
-                      "query": "avg:test.4.modularization.all_packages.rubocops.packs_classmethodsaspublicapis.strict.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.rubocops.packs_classmethodsaspublicapis.strict.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query5",
-                      "query": "avg:test.4.modularization.all_packages.rubocops.packs_classmethodsaspublicapis.strict.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.rubocops.packs_classmethodsaspublicapis.strict.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query6",
-                      "query": "avg:test.4.modularization.all_packages.rubocops.packs_documentedpublicapis.true.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.rubocops.packs_documentedpublicapis.true.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query7",
-                      "query": "avg:test.4.modularization.all_packages.rubocops.packs_documentedpublicapis.strict.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.rubocops.packs_documentedpublicapis.strict.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query8",
-                      "query": "avg:test.4.modularization.all_packages.rubocops.packs_typedpublicapis.true.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.rubocops.packs_typedpublicapis.true.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query9",
-                      "query": "avg:test.4.modularization.all_packages.rubocops.packs_typedpublicapis.strict.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.rubocops.packs_typedpublicapis.strict.count{$app,$max_enforcements} by {app}"
                     }
                   ],
                   "response_format": "timeseries",
@@ -723,12 +723,12 @@
                     {
                       "data_source": "metrics",
                       "name": "query3",
-                      "query": "avg:test.4.modularization.all_packages.has_readme.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.has_readme.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.all_packages.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.count{$app,$max_enforcements} by {app}"
                     }
                   ],
                   "response_format": "timeseries",
@@ -781,12 +781,12 @@
                     {
                       "data_source": "metrics",
                       "name": "query3",
-                      "query": "avg:test.4.modularization.all_packages.using_public_directory.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.using_public_directory.count{$app,$max_enforcements} by {app}"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:test.4.modularization.all_packages.count{$app,$max_enforcements} by {app}"
+                      "query": "avg:modularization.all_packages.count{$app,$max_enforcements} by {app}"
                     }
                   ],
                   "response_format": "timeseries",
@@ -825,7 +825,7 @@
                     {
                       "data_source": "metrics",
                       "name": "query3",
-                      "query": "avg:test.4.modularization.by_package.depended_on.count{$app,$package,$team} by {app,package}",
+                      "query": "avg:modularization.by_package.depended_on.count{$app,$package,$team} by {app,package}",
                       "aggregator": "avg"
                     }
                   ],
