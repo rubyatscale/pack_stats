@@ -22,7 +22,7 @@ module PackStats
         class PackwerkChecker < T::Struct
           extend T::Sig
 
-          const :setting, String
+          const :key, String
           const :violation_type, String
           const :direction, Direction
 
@@ -36,10 +36,10 @@ module PackStats
         end
 
         CHECKERS = T.let([
-          PackwerkChecker.new(setting: 'enforce_dependencies', violation_type: 'dependency', direction: Direction::Outbound),
-          PackwerkChecker.new(setting: 'enforce_privacy', violation_type: 'privacy', direction: Direction::Inbound),
-          PackwerkChecker.new(setting: 'enforce_architecture', violation_type: 'architecture', direction: Direction::Outbound),
-          PackwerkChecker.new(setting: 'enforce_visibility', violation_type: 'visibility', direction: Direction::Outbound),
+          PackwerkChecker.new(key: 'enforce_dependencies', violation_type: 'dependency', direction: Direction::Outbound),
+          PackwerkChecker.new(key: 'enforce_privacy', violation_type: 'privacy', direction: Direction::Inbound),
+          PackwerkChecker.new(key: 'enforce_architecture', violation_type: 'architecture', direction: Direction::Outbound),
+          PackwerkChecker.new(key: 'enforce_visibility', violation_type: 'visibility', direction: Direction::Outbound),
         ], T::Array[PackwerkChecker])
 
         sig { params(prefix: String, packages: T::Array[ParsePackwerk::Package], package_tags: T::Array[Tag]).returns(T::Array[GaugeMetric]) }
@@ -47,22 +47,17 @@ module PackStats
           metrics = T.let([], T::Array[GaugeMetric])
 
           CHECKERS.each do |checker|
-            ['false', 'true', 'strict'].each do |enabled_mode|
-              count_of_packages = ParsePackwerk.all.count do |package|
-                checker_setting = YAML.load_file(package.yml)[checker.setting]
-                case enabled_mode
-                when 'false'
-                  !checker_setting
-                when 'true'
-                  checker_setting && checker_setting != 'strict'
-                when 'strict'
-                  checker_setting == 'strict'
-                end
-              end
+            checker_values = ParsePackwerk.all.map do |package|
+              YAML.load_file(package.yml)[checker.key]
+            end
 
-              metric_name = "#{prefix}.packwerk_checkers.#{enabled_mode}.count"
+            checker_values_tally = checker_values.map(&:to_s).tally
+
+            ['false', 'true', 'strict'].each do |possible_value|
+              count = checker_values_tally.fetch(possible_value, 0)
+              metric_name = "#{prefix}.packwerk_checkers.#{possible_value}.count"
               tags = package_tags + [checker.violation_type_tag]
-              metrics << GaugeMetric.for(metric_name, count_of_packages, tags)
+              metrics << GaugeMetric.for(metric_name, count, tags)
             end
           end
 
