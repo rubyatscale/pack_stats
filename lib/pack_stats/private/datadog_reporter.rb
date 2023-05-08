@@ -7,6 +7,7 @@ require 'pack_stats/private/metrics/files'
 require 'pack_stats/private/metrics/public_usage'
 require 'pack_stats/private/metrics/packwerk_checker_usage'
 require 'pack_stats/private/metrics/rubocop_usage'
+require 'pack_stats/private/metrics/dependencies'
 require 'pack_stats/private/metrics/packages'
 require 'pack_stats/private/metrics/packages_by_team'
 

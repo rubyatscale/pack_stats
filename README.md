@@ -46,42 +46,51 @@ PackStats.report_to_datadog!(
 
 It's recommended to run this in CI on the main/development branch so each new commit has metrics emitted for it.
 
-# Tracking Privacy and Dependency Violations Reliably
-With [`packwerk`](https://github.com/Shopify/packwerk), privacy and dependency violations do not show up until a package has set `enforce_privacy` and `enforce_dependency` (respectively) to `true`. As such, when you're first starting off, you'll see no violations, and then periodic large increases as teams start using these protections. If you're interested in looking at privacy and dependency violations over time as if all packages were enforcing dependencies and privacy the whole time, we recommend setting these values to be true before running modularization statistics in your CI.
-
 ```ruby
 require 'pack_stats'
 
-namespace(:modularization) do
-  desc(
-    'Publish modularization stats to datadog. ' \
-      'Example: bin/rails "modularization:upload_statistics"'
-  )
-  task(:upload_statistics, [:verbose] => :environment) do |_, args|
-    ignored_paths = Pathname.glob('spec/fixtures/**/**')
-    source_code_pathnames = Pathname.glob('{app,components,lib,packs,spec}/**/**').select(&:file?) - ignored_paths
+def report(verbose:, max_enforcements: false)
+  ignored_paths = Pathname.glob('spec/fixtures/**/**')
+  source_code_pathnames = Pathname.glob('{app,components,lib,packs,spec}/**/**').select(&:file?) - ignored_paths
 
-    # To correctly track violations, we rewrite all `package.yml` files with
-    # `enforce_dependencies` and `enforce_privacy` set to true, then update deprecations.
+  PackStats.report_to_datadog!(
+    datadog_client: Dogapi::Client.new(ENV.fetch('DATADOG_API_KEY')),
+    app_name: Rails.application.class.module_parent_name,
+    source_code_pathnames: source_code_pathnames,
+    verbose: verbose,
+    max_enforcements: max_enforcements
+  )
+end
+
+namespace(:pack_stats) do
+  desc(
+    'Publish pack_stats to datadog. ' \
+      'Example: bin/rails "pack_stats:upload"'
+  )
+  task(:upload, [:verbose] => :environment) do |_, args|
+    verbose = args[:verbose] == 'true' || false
+
+    # First send without any changes, tagging metrics with max_enforcements:false
+    report(verbose: verbose, max_enforcements: false)
+
+    # At Gusto, it's useful to be able to view the dashboard as if all enforce_x were set to true.
+    # To do this, we rewrite all `package.yml` files with `enforce_dependencies` and `enforce_privacy`
+    # set to true, then bin/packwerk update-todo.
     old_packages = ParsePackwerk.all
     old_packages.each do |package|
       new_package = package.with(enforce_dependencies: true, enforce_privacy: true)
       ParsePackwerk.write_package_yml!(new_package)
     end
 
-    Packwerk::Cli.new.execute_command(['update-deprecations'])
+    Packwerk::Cli.new.execute_command(['update-todo'])
 
     # Now we reset it back so that the protection values are the same as the native packwerk configuration
     old_packages.each do |package|
       ParsePackwerk.write_package_yml!(package)
     end
-
-    PackStats.report_to_datadog!(
-      datadog_client: Dogapi::Client.new(ENV.fetch('DATADOG_API_KEY')),
-      app_name: Rails.application.class.module_parent_name,
-      source_code_pathnames: source_code_pathnames,
-      verbose: args[:verbose] == 'true' || false
-    )
+    
+    # Then send after maxing out enforcements, tagging metrics with max_enforcements:true
+    report(verbose: verbose, max_enforcements: true)
   end
 end
 ```
@@ -98,7 +107,7 @@ Gusto has two dashboards that we've created to view these metrics. We've also ex
 
 This helps answer questions like:
 - How are we doing on reducing dependency and privacy violations in your monolith overall?
-- How are we doing overall on adopting package protections?
+- How are we doing overall on adopting packwerk?
 
 [Dashboard JSON](docs/executive_summary.json)
 
