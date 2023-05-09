@@ -5,7 +5,7 @@
     {
       "id": 6370727016503428,
       "definition": {
-        "title": "Click here to see the documentation for this dashboard!",
+        "title": "Open this to see the documentation for this dashboard!",
         "background_color": "vivid_blue",
         "show_title": true,
         "type": "group",
@@ -15,9 +15,9 @@
             "id": 5169947781850282,
             "definition": {
               "type": "note",
-              "content": "At the top, there are some template variables you can set to filter the entire dashboard by...\n\n- *app*: You can change this to HI (*hawaiianice*) or ZP (*zenpayroll*). Note if this is not set, you may see double-counting on some widgets.\n- *team*, e.g. `payments`\n- *package*: e.g. `packs/background_jobs`\n- *violation_type*: e.g. `dependency`, `privacy`\n- *max_enforcements*: By setting this to `true`, you will get the metrics as if `enforce_privacy` and `enforce_dependencies` were turned on for all packages.\n\nPro-tip: Click \"split graph\" in the \"full-screen\" mode of a widget to see a graph broken up by team, violation type, or package. Here's an [example (violations over time)](https://app.datadoghq.com/dashboard/s3q-cb3-bed?fullscreen_end_ts=1683557460383&fullscreen_paused=false&fullscreen_section=split%20graph&fullscreen_start_ts=1683543060383&fullscreen_widget=452601886481639&from_ts=1683543021000&to_ts=1683557421000&live=true)\n\nMore information at [https://go/packs](https://docs.google.com/document/d/1OGYqV1pt1r6g6LimCDs8RSIR7hBZ7BVO1yohk2Jnu0M/edit#heading=h.4cufcvb5oqvd)",
+              "content": "# Template Variables\nAt the top, there are some template variables you can set to filter the entire dashboard by...\n\n| Key | Default | Examples |\n|---|---|---|\n| *app* (required) | `zenpayroll` | `hawaiianice`, `zenpayroll` |\n| *max_enforcements* | `false` | `false`, `true` |\n| *package* | `*` | `packs/background_jobs` |\n| *team* | `*` | `payments` |\n| *violation_type* | `dependency`,`privacy` | `architecture`,`visibility` |\n\nFor `max_enforcement`, \n  - `false` means: Violation counts without changing `enforce_x` in `package.yml` files. Used to track violations we care about.\n  - `true` means: Violation counts after changing `enforce_x` to `true` for all packages.  Used for \"what if\" scenarios.\n\n# Pro-Tip: Split graph by variables\nClick \"split graph\" in the \"full-screen\" mode of a widget to see a graph broken up by team, violation type, or package. Here's an [example (violations over time)](https://app.datadoghq.com/dashboard/s3q-cb3-bed?fullscreen_end_ts=1683557460383&fullscreen_paused=false&fullscreen_section=split%20graph&fullscreen_start_ts=1683543060383&fullscreen_widget=452601886481639&from_ts=1683543021000&to_ts=1683557421000&live=true).\n\n# Data Completeness\nNote since data is fresh, we are missing change counts and line graphs show dots or otherwise minimal data.\n\n# Additional Documentation\nMore information at [https://go/packs](https://docs.google.com/document/d/1OGYqV1pt1r6g6LimCDs8RSIR7hBZ7BVO1yohk2Jnu0M/edit#heading=h.4cufcvb5oqvd)\n",
               "background_color": "white",
-              "font_size": "16",
+              "font_size": "14",
               "text_align": "left",
               "vertical_align": "top",
               "show_tick": false,
@@ -29,7 +29,7 @@
               "x": 0,
               "y": 0,
               "width": 12,
-              "height": 3
+              "height": 7
             }
           }
         ]
@@ -38,7 +38,7 @@
         "x": 0,
         "y": 0,
         "width": 12,
-        "height": 1
+        "height": 8
       }
     },
     {
@@ -101,13 +101,9 @@
               "title_size": "16",
               "title_align": "left",
               "show_legend": false,
-              "legend_layout": "auto",
+              "legend_layout": "vertical",
               "legend_columns": [
-                "avg",
-                "min",
-                "max",
-                "value",
-                "sum"
+                "value"
               ],
               "type": "timeseries",
               "requests": [
@@ -190,9 +186,9 @@
       },
       "layout": {
         "x": 0,
-        "y": 1,
+        "y": 8,
         "width": 12,
-        "height": 10
+        "height": 1
       }
     },
     {
@@ -344,7 +340,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 11,
+        "y": 9,
         "width": 12,
         "height": 1
       }
@@ -352,7 +348,7 @@
     {
       "id": 5988093184398876,
       "definition": {
-        "title": "Team Specific Metrics",
+        "title": "Packwerk Usage By Team",
         "title_align": "center",
         "background_color": "vivid_orange",
         "show_title": true,
@@ -412,7 +408,7 @@
                       "formula": "(query1 + query3) / (query2 + query1 + query3) * 100",
                       "limit": {
                         "count": 500,
-                        "order": "asc"
+                        "order": "desc"
                       }
                     }
                   ],
@@ -421,19 +417,19 @@
                       "data_source": "metrics",
                       "name": "query1",
                       "query": "avg:modularization.by_team.packwerk_checkers.true.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
-                      "aggregator": "avg"
+                      "aggregator": "last"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query3",
                       "query": "avg:modularization.by_team.packwerk_checkers.strict.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
-                      "aggregator": "avg"
+                      "aggregator": "last"
                     },
                     {
                       "data_source": "metrics",
                       "name": "query2",
                       "query": "avg:modularization.by_team.packwerk_checkers.false.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
-                      "aggregator": "avg"
+                      "aggregator": "last"
                     }
                   ]
                 }
@@ -450,15 +446,16 @@
       },
       "layout": {
         "x": 0,
-        "y": 12,
+        "y": 10,
         "width": 12,
-        "height": 1
+        "height": 1,
+        "is_column_break": true
       }
     },
     {
       "id": 3553542546106134,
       "definition": {
-        "title": "Overall Packwerk Usage",
+        "title": "Overall Packs Usage",
         "background_color": "vivid_yellow",
         "show_title": true,
         "type": "group",
@@ -475,6 +472,7 @@
               "legend_columns": [
                 "value"
               ],
+              "time": {},
               "type": "timeseries",
               "requests": [
                 {
@@ -498,6 +496,28 @@
                     "line_width": "normal"
                   },
                   "display_type": "line"
+                }
+              ],
+              "custom_links": [
+                {
+                  "override_label": "containers",
+                  "is_hidden": true
+                },
+                {
+                  "override_label": "hosts",
+                  "is_hidden": true
+                },
+                {
+                  "override_label": "logs",
+                  "is_hidden": true
+                },
+                {
+                  "override_label": "traces",
+                  "is_hidden": true
+                },
+                {
+                  "override_label": "profiles",
+                  "is_hidden": true
                 }
               ]
             },
@@ -825,8 +845,8 @@
                     {
                       "data_source": "metrics",
                       "name": "query3",
-                      "query": "avg:modularization.by_package.depended_on.count{$app,$package,$team} by {app,package}",
-                      "aggregator": "avg"
+                      "query": "max:modularization.by_package.depended_on.count{$app,$package,$team} by {app,package}",
+                      "aggregator": "last"
                     }
                   ],
                   "formulas": [
@@ -845,16 +865,16 @@
               "x": 0,
               "y": 8,
               "width": 6,
-              "height": 2
+              "height": 3
             }
           }
         ]
       },
       "layout": {
         "x": 0,
-        "y": 13,
+        "y": 11,
         "width": 12,
-        "height": 1
+        "height": 12
       }
     }
   ],
@@ -894,8 +914,25 @@
     }
   ],
   "layout_type": "ordered",
-  "notify_list": [],
+  "notify_list": [
+    "alex.evanczuk@gusto.com"
+  ],
   "template_variable_presets": [
+    {
+      "name": "Growth",
+      "template_variables": [
+        {
+          "name": "team",
+          "values": [
+            "acquisition",
+            "accountants_growth",
+            "expansion",
+            "growth_foundation",
+            "onboarding"
+          ]
+        }
+      ]
+    },
     {
       "name": "Wallet Experience",
       "template_variables": [
