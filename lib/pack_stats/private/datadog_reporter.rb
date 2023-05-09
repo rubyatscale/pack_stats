@@ -47,11 +47,25 @@ module PackStats
         # we want to split this up into chunks of 1000 so that as we add more metrics,
         # our payload is not rejected for being too large
         #
-        metrics.each_slice(1000).each do |metric_slice|
-          datadog_client.batch_metrics do
-            metric_slice.each do |metric|
-              datadog_client.emit_points(metric.name, [[report_time, metric.count]], type: 'gauge', tags: metric.tags.map(&:to_s))
+        slices = metrics.each_slice(1000)
+        slices.each_with_index do |metric_slice, index|
+          puts "[#{index}/#{slices.count}] Sending a slice of 1000 metrics to DD with names #{metric_slice.map(&:name).uniq.sort}"
+          # I was having issues with my local internet, so made this portion a bit more resilient.
+          begin
+            datadog_client.batch_metrics do
+              metric_slice.each do |metric|
+                datadog_client.emit_points(metric.name, [[report_time, metric.count]], type: 'gauge', tags: metric.tags.map(&:to_s))
+              end
             end
+          rescue Net::OpenTimeout => ex
+            puts "⚠️ Net::OpenTimeout [#{ex.message}], retrying..."
+            retry
+          rescue ActiveSupport::DeprecationException => ex
+            puts "ActiveSupport::DeprecationException, retrying..."
+            retry
+          rescue => ex
+            puts "#{ex} #{ex.class.name} #{ex.message}, retrying..."
+            retry
           end
         end
       end
