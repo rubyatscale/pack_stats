@@ -7,27 +7,27 @@
 # source://parse_packwerk//lib/parse_packwerk/constants.rb#3
 module ParsePackwerk
   class << self
-    # source://parse_packwerk//lib/parse_packwerk.rb#28
+    # source://parse_packwerk//lib/parse_packwerk.rb#32
     sig { returns(T::Array[::ParsePackwerk::Package]) }
     def all; end
 
-    # source://parse_packwerk//lib/parse_packwerk.rb#112
+    # source://parse_packwerk//lib/parse_packwerk.rb#117
     sig { void }
     def bust_cache!; end
 
-    # source://parse_packwerk//lib/parse_packwerk.rb#33
+    # source://parse_packwerk//lib/parse_packwerk.rb#37
     sig { params(name: ::String).returns(T.nilable(::ParsePackwerk::Package)) }
     def find(name); end
 
-    # source://parse_packwerk//lib/parse_packwerk.rb#43
+    # source://parse_packwerk//lib/parse_packwerk.rb#47
     sig { params(file_path: T.any(::Pathname, ::String)).returns(::ParsePackwerk::Package) }
     def package_from_path(file_path); end
 
-    # source://parse_packwerk//lib/parse_packwerk.rb#54
+    # source://parse_packwerk//lib/parse_packwerk.rb#58
     sig { params(package: ::ParsePackwerk::Package).void }
     def write_package_yml!(package); end
 
-    # source://parse_packwerk//lib/parse_packwerk.rb#38
+    # source://parse_packwerk//lib/parse_packwerk.rb#42
     sig { returns(::ParsePackwerk::Configuration) }
     def yml; end
 
@@ -36,7 +36,7 @@ module ParsePackwerk
     # We memoize packages_by_name for fast lookup.
     # Since Graph is an immutable value object, we can create indexes and general caching mechanisms safely.
     #
-    # source://parse_packwerk//lib/parse_packwerk.rb#100
+    # source://parse_packwerk//lib/parse_packwerk.rb#105
     sig { returns(T::Hash[::String, ::ParsePackwerk::Package]) }
     def packages_by_name; end
   end
@@ -46,20 +46,21 @@ end
 class ParsePackwerk::Configuration < ::T::Struct
   const :exclude, T::Array[::String]
   const :package_paths, T::Array[::String]
+  const :requires, T::Array[::String]
 
   class << self
-    # source://parse_packwerk//lib/parse_packwerk/configuration.rb#28
+    # source://parse_packwerk//lib/parse_packwerk/configuration.rb#30
     sig { params(config_hash: T::Hash[T.untyped, T.untyped]).returns(T::Array[::String]) }
     def excludes(config_hash); end
 
-    # source://parse_packwerk//lib/parse_packwerk/configuration.rb#11
+    # source://parse_packwerk//lib/parse_packwerk/configuration.rb#12
     sig { returns(::ParsePackwerk::Configuration) }
     def fetch; end
 
-    # source://sorbet-runtime/0.5.9924/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.10796/lib/types/struct.rb#13
     def inherited(s); end
 
-    # source://parse_packwerk//lib/parse_packwerk/configuration.rb#40
+    # source://parse_packwerk//lib/parse_packwerk/configuration.rb#42
     sig { params(config_hash: T::Hash[T.untyped, T.untyped]).returns(T::Array[::String]) }
     def package_paths(config_hash); end
   end
@@ -86,6 +87,19 @@ ParsePackwerk::ENFORCE_DEPENDENCIES = T.let(T.unsafe(nil), String)
 # source://parse_packwerk//lib/parse_packwerk/constants.rb#9
 ParsePackwerk::ENFORCE_PRIVACY = T.let(T.unsafe(nil), String)
 
+# source://parse_packwerk//lib/parse_packwerk/extensions.rb#4
+module ParsePackwerk::Extensions
+  class << self
+    # source://parse_packwerk//lib/parse_packwerk/extensions.rb#8
+    sig { returns(T::Boolean) }
+    def all_extensions_installed?; end
+
+    # source://parse_packwerk//lib/parse_packwerk/extensions.rb#13
+    sig { returns(T::Boolean) }
+    def privacy_extension_installed?; end
+  end
+end
+
 # source://parse_packwerk//lib/parse_packwerk/constants.rb#13
 ParsePackwerk::METADATA = T.let(T.unsafe(nil), String)
 
@@ -95,9 +109,9 @@ ParsePackwerk::METADATA = T.let(T.unsafe(nil), String)
 # source://parse_packwerk//lib/parse_packwerk/constants.rb#18
 ParsePackwerk::MetadataYmlType = T.type_alias { T::Hash[T.untyped, T.untyped] }
 
-# source://parse_packwerk//lib/parse_packwerk.rb#14
+# source://parse_packwerk//lib/parse_packwerk.rb#18
 class ParsePackwerk::MissingConfiguration < ::StandardError
-  # source://parse_packwerk//lib/parse_packwerk.rb#18
+  # source://parse_packwerk//lib/parse_packwerk.rb#22
   sig { params(packwerk_file_name: ::Pathname).void }
   def initialize(packwerk_file_name); end
 end
@@ -119,46 +133,50 @@ ParsePackwerk::PUBLIC_PATH = T.let(T.unsafe(nil), String)
 
 # source://parse_packwerk//lib/parse_packwerk/package.rb#4
 class ParsePackwerk::Package < ::T::Struct
-  const :dependencies, T::Array[::String]
-  const :enforce_dependencies, T::Boolean
-  const :enforce_privacy, T::Boolean
-  const :metadata, T::Hash[T.untyped, T.untyped]
   const :name, ::String
+  const :enforce_dependencies, T.any(::String, T::Boolean)
+  const :enforce_privacy, T.any(::String, T::Boolean), default: T.unsafe(nil)
   const :public_path, ::String, default: T.unsafe(nil)
+  const :metadata, T::Hash[T.untyped, T.untyped]
+  const :dependencies, T::Array[::String]
+  const :config, T::Hash[T.untyped, T.untyped]
 
-  # source://parse_packwerk//lib/parse_packwerk/package.rb#35
+  # source://parse_packwerk//lib/parse_packwerk/package.rb#41
   sig { returns(::Pathname) }
   def directory; end
 
-  # source://parse_packwerk//lib/parse_packwerk/package.rb#45
-  sig { returns(T::Boolean) }
+  # source://parse_packwerk//lib/parse_packwerk/package.rb#51
+  sig { returns(T.any(::String, T::Boolean)) }
   def enforces_dependencies?; end
 
-  # source://parse_packwerk//lib/parse_packwerk/package.rb#50
-  sig { returns(T::Boolean) }
+  # source://parse_packwerk//lib/parse_packwerk/package.rb#56
+  sig { returns(T.any(::String, T::Boolean)) }
   def enforces_privacy?; end
 
-  # source://parse_packwerk//lib/parse_packwerk/package.rb#40
+  # source://parse_packwerk//lib/parse_packwerk/package.rb#46
   sig { returns(::Pathname) }
   def public_directory; end
 
-  # source://parse_packwerk//lib/parse_packwerk/package.rb#55
+  # source://parse_packwerk//lib/parse_packwerk/package.rb#61
   sig { returns(T::Array[::ParsePackwerk::Violation]) }
   def violations; end
 
-  # source://parse_packwerk//lib/parse_packwerk/package.rb#30
+  # source://parse_packwerk//lib/parse_packwerk/package.rb#36
   sig { returns(::Pathname) }
   def yml; end
 
   class << self
-    # source://parse_packwerk//lib/parse_packwerk/package.rb#15
+    # source://parse_packwerk//lib/parse_packwerk/package.rb#16
     sig { params(pathname: ::Pathname).returns(::ParsePackwerk::Package) }
     def from(pathname); end
 
-    # source://sorbet-runtime/0.5.9924/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.10796/lib/types/struct.rb#13
     def inherited(s); end
   end
 end
+
+# source://parse_packwerk//lib/parse_packwerk.rb#15
+class ParsePackwerk::PackageParseError < ::StandardError; end
 
 # source://parse_packwerk//lib/parse_packwerk/package_set.rb#8
 class ParsePackwerk::PackageSet
@@ -194,7 +212,7 @@ class ParsePackwerk::PackageTodo < ::T::Struct
     sig { params(pathname: ::Pathname).returns(::ParsePackwerk::PackageTodo) }
     def from(pathname); end
 
-    # source://sorbet-runtime/0.5.9924/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.10796/lib/types/struct.rb#13
     def inherited(s); end
   end
 end
@@ -204,10 +222,10 @@ ParsePackwerk::ROOT_PACKAGE_NAME = T.let(T.unsafe(nil), String)
 
 # source://parse_packwerk//lib/parse_packwerk/violation.rb#4
 class ParsePackwerk::Violation < ::T::Struct
+  const :type, ::String
+  const :to_package_name, ::String
   const :class_name, ::String
   const :files, T::Array[::String]
-  const :to_package_name, ::String
-  const :type, ::String
 
   # source://parse_packwerk//lib/parse_packwerk/violation.rb#13
   sig { returns(T::Boolean) }
@@ -218,7 +236,7 @@ class ParsePackwerk::Violation < ::T::Struct
   def privacy?; end
 
   class << self
-    # source://sorbet-runtime/0.5.9924/lib/types/struct.rb#13
+    # source://sorbet-runtime/0.5.10796/lib/types/struct.rb#13
     def inherited(s); end
   end
 end
