@@ -453,17 +453,17 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.for('by_team.using_public_directory.count', 0, Tags.for(['team:Unknown', 'app:MyApp']))
 
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 2, Tags.for(['team:Chefs', 'other_team:Artists', 'violation_type:dependency', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Chefs', 'other_team:Artists', 'violation_type:privacy', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Chefs', 'other_team:Artists', 'violation_type:privacy', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 1, Tags.for(['team:Chefs', 'other_team:Unknown', 'violation_type:dependency', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Chefs', 'other_team:Unknown', 'violation_type:privacy', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Chefs', 'other_team:Unknown', 'violation_type:privacy', 'app:MyApp']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 2, Tags.for(['team:Unknown', 'other_team:Chefs', 'violation_type:dependency', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Unknown', 'other_team:Chefs', 'violation_type:privacy', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Unknown', 'other_team:Artists', 'violation_type:dependency', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Unknown', 'other_team:Artists', 'violation_type:privacy', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Artists', 'other_team:Chefs', 'violation_type:dependency', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Artists', 'other_team:Chefs', 'violation_type:privacy', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Artists', 'other_team:Unknown', 'violation_type:dependency', 'app:MyApp']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Artists', 'other_team:Unknown', 'violation_type:privacy', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Unknown', 'other_team:Chefs', 'violation_type:privacy', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Unknown', 'other_team:Artists', 'violation_type:dependency', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Unknown', 'other_team:Artists', 'violation_type:privacy', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Artists', 'other_team:Chefs', 'violation_type:dependency', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Artists', 'other_team:Chefs', 'violation_type:privacy', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Artists', 'other_team:Unknown', 'violation_type:dependency', 'app:MyApp']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['team:Artists', 'other_team:Unknown', 'violation_type:privacy', 'app:MyApp']))
         end
       end
 
@@ -1089,8 +1089,8 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to_not include_metric GaugeMetric.for('by_package.violations.by_other_package.count', 0, Tags.for(['app:MyApp', 'package:packs/other_pack', 'other_package:packs/my_pack', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:architecture', 'layer:product']))
           expect(metrics).to_not include_metric GaugeMetric.for('by_package.violations.by_other_package.count', 0, Tags.for(['app:MyApp', 'package:packs/other_pack', 'other_package:packs/my_pack', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:visibility', 'layer:product']))
 
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:architecture']))
-          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:visibility']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:architecture']))
+          expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:visibility']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:architecture']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:visibility']))
         end
