@@ -59,7 +59,10 @@ module PackStats
                     checker.violation_type_tag
                   ]
 
-                  all_metrics << GaugeMetric.for("by_package.violations.by_other_package.count", Metrics.file_count(violations), tags)
+                  count = Metrics.file_count(violations)
+                  if count > 0
+                    all_metrics << GaugeMetric.for("by_package.violations.by_other_package.count", Metrics.file_count(violations), tags)
+                  end
                 end
               when PackwerkCheckerUsage::Direction::Inbound
                 all_violations_of_type = inbound_violations.select { |v| v.type == checker.violation_type } 
@@ -72,7 +75,10 @@ module PackStats
                     checker.violation_type_tag
                   ]
 
-                  all_metrics << GaugeMetric.for("by_package.violations.by_other_package.count", Metrics.file_count(violations), tags)
+                  count = Metrics.file_count(violations)
+                  if count > 0
+                    all_metrics << GaugeMetric.for("by_package.violations.by_other_package.count", count, tags)
+                  end
                 end
               else
                 T.absurd(direction)
