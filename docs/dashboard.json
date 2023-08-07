@@ -1,63 +1,97 @@
 {
+  "description": "See text widget for dashboard documentation.",
+  "layout_type": "ordered",
+  "notify_list": [],
+  "reflow_type": "fixed",
+  "tags": [],
+  "template_variable_presets": [],
+  "template_variables": [
+    {
+      "available_values": [],
+      "default": "*",
+      "name": "app",
+      "prefix": "app"
+    },
+    {
+      "available_values": [],
+      "default": "*",
+      "name": "team",
+      "prefix": "team"
+    },
+    {
+      "available_values": [],
+      "default": "*",
+      "name": "package",
+      "prefix": "package"
+    },
+    {
+      "available_values": [],
+      "default": "false",
+      "name": "max_enforcements",
+      "prefix": "max_enforcements"
+    },
+    {
+      "available_values": [],
+      "defaults": [
+        "dependency",
+        "privacy"
+      ],
+      "name": "violation_type",
+      "prefix": "violation_type"
+    }
+  ],
   "title": "[Modularization] Pack Stats",
-  "description": "See text widget for dashboard documentation. (cloned)",
   "widgets": [
     {
-      "id": 6370727016503428,
       "definition": {
-        "title": "Open this to see the documentation for this dashboard!",
         "background_color": "vivid_blue",
-        "show_title": true,
-        "type": "group",
         "layout_type": "ordered",
+        "show_title": true,
+        "title": "Open this to see the documentation for this dashboard!",
+        "type": "group",
         "widgets": [
           {
-            "id": 5169947781850282,
             "definition": {
-              "type": "note",
-              "content": "# Template Variables\nAt the top, there are some template variables you can set to filter the entire dashboard by...\n\n| Key | Default | Examples |\n|---|---|---|\n| *app* (required) | `zenpayroll` | `hawaiianice`, `zenpayroll` |\n| *max_enforcements* | `false` | `false`, `true` |\n| *package* | `*` | `packs/background_jobs` |\n| *team* | `*` | `payments` |\n| *violation_type* | `dependency`,`privacy` | `architecture`,`visibility` |\n\nFor `max_enforcement`, \n  - `false` means: Violation counts without changing `enforce_x` in `package.yml` files. Used to track violations we care about.\n  - `true` means: Violation counts after changing `enforce_x` to `true` for all packages.  Used for \"what if\" scenarios.\n\n# Pro-Tip: Split graph by variables\nClick \"split graph\" in the \"full-screen\" mode of a widget to see a graph broken up by team, violation type, or package. Here's an [example (violations over time)](https://app.datadoghq.com/dashboard/s3q-cb3-bed?fullscreen_end_ts=1683557460383&fullscreen_paused=false&fullscreen_section=split%20graph&fullscreen_start_ts=1683543060383&fullscreen_widget=452601886481639&from_ts=1683543021000&to_ts=1683557421000&live=true).\n\n# Data Completeness\nNote since data is fresh, we are missing change counts and line graphs show dots or otherwise minimal data.\n\n# Additional Documentation\nMore information at [https://go/packs](https://docs.google.com/document/d/1OGYqV1pt1r6g6LimCDs8RSIR7hBZ7BVO1yohk2Jnu0M/edit#heading=h.4cufcvb5oqvd)\n",
               "background_color": "white",
+              "content": "# Template Variables\nAt the top, there are some template variables you can set to filter the entire dashboard by...\n\n| Key | Default | Examples |\n|---|---|---|\n| *app* (required) | `my_app` | `my_app` |\n| *max_enforcements* | `false` | `false`, `true` |\n| *package* | `*` | `packs/background_jobs` |\n| *team* | `*` | `payments` |\n| *violation_type* | `dependency`,`privacy` | `architecture`,`visibility` |\n\nFor `max_enforcement`, \n  - `false` means: Violation counts without changing `enforce_x` in `package.yml` files. Used to track violations we care about.\n  - `true` means: Violation counts after changing `enforce_x` to `true` for all packages.  Used for \"what if\" scenarios.\n\n# Pro-Tip: Split graph by variables\nClick \"split graph\" in the \"full-screen\" mode of a widget to see a graph broken up by team, violation type, or package. Here's an [example (violations over time)](https://app.datadoghq.com/dashboard/s3q-cb3-bed?fullscreen_end_ts=1683557460383&fullscreen_paused=false&fullscreen_section=split%20graph&fullscreen_start_ts=1683543060383&fullscreen_widget=452601886481639&from_ts=1683543021000&to_ts=1683557421000&live=true).\n\n# Additional Documentation\nMore information at [https://go/packs](https://docs.google.com/document/d/1OGYqV1pt1r6g6LimCDs8RSIR7hBZ7BVO1yohk2Jnu0M/edit#heading=h.4cufcvb5oqvd)\n",
               "font_size": "14",
-              "text_align": "left",
-              "vertical_align": "top",
+              "has_padding": true,
               "show_tick": false,
-              "tick_pos": "50%",
+              "text_align": "left",
               "tick_edge": "left",
-              "has_padding": true
+              "tick_pos": "50%",
+              "type": "note",
+              "vertical_align": "top"
             },
+            "id": 5169947781850282,
             "layout": {
-              "x": 0,
-              "y": 0,
+              "height": 7,
               "width": 12,
-              "height": 7
+              "x": 0,
+              "y": 0
             }
           }
         ]
       },
+      "id": 6370727016503428,
       "layout": {
-        "x": 0,
-        "y": 0,
+        "height": 1,
         "width": 12,
-        "height": 8
+        "x": 0,
+        "y": 0
       }
     },
     {
-      "id": 6323770581286804,
       "definition": {
+        "background_color": "vivid_purple",
+        "layout_type": "ordered",
+        "show_title": true,
         "title": "Violations By Package",
         "title_align": "center",
-        "background_color": "vivid_purple",
-        "show_title": true,
         "type": "group",
-        "layout_type": "ordered",
         "widgets": [
           {
-            "id": 3643760892520117,
             "definition": {
-              "title": "Current count (left) and monthly change (right) of violations",
-              "title_size": "16",
-              "title_align": "left",
-              "type": "change",
               "requests": [
                 {
                   "change_type": "absolute",
@@ -67,12 +101,12 @@
                       "formula": "month_before(query1)"
                     },
                     {
-                      "formula": "query1",
-                      "alias": "current violation count"
+                      "alias": "current violation count",
+                      "formula": "query1"
                     }
                   ],
                   "increase_good": false,
-                  "order_by": "present",
+                  "order_by": "change",
                   "order_dir": "desc",
                   "queries": [
                     {
@@ -85,29 +119,29 @@
                   "response_format": "scalar",
                   "show_present": true
                 }
-              ]
+              ],
+              "title": "Current count (left) and monthly change (right) of violations",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "change"
             },
+            "id": 3643760892520117,
             "layout": {
-              "x": 0,
-              "y": 0,
+              "height": 3,
               "width": 12,
-              "height": 3
+              "x": 0,
+              "y": 0
             }
           },
           {
-            "id": 452601886481639,
             "definition": {
-              "title": "Violations over time",
-              "title_size": "16",
-              "title_align": "left",
-              "show_legend": false,
-              "legend_layout": "vertical",
               "legend_columns": [
                 "value"
               ],
-              "type": "timeseries",
+              "legend_layout": "vertical",
               "requests": [
                 {
+                  "display_type": "line",
                   "formulas": [
                     {
                       "alias": "violation count",
@@ -123,28 +157,28 @@
                   ],
                   "response_format": "timeseries",
                   "style": {
-                    "palette": "dog_classic",
                     "line_type": "solid",
-                    "line_width": "normal"
-                  },
-                  "display_type": "line"
+                    "line_width": "normal",
+                    "palette": "dog_classic"
+                  }
                 }
-              ]
+              ],
+              "show_legend": false,
+              "title": "Violations over time",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "timeseries"
             },
+            "id": 452601886481639,
             "layout": {
-              "x": 0,
-              "y": 3,
+              "height": 3,
               "width": 12,
-              "height": 3
+              "x": 0,
+              "y": 3
             }
           },
           {
-            "id": 4999182362039404,
             "definition": {
-              "title": "Count of violation pairs (format is count, violation type, pack responsible for violation, other pack)",
-              "title_size": "16",
-              "title_align": "left",
-              "type": "toplist",
               "requests": [
                 {
                   "conditional_formats": [
@@ -173,41 +207,41 @@
                   ],
                   "response_format": "scalar"
                 }
-              ]
+              ],
+              "title": "Count of violation pairs (format is count, violation type, pack responsible for violation, other pack)",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "toplist"
             },
+            "id": 4999182362039404,
             "layout": {
-              "x": 0,
-              "y": 6,
+              "height": 3,
               "width": 12,
-              "height": 3
+              "x": 0,
+              "y": 6
             }
           }
         ]
       },
+      "id": 6323770581286804,
       "layout": {
-        "x": 0,
-        "y": 8,
+        "height": 1,
         "width": 12,
-        "height": 1
+        "x": 0,
+        "y": 1
       }
     },
     {
-      "id": 8036812677312511,
       "definition": {
+        "background_color": "vivid_pink",
+        "layout_type": "ordered",
+        "show_title": true,
         "title": "Violations By Team",
         "title_align": "center",
-        "background_color": "vivid_pink",
-        "show_title": true,
         "type": "group",
-        "layout_type": "ordered",
         "widgets": [
           {
-            "id": 729312621174170,
             "definition": {
-              "title": "Current count (left) and monthly change (right) of violations",
-              "title_size": "16",
-              "title_align": "left",
-              "type": "change",
               "requests": [
                 {
                   "change_type": "absolute",
@@ -217,8 +251,8 @@
                       "formula": "month_before(query1)"
                     },
                     {
-                      "formula": "query1",
-                      "alias": "current violation count"
+                      "alias": "current violation count",
+                      "formula": "query1"
                     }
                   ],
                   "increase_good": false,
@@ -235,23 +269,22 @@
                   "response_format": "scalar",
                   "show_present": true
                 }
-              ]
+              ],
+              "title": "Current count (left) and monthly change (right) of violations",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "change"
             },
+            "id": 729312621174170,
             "layout": {
-              "x": 0,
-              "y": 0,
+              "height": 5,
               "width": 12,
-              "height": 3
+              "x": 0,
+              "y": 0
             }
           },
           {
-            "id": 8106464030577332,
             "definition": {
-              "title": "Violations over time",
-              "title_size": "16",
-              "title_align": "left",
-              "show_legend": false,
-              "legend_layout": "auto",
               "legend_columns": [
                 "avg",
                 "min",
@@ -259,9 +292,10 @@
                 "value",
                 "sum"
               ],
-              "type": "timeseries",
+              "legend_layout": "auto",
               "requests": [
                 {
+                  "display_type": "line",
                   "formulas": [
                     {
                       "alias": "violation count",
@@ -277,28 +311,28 @@
                   ],
                   "response_format": "timeseries",
                   "style": {
-                    "palette": "dog_classic",
                     "line_type": "solid",
-                    "line_width": "normal"
-                  },
-                  "display_type": "line"
+                    "line_width": "normal",
+                    "palette": "dog_classic"
+                  }
                 }
-              ]
+              ],
+              "show_legend": false,
+              "title": "Violations over time",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "timeseries"
             },
+            "id": 8106464030577332,
             "layout": {
-              "x": 0,
-              "y": 3,
+              "height": 3,
               "width": 12,
-              "height": 3
+              "x": 0,
+              "y": 5
             }
           },
           {
-            "id": 7551686457697865,
             "definition": {
-              "title": "Count of violation pairs (format is count, violation type, team responsible for violation, other team)",
-              "title_size": "16",
-              "title_align": "left",
-              "type": "toplist",
               "requests": [
                 {
                   "conditional_formats": [
@@ -327,41 +361,41 @@
                   ],
                   "response_format": "scalar"
                 }
-              ]
+              ],
+              "title": "Count of violation pairs (format is count, violation type, team responsible for violation, other team)",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "toplist"
             },
+            "id": 7551686457697865,
             "layout": {
-              "x": 0,
-              "y": 6,
+              "height": 3,
               "width": 12,
-              "height": 3
+              "x": 0,
+              "y": 8
             }
           }
         ]
       },
+      "id": 8036812677312511,
       "layout": {
-        "x": 0,
-        "y": 9,
+        "height": 1,
         "width": 12,
-        "height": 1
+        "x": 0,
+        "y": 2
       }
     },
     {
-      "id": 5988093184398876,
       "definition": {
+        "background_color": "vivid_orange",
+        "layout_type": "ordered",
+        "show_title": true,
         "title": "Packwerk Usage By Team",
         "title_align": "center",
-        "background_color": "vivid_orange",
-        "show_title": true,
         "type": "group",
-        "layout_type": "ordered",
         "widgets": [
           {
-            "id": 2759533194955744,
             "definition": {
-              "title": "Number of packs",
-              "title_size": "16",
-              "title_align": "left",
-              "type": "toplist",
               "requests": [
                 {
                   "formulas": [
@@ -383,25 +417,24 @@
                   ],
                   "response_format": "scalar"
                 }
-              ]
+              ],
+              "title": "Number of packs",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "toplist"
             },
+            "id": 2759533194955744,
             "layout": {
-              "x": 0,
-              "y": 0,
+              "height": 3,
               "width": 6,
-              "height": 3
+              "x": 0,
+              "y": 0
             }
           },
           {
-            "id": 7803071284986718,
             "definition": {
-              "title": "% of packs using enforce_*",
-              "title_size": "16",
-              "title_align": "left",
-              "type": "query_table",
               "requests": [
                 {
-                  "response_format": "scalar",
                   "formulas": [
                     {
                       "alias": "% of packs enforcing violation_type",
@@ -414,68 +447,90 @@
                   ],
                   "queries": [
                     {
+                      "aggregator": "last",
                       "data_source": "metrics",
                       "name": "query1",
-                      "query": "avg:modularization.by_team.packwerk_checkers.true.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
-                      "aggregator": "last"
+                      "query": "avg:modularization.by_team.packwerk_checkers.true.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}"
                     },
                     {
+                      "aggregator": "last",
                       "data_source": "metrics",
                       "name": "query3",
-                      "query": "avg:modularization.by_team.packwerk_checkers.strict.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
-                      "aggregator": "last"
+                      "query": "avg:modularization.by_team.packwerk_checkers.strict.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}"
                     },
                     {
+                      "aggregator": "last",
                       "data_source": "metrics",
                       "name": "query2",
-                      "query": "avg:modularization.by_team.packwerk_checkers.false.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}",
-                      "aggregator": "last"
+                      "query": "avg:modularization.by_team.packwerk_checkers.false.count{$app,$team,$package,$max_enforcements,$violation_type} by {team,violation_type}"
                     }
-                  ]
+                  ],
+                  "response_format": "scalar"
                 }
-              ]
+              ],
+              "title": "% of packs using enforce_*",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "query_table"
             },
+            "id": 7803071284986718,
             "layout": {
-              "x": 6,
-              "y": 0,
+              "height": 3,
               "width": 6,
-              "height": 3
+              "x": 6,
+              "y": 0
             }
           }
         ]
       },
+      "id": 5988093184398876,
       "layout": {
-        "x": 0,
-        "y": 10,
-        "width": 12,
         "height": 1,
-        "is_column_break": true
+        "is_column_break": true,
+        "width": 12,
+        "x": 0,
+        "y": 3
       }
     },
     {
-      "id": 3553542546106134,
       "definition": {
-        "title": "Overall Packs Usage",
         "background_color": "vivid_yellow",
-        "show_title": true,
-        "type": "group",
         "layout_type": "ordered",
+        "show_title": true,
+        "title": "Overall Packs Usage",
+        "type": "group",
         "widgets": [
           {
-            "id": 6899218535842667,
             "definition": {
-              "title": "Total violations over time",
-              "title_size": "16",
-              "title_align": "left",
-              "show_legend": true,
-              "legend_layout": "vertical",
+              "custom_links": [
+                {
+                  "is_hidden": true,
+                  "override_label": "containers"
+                },
+                {
+                  "is_hidden": true,
+                  "override_label": "hosts"
+                },
+                {
+                  "is_hidden": true,
+                  "override_label": "logs"
+                },
+                {
+                  "is_hidden": true,
+                  "override_label": "traces"
+                },
+                {
+                  "is_hidden": true,
+                  "override_label": "profiles"
+                }
+              ],
               "legend_columns": [
                 "value"
               ],
-              "time": {},
-              "type": "timeseries",
+              "legend_layout": "vertical",
               "requests": [
                 {
+                  "display_type": "line",
                   "formulas": [
                     {
                       "alias": "total violations",
@@ -491,57 +546,36 @@
                   ],
                   "response_format": "timeseries",
                   "style": {
-                    "palette": "dog_classic",
                     "line_type": "solid",
-                    "line_width": "normal"
-                  },
-                  "display_type": "line"
+                    "line_width": "normal",
+                    "palette": "dog_classic"
+                  }
                 }
               ],
-              "custom_links": [
-                {
-                  "override_label": "containers",
-                  "is_hidden": true
-                },
-                {
-                  "override_label": "hosts",
-                  "is_hidden": true
-                },
-                {
-                  "override_label": "logs",
-                  "is_hidden": true
-                },
-                {
-                  "override_label": "traces",
-                  "is_hidden": true
-                },
-                {
-                  "override_label": "profiles",
-                  "is_hidden": true
-                }
-              ]
+              "show_legend": true,
+              "title": "Total violations over time",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "timeseries"
             },
+            "id": 6899218535842667,
             "layout": {
-              "x": 0,
-              "y": 0,
+              "height": 3,
               "width": 12,
-              "height": 3
+              "x": 0,
+              "y": 0
             }
           },
           {
-            "id": 5484448588630899,
             "definition": {
-              "title": "% of packs using packwerk checker enforcements",
-              "title_size": "16",
-              "title_align": "left",
-              "show_legend": true,
-              "legend_layout": "vertical",
               "legend_columns": [
                 "value"
               ],
-              "type": "timeseries",
+              "legend_layout": "vertical",
+              "markers": [],
               "requests": [
                 {
+                  "display_type": "line",
                   "formulas": [
                     {
                       "alias": "% packages using enforce_violation_type: true | strict",
@@ -572,215 +606,32 @@
                   ],
                   "response_format": "timeseries",
                   "style": {
-                    "palette": "dog_classic",
                     "line_type": "solid",
-                    "line_width": "normal"
-                  },
-                  "display_type": "line"
+                    "line_width": "normal",
+                    "palette": "dog_classic"
+                  }
                 }
               ],
-              "yaxis": {
-                "min": "0",
-                "max": "100"
-              },
-              "markers": []
-            },
-            "layout": {
-              "x": 0,
-              "y": 3,
-              "width": 6,
-              "height": 3
-            }
-          },
-          {
-            "id": 6522220798476128,
-            "definition": {
-              "title": "% of packs using rubocop-packs cops",
-              "title_size": "16",
-              "title_align": "left",
               "show_legend": true,
-              "legend_layout": "vertical",
-              "legend_columns": [
-                "value"
-              ],
-              "type": "timeseries",
-              "requests": [
-                {
-                  "formulas": [
-                    {
-                      "alias": "% packs using Packs/RootNamespaceIsPackName",
-                      "formula": "(query4 + query1) / query2 * 100"
-                    },
-                    {
-                      "alias": "% packs using Packs/ClassMethodsAsPublicApis",
-                      "formula": "(query3 + query5) / query2 * 100"
-                    },
-                    {
-                      "alias": "% packs using Packs/DocumentedPublicApis",
-                      "formula": "(query6 + query7) / query2 * 100"
-                    },
-                    {
-                      "alias": "% packs using Packs/TypedPublicApis",
-                      "formula": "(query8 + query9) / query2 * 10"
-                    }
-                  ],
-                  "queries": [
-                    {
-                      "data_source": "metrics",
-                      "name": "query4",
-                      "query": "avg:modularization.all_packages.rubocops.packs_rootnamespaceispackname.true.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query1",
-                      "query": "avg:modularization.all_packages.rubocops.packs_rootnamespaceispackname.strict.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query2",
-                      "query": "avg:modularization.all_packages.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query3",
-                      "query": "avg:modularization.all_packages.rubocops.packs_classmethodsaspublicapis.strict.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query5",
-                      "query": "avg:modularization.all_packages.rubocops.packs_classmethodsaspublicapis.strict.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query6",
-                      "query": "avg:modularization.all_packages.rubocops.packs_documentedpublicapis.true.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query7",
-                      "query": "avg:modularization.all_packages.rubocops.packs_documentedpublicapis.strict.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query8",
-                      "query": "avg:modularization.all_packages.rubocops.packs_typedpublicapis.true.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query9",
-                      "query": "avg:modularization.all_packages.rubocops.packs_typedpublicapis.strict.count{$app,$max_enforcements} by {app}"
-                    }
-                  ],
-                  "response_format": "timeseries",
-                  "style": {
-                    "palette": "dog_classic",
-                    "line_type": "solid",
-                    "line_width": "normal"
-                  },
-                  "display_type": "line"
-                }
-              ],
-              "yaxis": {
-                "min": "0",
-                "max": "100"
-              },
-              "markers": [],
-              "custom_links": [
-                {
-                  "override_label": "hosts",
-                  "is_hidden": true
-                },
-                {
-                  "override_label": "logs",
-                  "is_hidden": true
-                },
-                {
-                  "override_label": "traces",
-                  "is_hidden": true
-                },
-                {
-                  "override_label": "profiles",
-                  "is_hidden": true
-                },
-                {
-                  "override_label": "containers",
-                  "is_hidden": true
-                }
-              ]
-            },
-            "layout": {
-              "x": 6,
-              "y": 3,
-              "width": 6,
-              "height": 3
-            }
-          },
-          {
-            "id": 7370986557741715,
-            "definition": {
-              "title": "% of packs that have a README",
-              "title_size": "16",
+              "title": "% of packs using packwerk checker enforcements",
               "title_align": "left",
-              "show_legend": false,
-              "legend_layout": "vertical",
-              "legend_columns": [
-                "avg",
-                "min",
-                "max",
-                "value",
-                "sum"
-              ],
+              "title_size": "16",
               "type": "timeseries",
-              "requests": [
-                {
-                  "formulas": [
-                    {
-                      "alias": "% of packages with README.md",
-                      "formula": "query3 / query1 * 100"
-                    }
-                  ],
-                  "queries": [
-                    {
-                      "data_source": "metrics",
-                      "name": "query3",
-                      "query": "avg:modularization.all_packages.has_readme.count{$app,$max_enforcements} by {app}"
-                    },
-                    {
-                      "data_source": "metrics",
-                      "name": "query1",
-                      "query": "avg:modularization.all_packages.count{$app,$max_enforcements} by {app}"
-                    }
-                  ],
-                  "response_format": "timeseries",
-                  "style": {
-                    "palette": "dog_classic",
-                    "line_type": "solid",
-                    "line_width": "normal"
-                  },
-                  "display_type": "line"
-                }
-              ],
               "yaxis": {
-                "min": "0",
-                "max": "100"
-              },
-              "markers": []
+                "max": "100",
+                "min": "0"
+              }
             },
+            "id": 5484448588630899,
             "layout": {
+              "height": 3,
+              "width": 6,
               "x": 0,
-              "y": 6,
-              "width": 6,
-              "height": 2
+              "y": 3
             }
           },
           {
-            "id": 2831082575270868,
             "definition": {
-              "title": "% of packs with non-empty public API",
-              "title_size": "16",
-              "title_align": "left",
-              "show_legend": false,
-              "legend_layout": "vertical",
               "legend_columns": [
                 "avg",
                 "min",
@@ -788,9 +639,11 @@
                 "value",
                 "sum"
               ],
-              "type": "timeseries",
+              "legend_layout": "vertical",
+              "markers": [],
               "requests": [
                 {
+                  "display_type": "line",
                   "formulas": [
                     {
                       "alias": "% of packages with non-empty public API",
@@ -811,44 +664,34 @@
                   ],
                   "response_format": "timeseries",
                   "style": {
-                    "palette": "dog_classic",
                     "line_type": "solid",
-                    "line_width": "normal"
-                  },
-                  "display_type": "line"
+                    "line_width": "normal",
+                    "palette": "dog_classic"
+                  }
                 }
               ],
+              "show_legend": false,
+              "title": "% of packs with non-empty public API",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "timeseries",
               "yaxis": {
-                "min": "0",
-                "max": "100"
-              },
-              "markers": []
+                "max": "100",
+                "min": "0"
+              }
             },
+            "id": 2831082575270868,
             "layout": {
-              "x": 6,
-              "y": 6,
+              "height": 2,
               "width": 6,
-              "height": 2
+              "x": 6,
+              "y": 3
             }
           },
           {
-            "id": 505612504525801,
             "definition": {
-              "title": "Packs most depended on",
-              "title_size": "16",
-              "title_align": "left",
-              "type": "toplist",
               "requests": [
                 {
-                  "response_format": "scalar",
-                  "queries": [
-                    {
-                      "data_source": "metrics",
-                      "name": "query3",
-                      "query": "max:modularization.by_package.depended_on.count{$app,$package,$team} by {app,package}",
-                      "aggregator": "last"
-                    }
-                  ],
                   "formulas": [
                     {
                       "formula": "query3",
@@ -857,112 +700,168 @@
                         "order": "desc"
                       }
                     }
-                  ]
+                  ],
+                  "queries": [
+                    {
+                      "aggregator": "last",
+                      "data_source": "metrics",
+                      "name": "query3",
+                      "query": "max:modularization.by_package.depended_on.count{$app,$package,$team} by {app,package}"
+                    }
+                  ],
+                  "response_format": "scalar"
                 }
-              ]
+              ],
+              "title": "Packs most depended on",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "toplist"
             },
+            "id": 505612504525801,
             "layout": {
-              "x": 0,
-              "y": 8,
+              "height": 3,
               "width": 6,
-              "height": 3
+              "x": 6,
+              "y": 5
+            }
+          },
+          {
+            "definition": {
+              "legend_columns": [
+                "avg",
+                "min",
+                "max",
+                "value",
+                "sum"
+              ],
+              "legend_layout": "vertical",
+              "markers": [],
+              "requests": [
+                {
+                  "display_type": "line",
+                  "formulas": [
+                    {
+                      "alias": "% of packages with README.md",
+                      "formula": "query3 / query1 * 100"
+                    }
+                  ],
+                  "queries": [
+                    {
+                      "data_source": "metrics",
+                      "name": "query3",
+                      "query": "avg:modularization.all_packages.has_readme.count{$app,$max_enforcements} by {app}"
+                    },
+                    {
+                      "data_source": "metrics",
+                      "name": "query1",
+                      "query": "avg:modularization.all_packages.count{$app,$max_enforcements} by {app}"
+                    }
+                  ],
+                  "response_format": "timeseries",
+                  "style": {
+                    "line_type": "solid",
+                    "line_width": "normal",
+                    "palette": "dog_classic"
+                  }
+                }
+              ],
+              "show_legend": false,
+              "title": "% of packs that have a README",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "timeseries",
+              "yaxis": {
+                "max": "100",
+                "min": "0"
+              }
+            },
+            "id": 7370986557741715,
+            "layout": {
+              "height": 2,
+              "width": 6,
+              "x": 0,
+              "y": 6
+            }
+          },
+          {
+            "definition": {
+              "custom_links": [
+                {
+                  "is_hidden": true,
+                  "override_label": "containers"
+                },
+                {
+                  "is_hidden": true,
+                  "override_label": "hosts"
+                },
+                {
+                  "is_hidden": true,
+                  "override_label": "logs"
+                },
+                {
+                  "is_hidden": true,
+                  "override_label": "traces"
+                },
+                {
+                  "is_hidden": true,
+                  "override_label": "profiles"
+                }
+              ],
+              "legend_columns": [
+                "value"
+              ],
+              "legend_layout": "vertical",
+              "requests": [
+                {
+                  "display_type": "bars",
+                  "formulas": [
+                    {
+                      "formula": "query1 - month_before(query2)"
+                    }
+                  ],
+                  "queries": [
+                    {
+                      "data_source": "metrics",
+                      "name": "query1",
+                      "query": "avg:modularization.all_packages.violations.count{$app,$max_enforcements,$violation_type} by {violation_type}.rollup(max, 2419200)"
+                    },
+                    {
+                      "data_source": "metrics",
+                      "name": "query2",
+                      "query": "avg:modularization.all_packages.violations.count{$app,$max_enforcements,$violation_type} by {violation_type}.rollup(max, 2419200)"
+                    }
+                  ],
+                  "response_format": "timeseries",
+                  "style": {
+                    "line_type": "solid",
+                    "line_width": "normal",
+                    "palette": "dog_classic"
+                  }
+                }
+              ],
+              "show_legend": true,
+              "title": "Change in violations each month",
+              "title_align": "left",
+              "title_size": "16",
+              "type": "timeseries"
+            },
+            "id": 7600367732349558,
+            "layout": {
+              "height": 3,
+              "width": 12,
+              "x": 0,
+              "y": 8
             }
           }
         ]
       },
+      "id": 3553542546106134,
       "layout": {
-        "x": 0,
-        "y": 11,
+        "height": 1,
         "width": 12,
-        "height": 12
+        "x": 0,
+        "y": 4
       }
     }
-  ],
-  "template_variables": [
-    {
-      "name": "app",
-      "prefix": "app",
-      "available_values": [],
-      "default": "zenpayroll"
-    },
-    {
-      "name": "team",
-      "prefix": "team",
-      "available_values": [],
-      "default": "*"
-    },
-    {
-      "name": "package",
-      "prefix": "package",
-      "available_values": [],
-      "default": "*"
-    },
-    {
-      "name": "max_enforcements",
-      "prefix": "max_enforcements",
-      "available_values": [],
-      "default": "false"
-    },
-    {
-      "name": "violation_type",
-      "prefix": "violation_type",
-      "available_values": [],
-      "defaults": [
-        "dependency",
-        "privacy"
-      ]
-    }
-  ],
-  "layout_type": "ordered",
-  "notify_list": [
-    "alex.evanczuk@gusto.com"
-  ],
-  "template_variable_presets": [
-    {
-      "name": "Growth",
-      "template_variables": [
-        {
-          "name": "team",
-          "values": [
-            "acquisition",
-            "accountants_growth",
-            "expansion",
-            "growth_foundation",
-            "onboarding"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Wallet Experience",
-      "template_variables": [
-        {
-          "name": "app",
-          "value": "zenpayroll"
-        },
-        {
-          "name": "team",
-          "values": [
-            "mobile",
-            "wallet_experience"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "hawaiianice",
-      "template_variables": [
-        {
-          "name": "app",
-          "value": "hawaiianice"
-        },
-        {
-          "name": "violation_type",
-          "value": "*"
-        }
-      ]
-    }
-  ],
-  "reflow_type": "fixed",
-  "tags": []
+  ]
 }
