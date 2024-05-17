@@ -1,6 +1,10 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   rspec:
@@ -8,14 +12,9 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - 2.7
-          # See comment comes from https://github.com/ruby/setup-ruby#matrix-of-ruby-versions
-          # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
-          - '3.0'
           - 3.1
           - 3.2
           - 3.3
-          - head
     env:
       BUNDLE_GEMFILE: Gemfile
     name: "RSpec tests: Ruby ${{ matrix.ruby }}"
@@ -37,6 +36,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: head
+          ruby-version: 3.3
       - name: Run static type checks
         run: bundle exec srb tc
