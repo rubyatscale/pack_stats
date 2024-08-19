@@ -103,4 +103,5 @@ Right now this tool sends metrics to DataDog only. However, if you want to use t
 
 We recommend the use of the dashboard that is shipped with this gem. You can create a new dashboard and then click "import dashboard JSON" to get a jump start on tracking your metrics. Note you may want to make some tweaks to these dashboards to better fit your organization's circumstances and goals.
 
-[Dashboard JSON](docs/dashboard.json)
+- [Dashboard JSON](docs/dashboard.json)
+- [Screenshots](docs/screenshots.md)
