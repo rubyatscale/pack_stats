@@ -12,8 +12,8 @@ module PackStats
         PackStats.report_to_datadog!(
           app_name: 'MyApp',
           source_code_pathnames: Pathname.glob('**/**.rb'),
-          datadog_client: datadog_client,
-          report_time: report_time
+          datadog_client:,
+          report_time:
         )
       end
 
@@ -1318,7 +1318,7 @@ module PackStats
           write_file('packs/my_pack/package.yml', <<~CONTENTS)
             enforce_dependencies: false
             enforce_privacy: false
-            enforce_architecture: true
+            enforce_layers: true
             enforce_visibility: true
             layer: utilities
             metadata:
@@ -1337,7 +1337,7 @@ module PackStats
             packs/other_pack:
               "SomeConstant":
                 violations:
-                - architecture
+                - layer
                 - visibility
                 files:
                 - some_file.rb
@@ -1346,9 +1346,9 @@ module PackStats
 
         it 'emits the right metrics' do
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0,
-                                                            Tags.for(['app:MyApp', 'violation_type:architecture']))
+                                                            Tags.for(['app:MyApp', 'violation_type:layer']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1,
-                                                            Tags.for(['app:MyApp', 'violation_type:architecture']))
+                                                            Tags.for(['app:MyApp', 'violation_type:layer']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0,
                                                             Tags.for(['app:MyApp', 'violation_type:visibility']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1,
@@ -1356,38 +1356,38 @@ module PackStats
           expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1,
                                                             Tags.for(['app:MyApp', 'violation_type:visibility']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 1,
-                                                            Tags.for(['app:MyApp', 'violation_type:architecture']))
+                                                            Tags.for(['app:MyApp', 'violation_type:layer']))
           expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 1,
                                                             Tags.for(['app:MyApp', 'violation_type:visibility']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 1,
-                                                            Tags.for(['app:MyApp', 'team:Bar Team', 'violation_type:architecture']))
+                                                            Tags.for(['app:MyApp', 'team:Bar Team', 'violation_type:layer']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 1,
                                                             Tags.for(['app:MyApp', 'team:Bar Team', 'violation_type:visibility']))
 
           expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 1,
-                                                            Tags.for(['app:MyApp', 'package:packs/my_pack', 'team:Bar Team', 'violation_type:architecture', 'layer:utilities']))
+                                                            Tags.for(['app:MyApp', 'package:packs/my_pack', 'team:Bar Team', 'violation_type:layer', 'layer:utilities']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 1,
                                                             Tags.for(['app:MyApp', 'package:packs/my_pack', 'team:Bar Team', 'violation_type:visibility', 'layer:utilities']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0,
-                                                            Tags.for(['app:MyApp', 'package:packs/other_pack', 'team:Foo Team', 'violation_type:architecture', 'layer:product']))
+                                                            Tags.for(['app:MyApp', 'package:packs/other_pack', 'team:Foo Team', 'violation_type:layer', 'layer:product']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.violations.count', 0,
                                                             Tags.for(['app:MyApp', 'package:packs/other_pack', 'team:Foo Team', 'violation_type:visibility', 'layer:product']))
 
           expect(metrics).to include_metric GaugeMetric.for('by_package.violations.by_other_package.count', 1,
-                                                            Tags.for(['app:MyApp', 'package:packs/my_pack', 'other_package:packs/other_pack', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:architecture', 'layer:utilities']))
+                                                            Tags.for(['app:MyApp', 'package:packs/my_pack', 'other_package:packs/other_pack', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:layer', 'layer:utilities']))
           expect(metrics).to include_metric GaugeMetric.for('by_package.violations.by_other_package.count', 1,
                                                             Tags.for(['app:MyApp', 'package:packs/my_pack', 'other_package:packs/other_pack', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:visibility', 'layer:utilities']))
           expect(metrics).to_not include_metric GaugeMetric.for('by_package.violations.by_other_package.count', 0,
-                                                                Tags.for(['app:MyApp', 'package:packs/other_pack', 'other_package:packs/my_pack', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:architecture', 'layer:product']))
+                                                                Tags.for(['app:MyApp', 'package:packs/other_pack', 'other_package:packs/my_pack', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:layer', 'layer:product']))
           expect(metrics).to_not include_metric GaugeMetric.for('by_package.violations.by_other_package.count', 0,
                                                                 Tags.for(['app:MyApp', 'package:packs/other_pack', 'other_package:packs/my_pack', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:visibility', 'layer:product']))
 
           expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0,
-                                                                Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:architecture']))
+                                                                Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:layer']))
           expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0,
                                                                 Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:visibility']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 1,
-                                                            Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:architecture']))
+                                                            Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:layer']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 1,
                                                             Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:visibility']))
         end
