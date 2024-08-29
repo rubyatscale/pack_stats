@@ -38,6 +38,7 @@ module PackStats
         CHECKERS = T.let([
           PackwerkChecker.new(key: 'enforce_dependencies', violation_type: 'dependency', direction: Direction::Outbound),
           PackwerkChecker.new(key: 'enforce_privacy', violation_type: 'privacy', direction: Direction::Inbound),
+          PackwerkChecker.new(key: 'enforce_folder_privacy', violation_type: 'folder_privacy', direction: Direction::Inbound),
           PackwerkChecker.new(key: 'enforce_layers', violation_type: 'layer', direction: Direction::Outbound),
           PackwerkChecker.new(key: 'enforce_visibility', violation_type: 'visibility', direction: Direction::Outbound),
         ], T::Array[PackwerkChecker])

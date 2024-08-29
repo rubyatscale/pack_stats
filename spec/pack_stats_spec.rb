@@ -142,7 +142,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
         end
       end
 
-      context 'in app that does not use package protectiosn with a simple package owned by one team' do
+      context 'in app that does not use package protection with a simple package owned by one team' do
         include_context 'only one team'
 
         before do
@@ -981,7 +981,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to include_metric GaugeMetric.new(name: 'modularization.by_package.public_files.count', count: 0, tags: Tags.for(['package:packs/only_package', 'app:MyApp', 'team:Unknown', 'max_enforcements:true']))        end
       end
 
-      context 'in app with architectural enforcements' do
+      context 'in app with layer enforcements' do
         before do
           write_file('config/teams/Foo Team.yml', <<~CONTENTS)
             name: Foo Team
@@ -1046,6 +1046,53 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
           expect(metrics).to_not include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 0, Tags.for(['app:MyApp', 'team:Foo Team', 'other_team:Bar Team', 'violation_type:visibility']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:layer']))
           expect(metrics).to include_metric GaugeMetric.for('by_team.violations.by_other_team.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'other_team:Foo Team', 'violation_type:visibility']))
+        end
+      end
+
+      context 'in app with folder_privacy enforcements' do
+        before do
+          write_file('config/teams/Foo Team.yml', <<~CONTENTS)
+            name: Foo Team
+          CONTENTS
+
+          write_file('config/teams/Bar Team.yml', <<~CONTENTS)
+            name: Bar Team
+          CONTENTS
+
+          write_file('packs/my_pack/package.yml', <<~CONTENTS)
+            enforce_dependencies: false
+            enforce_privacy: false
+            enforce_folder_privacy: true
+            enforce_visibility: true
+            layer: utilities
+            metadata:
+              owner: Bar Team
+          CONTENTS
+
+          write_file('packs/other_pack/package.yml', <<~CONTENTS)
+            enforce_dependencies: false
+            metadata:
+              owner: Foo Team
+          CONTENTS
+
+          write_file('packs/my_pack/package_todo.yml', <<~CONTENTS)
+            ---
+            packs/other_pack:
+              "SomeConstant":
+                violations:
+                - folder_privacy
+                - visibility
+                files:
+                - some_file.rb
+          CONTENTS
+
+        end
+
+        it 'emits the right metrics' do
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.strict.count', 0, Tags.for(['app:MyApp', 'violation_type:folder_privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.packwerk_checkers.true.count', 1, Tags.for(['app:MyApp', 'violation_type:folder_privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('all_packages.violations.count', 1, Tags.for(['app:MyApp', 'violation_type:folder_privacy']))
+          expect(metrics).to include_metric GaugeMetric.for('by_team.violations.count', 1, Tags.for(['app:MyApp', 'team:Bar Team', 'violation_type:folder_privacy']))
         end
       end
     end
