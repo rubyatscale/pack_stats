@@ -26,13 +26,13 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'code_teams'
   spec.add_dependency 'code_ownership'
+  spec.add_dependency 'code_teams'
   spec.add_dependency 'dogapi'
   spec.add_dependency 'packs'
   spec.add_dependency 'parse_packwerk'
-  spec.add_dependency 'sorbet-runtime'
   spec.add_dependency 'rubocop-packs'
+  spec.add_dependency 'sorbet-runtime'
 
   spec.add_development_dependency 'base64'
   spec.add_development_dependency 'pry'

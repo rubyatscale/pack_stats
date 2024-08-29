@@ -46,7 +46,9 @@ RSpec::Matchers.define(:include_metric) do |expected_metric|
     @actual_metrics = actual_metrics
     @expected_metric = expected_metric
     @metrics_with_same_name = actual_metrics.select { |actual_metric| actual_metric.name == expected_metric.name }
-    @matching_metric = @metrics_with_same_name.find { |matching_metric| matching_metric.count == expected_metric.count && expected_metric.tags.sort_by(&:key) == matching_metric.tags.sort_by(&:key) }
+    @matching_metric = @metrics_with_same_name.find do |matching_metric|
+      matching_metric.count == expected_metric.count && expected_metric.tags.sort_by(&:key) == matching_metric.tags.sort_by(&:key)
+    end
     @metrics_with_same_name.any? && !@matching_metric.nil?
   end
 
@@ -85,7 +87,7 @@ def write_package_yml(
   name
 )
   write_pack(name, {
-    'enforce_dependencies' => true,
-    'enforce_privacy' => true,
-  })
+               'enforce_dependencies' => true,
+               'enforce_privacy' => true
+             })
 end

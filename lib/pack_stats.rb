@@ -24,7 +24,7 @@ module PackStats
   DEFAULT_COMPONENTIZED_SOURCE_CODE_LOCATIONS = T.let(
     [
       Pathname.new('components'),
-      Pathname.new('gems'),
+      Pathname.new('gems')
     ].freeze, T::Array[Pathname]
   )
 
@@ -47,17 +47,17 @@ module PackStats
     app_name:,
     source_code_pathnames:,
     componentized_source_code_locations: DEFAULT_COMPONENTIZED_SOURCE_CODE_LOCATIONS,
-    report_time: Time.now, # rubocop:disable Rails/TimeZone
+    report_time: Time.now,
     verbose: false,
     packaged_source_code_locations: [],
     max_enforcements_tag_value: false
   )
 
-    all_metrics = self.get_metrics(
+    all_metrics = get_metrics(
       source_code_pathnames: source_code_pathnames,
       componentized_source_code_locations: componentized_source_code_locations,
       app_name: app_name,
-      max_enforcements_tag_value: max_enforcements_tag_value,
+      max_enforcements_tag_value: max_enforcements_tag_value
     )
 
     # This helps us debug what metrics are being sent
@@ -101,7 +101,7 @@ module PackStats
     Private::DatadogReporter.get_metrics(
       source_code_files: source_code_files(
         source_code_pathnames: source_code_pathnames,
-        componentized_source_code_locations: componentized_source_code_locations,
+        componentized_source_code_locations: componentized_source_code_locations
       ),
       app_name: app_name
     )
@@ -110,7 +110,7 @@ module PackStats
   sig do
     params(
       source_code_pathnames: T::Array[Pathname],
-      componentized_source_code_locations: T::Array[Pathname],
+      componentized_source_code_locations: T::Array[Pathname]
     ).returns(T::Array[Private::SourceCodeFile])
   end
   def self.source_code_files(
@@ -119,7 +119,9 @@ module PackStats
   )
 
     # Sorbet has the wrong signatures for `Pathname#find`, whoops!
-    componentized_file_set = Set.new(componentized_source_code_locations.select(&:exist?).flat_map { |pathname| T.unsafe(pathname).find.to_a })
+    componentized_file_set = Set.new(componentized_source_code_locations.select(&:exist?).flat_map do |pathname|
+                                       T.unsafe(pathname).find.to_a
+                                     end)
 
     packaged_file_set = Packs.all.flat_map do |pack|
       pack.relative_path.find.to_a

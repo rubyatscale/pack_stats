@@ -7,8 +7,11 @@ module PackStats
       class Dependencies
         extend T::Sig
 
-        sig { params(prefix: String, packages: T::Array[ParsePackwerk::Package], app_name: String).returns(T::Array[GaugeMetric]) }
-        def self.get_metrics(prefix, packages, app_name)
+        sig do
+          params(prefix: String, packages: T::Array[ParsePackwerk::Package],
+                 app_name: String).returns(T::Array[GaugeMetric])
+        end
+        def self.get_metrics(_prefix, packages, app_name)
           all_metrics = T.let([], T::Array[GaugeMetric])
           inbound_explicit_dependency_by_package = {}
           packages.each do |package|
@@ -26,17 +29,17 @@ module PackStats
             #
             package.dependencies.each do |explicit_dependency|
               to_package = ParsePackwerk.find(explicit_dependency)
-              if to_package.nil?
-                raise StandardError, "Could not find matching package #{explicit_dependency}"
-              end
+              raise StandardError, "Could not find matching package #{explicit_dependency}" if to_package.nil?
 
               owner = Private.package_owner(to_package)
-              tags = package_tags + [Tag.for('other_package', Metrics.humanized_package_name(explicit_dependency))] + Metrics.tags_for_other_team(owner)
+              tags = package_tags + [Tag.for('other_package',
+                                             Metrics.humanized_package_name(explicit_dependency))] + Metrics.tags_for_other_team(owner)
               all_metrics << GaugeMetric.for('by_package.dependencies.by_other_package.count', 1, tags)
             end
 
             all_metrics << GaugeMetric.for('by_package.dependencies.count', package.dependencies.count, package_tags)
-            all_metrics << GaugeMetric.for('by_package.depended_on.count', inbound_explicit_dependency_by_package[package.name]&.count || 0, package_tags)
+            all_metrics << GaugeMetric.for('by_package.depended_on.count',
+                                           inbound_explicit_dependency_by_package[package.name]&.count || 0, package_tags)
           end
 
           all_metrics

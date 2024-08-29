@@ -38,7 +38,7 @@ module PackStats
           [
             GaugeMetric.for("component_files.#{metric_name_suffix}", files.count(&:componentized_file?), tags),
             GaugeMetric.for("packaged_files.#{metric_name_suffix}", files.count(&:packaged_file?), tags),
-            GaugeMetric.for("all_files.#{metric_name_suffix}", files.count, tags),
+            GaugeMetric.for("all_files.#{metric_name_suffix}", files.count, tags)
           ]
         end
       end

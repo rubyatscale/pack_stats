@@ -32,9 +32,9 @@ module PackStats
 
     sig { params(other: GaugeMetric).returns(T::Boolean) }
     def ==(other)
-      other.name == self.name &&
-        other.count == self.count &&
-        other.tags == self.tags
+      other.name == name &&
+        other.count == count &&
+        other.tags == tags
     end
 
     sig { params(tag_value: T::Boolean).void }

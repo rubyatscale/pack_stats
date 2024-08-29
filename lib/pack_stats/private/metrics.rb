@@ -14,17 +14,14 @@ module PackStats
 
       sig { params(package: ParsePackwerk::Package, app_name: String).returns(T::Array[Tag]) }
       def self.tags_for_package(package, app_name)
-
         tags = [
           Tag.new(key: 'package', value: humanized_package_name(package.name)),
           Tag.new(key: 'app', value: app_name),
-          *Metrics.tags_for_team(Private.package_owner(package)),
+          *Metrics.tags_for_team(Private.package_owner(package))
         ]
 
         layer = package.config['layer']
-        if layer
-          tags << Tag.new(key: 'layer', value: layer)
-        end
+        tags << Tag.new(key: 'layer', value: layer) if layer
 
         tags
       end

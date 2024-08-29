@@ -21,8 +21,8 @@ module PackStats
 
     sig { params(other: Tag).returns(T::Boolean) }
     def ==(other)
-      other.key == self.key &&
-        other.value == self.value
+      other.key == key &&
+        other.value == value
     end
   end
 end

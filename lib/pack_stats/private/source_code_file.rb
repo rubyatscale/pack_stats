@@ -12,12 +12,12 @@ module PackStats
 
       sig { returns(T::Boolean) }
       def componentized_file?
-        self.is_componentized_file
+        is_componentized_file
       end
 
       sig { returns(T::Boolean) }
       def packaged_file?
-        self.is_packaged_file
+        is_packaged_file
       end
     end
   end
