@@ -9,7 +9,7 @@ module PackStats
       class PackwerkCheckerUsage
         extend T::Sig
 
-        # Some violations (e.g. dependency, visibility, architecture) matter for the referencing (outbound) package.
+        # Some violations (e.g. dependency, visibility, layer) matter for the referencing (outbound) package.
         # Other violations (e.g. privacy) matter for the referenced (inbound) package.
         class Direction < T::Enum
           enums do
@@ -38,7 +38,7 @@ module PackStats
         CHECKERS = T.let([
           PackwerkChecker.new(key: 'enforce_dependencies', violation_type: 'dependency', direction: Direction::Outbound),
           PackwerkChecker.new(key: 'enforce_privacy', violation_type: 'privacy', direction: Direction::Inbound),
-          PackwerkChecker.new(key: 'enforce_architecture', violation_type: 'architecture', direction: Direction::Outbound),
+          PackwerkChecker.new(key: 'enforce_layers', violation_type: 'layer', direction: Direction::Outbound),
           PackwerkChecker.new(key: 'enforce_visibility', violation_type: 'visibility', direction: Direction::Outbound),
         ], T::Array[PackwerkChecker])
 
