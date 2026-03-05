@@ -1,5 +1,3 @@
-# AGENTS.md
-
 This file provides guidance to AI coding agents when working with code in this repository.
 
 ## What this project is
@@ -25,4 +23,4 @@ bundle exec srb tc
 
 - `lib/pack_stats.rb` — entry point; `PackStats.report_to_datadog!` is the primary public method
 - `lib/pack_stats/` — metric collectors (per-pack and per-team stats), DataDog gauge/distribution reporters, and configuration
-- `spec/` — RSpec tests; `spec/fixtures/` has sample pack structures
+- `spec/` — RSpec tests
