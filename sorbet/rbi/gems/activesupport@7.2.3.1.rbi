@@ -15,8 +15,6 @@ module ActiveSupport
   class << self
     def escape_html_entities_in_json(*_arg0, **_arg1, &_arg2); end
     def escape_html_entities_in_json=(arg); end
-    def escape_js_separators_in_json(*_arg0, **_arg1, &_arg2); end
-    def escape_js_separators_in_json=(arg); end
     def json_encoder(*_arg0, **_arg1, &_arg2); end
     def json_encoder=(arg); end
     def parse_json_times; end
@@ -116,31 +114,25 @@ class ActiveSupport::Inflector::Inflections
   end
 end
 
-class ActiveSupport::Inflector::Inflections::Uncountables
-  include ::Enumerable
-
+class ActiveSupport::Inflector::Inflections::Uncountables < ::Array
   def initialize; end
 
-  def <<(word); end
-  def ==(arg); end
+  def <<(*word); end
   def add(words); end
   def delete(entry); end
-  def each(*_arg0, **_arg1, &_arg2); end
-  def empty?(*_arg0, **_arg1, &_arg2); end
-  def flatten; end
-  def pop(*_arg0, **_arg1, &_arg2); end
-  def to_a(*_arg0, **_arg1, &_arg2); end
-  def to_ary(*_arg0, **_arg1, &_arg2); end
-  def to_s(*_arg0, **_arg1, &_arg2); end
   def uncountable?(str); end
+
+  private
+
+  def to_regex(string); end
 end
 
 module ActiveSupport::JSON
   class << self
-    def decode(json, options = T.unsafe(nil)); end
+    def decode(json); end
     def dump(value, options = T.unsafe(nil)); end
     def encode(value, options = T.unsafe(nil)); end
-    def load(json, options = T.unsafe(nil)); end
+    def load(json); end
     def parse_error; end
 
     private
@@ -154,24 +146,16 @@ ActiveSupport::JSON::DATE_REGEX = T.let(T.unsafe(nil), Regexp)
 
 module ActiveSupport::JSON::Encoding
   class << self
-    def encode_without_escape(value); end
-    def encode_without_options(value); end
     def escape_html_entities_in_json; end
     def escape_html_entities_in_json=(_arg0); end
-    def escape_js_separators_in_json; end
-    def escape_js_separators_in_json=(_arg0); end
     def json_encoder; end
-    def json_encoder=(encoder); end
+    def json_encoder=(_arg0); end
     def time_precision; end
     def time_precision=(_arg0); end
     def use_standard_json_time_format; end
     def use_standard_json_time_format=(_arg0); end
   end
 end
-
-ActiveSupport::JSON::Encoding::ESCAPED_CHARS = T.let(T.unsafe(nil), Hash)
-ActiveSupport::JSON::Encoding::FULL_ESCAPE_REGEX = T.let(T.unsafe(nil), Regexp)
-ActiveSupport::JSON::Encoding::HTML_ENTITIES_REGEX = T.let(T.unsafe(nil), Regexp)
 
 class ActiveSupport::JSON::Encoding::JSONGemEncoder
   def initialize(options = T.unsafe(nil)); end
@@ -184,10 +168,6 @@ class ActiveSupport::JSON::Encoding::JSONGemEncoder
   def jsonify(value); end
   def stringify(jsonified); end
 end
-
-ActiveSupport::JSON::Encoding::JS_SEPARATORS_REGEX = T.let(T.unsafe(nil), Regexp)
-ActiveSupport::JSON::Encoding::U2028 = T.let(T.unsafe(nil), String)
-ActiveSupport::JSON::Encoding::U2029 = T.let(T.unsafe(nil), String)
 
 module ActiveSupport::LazyLoadHooks
   def on_load(name, options = T.unsafe(nil), &block); end
@@ -213,7 +193,7 @@ end
 class ActiveSupport::Multibyte::Chars
   include ::Comparable
 
-  def initialize(string, deprecation: T.unsafe(nil)); end
+  def initialize(string); end
 
   def <=>(*_arg0, **_arg1, &_arg2); end
   def =~(*_arg0, **_arg1, &_arg2); end
@@ -264,9 +244,7 @@ class ActiveSupport::TimeZone
 
   def <=>(zone); end
   def =~(re); end
-  def abbr(time); end
   def at(*args); end
-  def dst?(time); end
   def encode_with(coder); end
   def formatted_offset(colon = T.unsafe(nil), alternate_utc_string = T.unsafe(nil)); end
   def init_with(coder); end
@@ -281,7 +259,6 @@ class ActiveSupport::TimeZone
   def period_for_utc(time); end
   def periods_for_local(time); end
   def rfc3339(str); end
-  def standard_name; end
   def strptime(str, format, now = T.unsafe(nil)); end
   def to_s; end
   def today; end
@@ -636,6 +613,10 @@ end
 
 class Pathname
   def as_json(options = T.unsafe(nil)); end
+end
+
+module Process
+  extend ::ConnectionPool::ForkTracker
 end
 
 class Process::Status
