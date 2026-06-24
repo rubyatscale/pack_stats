@@ -73,7 +73,6 @@ class Gem::SourceIndex
   end
 end
 
-Gem::UNTAINT = T.let(T.unsafe(nil), Proc)
 Gem::UnsatisfiableDepedencyError = Gem::UnsatisfiableDependencyError
 
 class IRB::SLex
@@ -2473,7 +2472,7 @@ class YARD::Parser::Ruby::MethodCallNode < ::YARD::Parser::Ruby::AstNode
 end
 
 class YARD::Parser::Ruby::MethodDefinitionNode < ::YARD::Parser::Ruby::AstNode
-  def block(*_arg0); end
+  def block(n = T.unsafe(nil)); end
   def def?; end
   def kw?; end
   def method_name(name_only = T.unsafe(nil)); end
