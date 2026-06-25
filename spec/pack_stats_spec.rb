@@ -4,7 +4,7 @@ module PackStats # rubocop:disable RSpec/DescribedClassModuleWrapping
   RSpec.describe PackStats do
     before do
       ParsePackwerk.bust_cache!
-      write_file('config/code_ownership.yml', YAML.dump({}))
+      write_file('config/code_ownership.yml', YAML.dump({ 'owned_globs' => ['{app,components,lib,packs}/**/*.{rb,rake}'] }))
     end
 
     describe 'PackStats.report_to_datadog!' do
