@@ -278,7 +278,7 @@ DEPENDENCIES
   pack_stats!
   pry
   rake
-  rspec (~> 3.0)
+  rspec
   rubocop-gusto
   rubocop-rubyfmt
   sorbet
