@@ -24,7 +24,7 @@ def sorbet_double(stubbed_class, attr_map = {})
   end
 end
 
-RSpec.shared_context("team names are based off of file names") do
+RSpec.shared_context("when team names are based off of file names") do
   before do
     allow(CodeOwnership).to(receive(:for_file)) do |filename|
       match = filename.match(/_(\d+)/)
@@ -36,7 +36,7 @@ RSpec.shared_context("team names are based off of file names") do
   end
 end
 
-RSpec.shared_context("only one team") do
+RSpec.shared_context("with only one team") do
   before do
     allow(CodeOwnership).to(receive(:for_file).and_return(sorbet_double(CodeTeams::Team, name: "Some team")))
   end

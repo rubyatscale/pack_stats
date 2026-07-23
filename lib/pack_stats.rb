@@ -120,9 +120,8 @@ module PackStats
     source_code_pathnames:,
     componentized_source_code_locations:
   )
-    # Sorbet has the wrong signatures for `Pathname#find`, whoops!
     componentized_file_set = Set.new(
-      componentized_source_code_locations.select(&:exist?).flat_map { |pathname| T.unsafe(pathname).find.to_a }
+      componentized_source_code_locations.select(&:exist?).flat_map { |pathname| pathname.find.to_a }
     )
 
     packaged_file_set = Packs.all.flat_map do |pack|

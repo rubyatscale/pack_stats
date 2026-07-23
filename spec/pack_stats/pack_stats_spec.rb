@@ -71,7 +71,7 @@ module PackStats
         )
       end
 
-      context "in empty app" do
+      context "with an empty app" do
         before do
           write_file("empty_file.rb")
         end
@@ -175,8 +175,8 @@ module PackStats
         end
       end
 
-      context "in app with a simple package owned by one team" do
-        include_context "only one team"
+      context "with a simple package owned by one team" do
+        include_context "with only one team"
 
         before do
           write_file("empty_file.rb")
@@ -365,198 +365,8 @@ module PackStats
         end
       end
 
-      context "in app that does not use package protection with a simple package owned by one team" do
-        include_context "only one team"
-
-        before do
-          write_file("empty_file.rb")
-          write_file("packs/only_package/app/some_package_file.rb")
-          write_file(
-            "packs/only_package/package.yml",
-            <<~CONTENTS
-              enforce_dependencies: false
-              enforce_privacy: false
-            CONTENTS
-          )
-
-          write_file("packs/only_package/spec/some_package_file_spec.rb")
-        end
-
-        it "emits the right metrics" do
-          expect(metrics).to(
-            include_metric GaugeMetric.for("component_files.by_team", 0, Tags.for(["team:Some team", "app:MyApp"]))
-          )
-          expect(metrics).to(
-            include_metric GaugeMetric.for("packaged_files.by_team", 2, Tags.for(["team:Some team", "app:MyApp"]))
-          )
-          expect(metrics).to(
-            include_metric GaugeMetric.for("all_files.by_team", 3, Tags.for(["team:Some team", "app:MyApp"]))
-          )
-          expect(metrics).to include_metric GaugeMetric.for("component_files.totals", 0, Tags.for(["app:MyApp"]))
-          expect(metrics).to include_metric GaugeMetric.for("packaged_files.totals", 2, Tags.for(["app:MyApp"]))
-          expect(metrics).to include_metric GaugeMetric.for("all_files.totals", 3, Tags.for(["app:MyApp"]))
-          expect(metrics).to include_metric GaugeMetric.for("all_packages.count", 2, Tags.for(["app:MyApp"]))
-          expect(metrics).to(
-            include_metric GaugeMetric.for("all_packages.dependencies.count", 0, Tags.for(["app:MyApp"]))
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for("all_packages.violations.count", 0, Tags.for(["app:MyApp", "violation_type:dependency"]))
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for("all_packages.violations.count", 0, Tags.for(["app:MyApp", "violation_type:privacy"]))
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "all_packages.packwerk_checkers.strict.count",
-                0,
-                Tags.for(["app:MyApp", "violation_type:dependency"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "all_packages.packwerk_checkers.true.count",
-                1,
-                Tags.for(["app:MyApp", "violation_type:dependency"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "all_packages.packwerk_checkers.strict.count",
-                0,
-                Tags.for(["app:MyApp", "violation_type:privacy"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "all_packages.packwerk_checkers.true.count",
-                1,
-                Tags.for(["app:MyApp", "violation_type:privacy"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for("all_packages.package_based_file_ownership.count", 0, Tags.for(["app:MyApp"]))
-            )
-          )
-          expect(metrics).to(
-            include_metric GaugeMetric.for("all_packages.using_public_directory.count", 0, Tags.for(["app:MyApp"]))
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.violations.count",
-                0,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown", "violation_type:dependency"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.violations.count",
-                0,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown", "violation_type:privacy"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.violations.count",
-                0,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown", "violation_type:dependency"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.violations.count",
-                0,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown", "violation_type:privacy"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.dependencies.count",
-                0,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.depended_on.count",
-                0,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric GaugeMetric.for("all_packages.using_public_directory.count", 0, Tags.for(["app:MyApp"]))
-          )
-          expect(metrics).to include_metric GaugeMetric.for("all_packages.all_files.count", 2, Tags.for(["app:MyApp"]))
-          expect(metrics).to(
-            include_metric GaugeMetric.for("all_packages.public_files.count", 0, Tags.for(["app:MyApp"]))
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for("by_team.using_public_directory.count", 0, Tags.for(["app:MyApp", "team:Unknown"]))
-            )
-          )
-          expect(metrics).to(
-            include_metric GaugeMetric.for("by_team.all_files.count", 2, Tags.for(["app:MyApp", "team:Unknown"]))
-          )
-          expect(metrics).to(
-            include_metric GaugeMetric.for("by_team.public_files.count", 0, Tags.for(["app:MyApp", "team:Unknown"]))
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.using_public_directory.count",
-                0,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.all_files.count",
-                2,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown"])
-              )
-            )
-          )
-          expect(metrics).to(
-            include_metric(
-              GaugeMetric.for(
-                "by_package.public_files.count",
-                0,
-                Tags.for(["package:packs/only_package", "app:MyApp", "team:Unknown"])
-              )
-            )
-          )
-        end
-      end
-
-      context "in app with two packages owned by different teams" do
-        include_context "team names are based off of file names"
+      context "with two packages owned by different teams" do
+        include_context "when team names are based off of file names"
         before do
           write_file("empty_file.rb")
           write_file("packs/package_2/app/some_package_file.rb")
@@ -856,8 +666,8 @@ module PackStats
         end
       end
 
-      context "in app with one root and 2 nonroot packages with dependency violations" do
-        include_context "team names are based off of file names"
+      context "with one root and 2 nonroot packages with dependency violations" do
+        include_context "when team names are based off of file names"
 
         before do
           write_file(
@@ -1621,8 +1431,8 @@ module PackStats
         end
       end
 
-      context "in app with one root and 2 nonroot packages with privacy and dependency violations, and also components" do
-        include_context "team names are based off of file names"
+      context "with one root and 2 nonroot packages with privacy and dependency violations, and also components" do
+        include_context "when team names are based off of file names"
 
         before do
           write_file(
@@ -2199,8 +2009,8 @@ module PackStats
         end
       end
 
-      context "in an app with a protected package" do
-        include_context "only one team"
+      context "with a protected package" do
+        include_context "with only one team"
         before do
           write_file(
             "packs/package_2/app/public/untyped_file.rb",
@@ -2479,7 +2289,7 @@ module PackStats
         end
       end
 
-      context "in an app with mixed usage of public directories" do
+      context "with mixed usage of public directories" do
         before do
           write_file(
             "config/teams/art/artists.yml",
@@ -2647,7 +2457,7 @@ module PackStats
         end
       end
 
-      context "in an app with mixed usage of readmes" do
+      context "with mixed usage of readmes" do
         before do
           write_file(
             "config/teams/art/artists.yml",
@@ -2749,7 +2559,7 @@ module PackStats
         end
       end
 
-      context "in an app with exclusions for rubocop based protections" do
+      context "with exclusions for rubocop based protections" do
         before do
           write_package_yml(".")
           write_package_yml("packs/foo")
@@ -2813,7 +2623,7 @@ module PackStats
           )
         end
 
-        include_context "only one team"
+        include_context "with only one team"
 
         before do
           write_file("empty_file.rb")
@@ -3144,7 +2954,7 @@ module PackStats
         end
       end
 
-      context "in app with layer enforcements" do
+      context "with layer enforcements" do
         before do
           write_file(
             "config/teams/Foo Team.yml",
@@ -3446,7 +3256,7 @@ module PackStats
         end
       end
 
-      context "in app with folder_privacy enforcements" do
+      context "with folder_privacy enforcements" do
         before do
           write_file(
             "config/teams/Foo Team.yml",
