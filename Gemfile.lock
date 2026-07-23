@@ -176,6 +176,16 @@ GEM
     rubocop-ast (1.49.1)
       parser (>= 3.3.7.2)
       prism (~> 1.7)
+    rubocop-gusto (11.3.0)
+      code_teams
+      lint_roller
+      rubocop (>= 1.76)
+      rubocop-performance
+      rubocop-rake
+      rubocop-rspec
+      rubocop-sorbet
+      smart_todo
+      thor
     rubocop-packs (0.0.45)
       activesupport
       base64
@@ -185,6 +195,20 @@ GEM
       rubocop (~> 1.0)
       rubocop-sorbet (>= 0.8.4)
       sorbet-runtime
+    rubocop-performance (1.26.1)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.75.0, < 2.0)
+      rubocop-ast (>= 1.47.1, < 2.0)
+    rubocop-rake (0.7.1)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.72.1)
+    rubocop-rspec (3.10.2)
+      lint_roller (~> 1.1)
+      regexp_parser (>= 2.0)
+      rubocop (~> 1.86, >= 1.86.2)
+    rubocop-rubyfmt (0.1.1)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.72.2)
     rubocop-sorbet (0.12.0)
       lint_roller
       rubocop (>= 1.75.2)
@@ -194,6 +218,8 @@ GEM
     rubydex (0.2.6-x86_64-linux)
     securerandom (0.4.1)
     smart_properties (1.17.0)
+    smart_todo (1.11.0)
+      prism (~> 1.0)
     sorbet (0.6.13321)
       sorbet-static (= 0.6.13321)
     sorbet-runtime (0.6.13321)
@@ -253,8 +279,10 @@ DEPENDENCIES
   pry
   rake
   rspec (~> 3.0)
+  rubocop-gusto
+  rubocop-rubyfmt
   sorbet
   tapioca
 
 BUNDLED WITH
-   4.0.15
+  4.0.15

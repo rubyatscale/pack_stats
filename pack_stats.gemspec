@@ -1,43 +1,49 @@
+# frozen_string_literal: true
 Gem::Specification.new do |spec|
-  spec.name          = 'pack_stats'
-  spec.version       = '0.2.1'
-  spec.authors       = ['Gusto Engineers']
-  spec.email         = ['dev@gusto.com']
+  spec.name = "pack_stats"
+  spec.version = "0.2.1"
+  spec.authors = ["Gusto Engineers"]
+  spec.email = ["dev@gusto.com"]
 
-  spec.summary       = 'A gem to collect statistics about modularization progress in a Rails application using packwerk.'
-  spec.description   = 'A gem to collect statistics about modularization progress in a Rails application using packwerk.'
-  spec.homepage      = 'https://github.com/rubyatscale/pack_stats'
-  spec.license       = 'MIT'
+  spec.summary = "A gem to collect statistics about modularization progress in a Rails application using packwerk."
+  spec.description = "A gem to collect statistics about modularization progress in a Rails application using packwerk."
+  spec.homepage = "https://github.com/rubyatscale/pack_stats"
+  spec.license = "MIT"
 
   if spec.respond_to?(:metadata)
-    spec.metadata['homepage_uri'] = spec.homepage
-    spec.metadata['source_code_uri'] = 'https://github.com/rubyatscale/pack_stats'
-    spec.metadata['changelog_uri'] = 'https://github.com/rubyatscale/pack_stats/releases'
-    spec.metadata['allowed_push_host'] = 'https://rubygems.org'
+    spec.metadata["homepage_uri"] = spec.homepage
+    spec.metadata["source_code_uri"] = "https://github.com/rubyatscale/pack_stats"
+    spec.metadata["changelog_uri"] = "https://github.com/rubyatscale/pack_stats/releases"
+    spec.metadata["allowed_push_host"] = "https://rubygems.org"
+    spec.metadata["rubygems_mfa_required"] = "true"
   else
-    raise 'RubyGems 2.0 or newer is required to protect against ' \
-          'public gem pushes.'
+    raise(
+      "RubyGems 2.0 or newer is required to protect against " \
+        "public gem pushes."
+    )
   end
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 3.3')
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.3")
 
   # Specify which files should be added to the gem when it is released.
-  spec.files = Dir['README.md', 'lib/**/*']
+  spec.files = Dir["README.md", "lib/**/*"]
 
-  spec.require_paths = ['lib']
+  spec.require_paths = ["lib"]
 
-  spec.add_dependency 'code_teams'
-  spec.add_dependency 'code_ownership'
-  spec.add_dependency 'dogapi'
-  spec.add_dependency 'packs'
-  spec.add_dependency 'parse_packwerk'
-  spec.add_dependency 'sorbet-runtime'
-  spec.add_dependency 'rubocop-packs'
+  spec.add_dependency("code_ownership")
+  spec.add_dependency("code_teams")
+  spec.add_dependency("dogapi")
+  spec.add_dependency("packs")
+  spec.add_dependency("parse_packwerk")
+  spec.add_dependency("rubocop-packs")
+  spec.add_dependency("sorbet-runtime")
 
-  spec.add_development_dependency 'base64'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'sorbet'
-  spec.add_development_dependency 'tapioca'
+  spec.add_development_dependency("base64")
+  spec.add_development_dependency("pry")
+  spec.add_development_dependency("rake")
+  spec.add_development_dependency("rspec", "~> 3.0")
+  spec.add_development_dependency("rubocop-gusto")
+  spec.add_development_dependency("rubocop-rubyfmt")
+  spec.add_development_dependency("sorbet")
+  spec.add_development_dependency("tapioca")
 end

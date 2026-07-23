@@ -1,8 +1,10 @@
 # typed: strict
+# frozen_string_literal: true
 
 module PackStats
   class Tag < T::Struct
     extend T::Sig
+
     const :key, String
     const :value, String
 
@@ -14,8 +16,8 @@ module PackStats
     sig { params(key: String, value: String).returns(Tag) }
     def self.for(key, value)
       new(
-        key: key,
-        value: value
+        key:,
+        value:
       )
     end
 

@@ -1,14 +1,14 @@
 # typed: strict
 # frozen_string_literal: true
 
-require 'dogapi'
-require 'pack_stats/private/metrics'
-require 'pack_stats/private/metrics/files'
-require 'pack_stats/private/metrics/public_usage'
-require 'pack_stats/private/metrics/packwerk_checker_usage'
-require 'pack_stats/private/metrics/dependencies'
-require 'pack_stats/private/metrics/packages'
-require 'pack_stats/private/metrics/packages_by_team'
+require "dogapi"
+require "pack_stats/private/metrics"
+require "pack_stats/private/metrics/files"
+require "pack_stats/private/metrics/public_usage"
+require "pack_stats/private/metrics/packwerk_checker_usage"
+require "pack_stats/private/metrics/dependencies"
+require "pack_stats/private/metrics/packages"
+require "pack_stats/private/metrics/packages_by_team"
 
 module PackStats
   module Private
@@ -19,7 +19,8 @@ module PackStats
         params(
           source_code_files: T::Array[SourceCodeFile],
           app_name: String
-        ).returns(T::Array[GaugeMetric])
+        )
+          .returns(T::Array[GaugeMetric])
       end
       def self.get_metrics(source_code_files:, app_name:)
         packages = ParsePackwerk.all
@@ -27,7 +28,7 @@ module PackStats
         [
           *Metrics::Files.get_metrics(source_code_files, app_name),
           *Metrics::Packages.get_package_metrics(packages, app_name),
-          *Metrics::PackagesByTeam.get_package_metrics_by_team(packages, app_name),
+          *Metrics::PackagesByTeam.get_package_metrics_by_team(packages, app_name)
         ]
       end
 
@@ -38,7 +39,8 @@ module PackStats
           # to ensure they fall into the same bucket.
           report_time: Time,
           metrics: T::Array[GaugeMetric]
-        ).void
+        )
+          .void
       end
       def self.report!(datadog_client:, report_time:, metrics:)
         #
@@ -49,7 +51,12 @@ module PackStats
         metrics.each_slice(1000).each do |metric_slice|
           datadog_client.batch_metrics do
             metric_slice.each do |metric|
-              datadog_client.emit_points(metric.name, [[report_time, metric.count]], type: 'gauge', tags: metric.tags.map(&:to_s))
+              datadog_client.emit_points(
+                metric.name,
+                [[report_time, metric.count]],
+                type: "gauge",
+                tags: metric.tags.map(&:to_s)
+              )
             end
           end
         end
