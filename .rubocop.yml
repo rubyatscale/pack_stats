@@ -28,6 +28,7 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - bin/**/*
+    - sorbet/tapioca/**/*
     - vendor/bundle/**/**
   TargetRubyVersion: 3.3
 

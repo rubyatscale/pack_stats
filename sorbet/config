@@ -1,4 +1,4 @@
---dir
-.
+--dir=.
 --ignore=/vendor/bundle
 --enable-experimental-requires-ancestor
+--enable-experimental-rspec
