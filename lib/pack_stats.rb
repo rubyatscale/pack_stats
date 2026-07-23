@@ -20,7 +20,7 @@ require "pack_stats/gauge_metric"
 module PackStats
   extend T::Sig
 
-  ROOT_PACKAGE_NAME = T.let("root", String)
+  ROOT_PACKAGE_NAME = "root"
 
   DEFAULT_COMPONENTIZED_SOURCE_CODE_LOCATIONS = T.let(
     [

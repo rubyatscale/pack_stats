@@ -6,7 +6,7 @@ module PackStats
     module Metrics
       extend T::Sig
 
-      UNKNOWN_OWNER = T.let("Unknown", String)
+      UNKNOWN_OWNER = "Unknown"
 
       sig { params(team_name: T.nilable(String)).returns(T::Array[Tag]) }
       def self.tags_for_team(team_name)
