@@ -8,6 +8,8 @@ inherit_mode:
 inherit_gem:
   rubocop-gusto:
     - config/default.yml
+  rubocop-rubyfmt:
+    - config/default.yml
 
 plugins:
   - rubocop-gusto
