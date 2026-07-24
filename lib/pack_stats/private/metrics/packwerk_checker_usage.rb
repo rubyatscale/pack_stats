@@ -1,7 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-require 'rubocop-packs'
+require "rubocop-packs"
 
 module PackStats
   module Private
@@ -29,23 +29,39 @@ module PackStats
           sig { returns(Tag) }
           def violation_type_tag
             Tag.new(
-              key: 'violation_type',
+              key: "violation_type",
               value: violation_type
             )
           end
         end
 
-        CHECKERS = T.let([
-          PackwerkChecker.new(key: 'enforce_dependencies', violation_type: 'dependency', direction: Direction::Outbound),
-          PackwerkChecker.new(key: 'enforce_privacy', violation_type: 'privacy', direction: Direction::Inbound),
-          PackwerkChecker.new(key: 'enforce_folder_privacy', violation_type: 'folder_privacy', direction: Direction::Inbound),
-          PackwerkChecker.new(key: 'enforce_layers', violation_type: 'layer', direction: Direction::Outbound),
-          PackwerkChecker.new(key: 'enforce_visibility', violation_type: 'visibility', direction: Direction::Outbound),
-        ], T::Array[PackwerkChecker])
+        CHECKERS = T.let(
+          [
+            PackwerkChecker.new(
+              key: "enforce_dependencies",
+              violation_type: "dependency",
+              direction: Direction::Outbound
+            ),
+            PackwerkChecker.new(key: "enforce_privacy", violation_type: "privacy", direction: Direction::Inbound),
+            PackwerkChecker.new(
+              key: "enforce_folder_privacy",
+              violation_type: "folder_privacy",
+              direction: Direction::Inbound
+            ),
+            PackwerkChecker.new(key: "enforce_layers", violation_type: "layer", direction: Direction::Outbound),
+            PackwerkChecker.new(key: "enforce_visibility", violation_type: "visibility", direction: Direction::Outbound)
+          ].freeze,
+          T::Array[PackwerkChecker]
+        )
 
-        sig { params(prefix: String, packages: T::Array[ParsePackwerk::Package], package_tags: T::Array[Tag]).returns(T::Array[GaugeMetric]) }
+        sig do
+          params(prefix: String, packages: T::Array[ParsePackwerk::Package], package_tags: T::Array[Tag]).returns(
+            T::Array[GaugeMetric]
+          )
+        end
         def self.get_checker_metrics(prefix, packages, package_tags)
           metrics = T.let([], T::Array[GaugeMetric])
+          possible_values = ["false", "true", "strict"]
 
           CHECKERS.each do |checker|
             checker_values = packages.map do |package|
@@ -54,7 +70,7 @@ module PackStats
 
             checker_values_tally = checker_values.map(&:to_s).tally
 
-            ['false', 'true', 'strict'].each do |possible_value|
+            possible_values.each do |possible_value|
               count = checker_values_tally.fetch(possible_value, 0)
               metric_name = "#{prefix}.packwerk_checkers.#{possible_value}.count"
               tags = package_tags + [checker.violation_type_tag]

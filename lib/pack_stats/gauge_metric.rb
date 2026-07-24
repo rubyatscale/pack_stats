@@ -1,4 +1,5 @@
 # typed: strict
+# frozen_string_literal: true
 
 module PackStats
   class GaugeMetric < T::Struct
@@ -14,20 +15,20 @@ module PackStats
       # https://docs.datadoghq.com/metrics/custom_metrics/#naming-custom-metrics
       # Metric names must not exceed 200 characters. Fewer than 100 is preferred from a UI perspective
       if name.length > 200
-        raise StandardError.new("Metrics names must not exceed 200 characters: #{name}") # rubocop:disable Style/RaiseArgs
+        raise StandardError, "Metrics names must not exceed 200 characters: #{name}"
       end
 
       all_tags = [*tags, max_enforcements_tag]
       new(
-        name: name,
-        count: count,
+        name:,
+        count:,
         tags: all_tags
       )
     end
 
     sig { returns(String) }
     def to_s
-      "#{name} with count #{count}, with tags #{tags.map(&:to_s).join(', ')}"
+      "#{name} with count #{count}, with tags #{tags.join(", ")}"
     end
 
     sig { params(other: GaugeMetric).returns(T::Boolean) }
@@ -40,12 +41,12 @@ module PackStats
     sig { params(tag_value: T::Boolean).void }
     def self.set_max_enforcements_tag(tag_value)
       @max_enforcements_tag = T.let(@max_enforcements_tag, T.nilable(Tag))
-      @max_enforcements_tag = Tag.new(key: 'max_enforcements', value: tag_value ? 'true' : 'false')
+      @max_enforcements_tag = Tag.new(key: "max_enforcements", value: tag_value ? "true" : "false")
     end
 
     sig { returns(Tag) }
     def self.max_enforcements_tag
-      @max_enforcements_tag || Tag.new(key: 'max_enforcements', value: 'false')
+      @max_enforcements_tag || Tag.new(key: "max_enforcements", value: "false")
     end
   end
 end

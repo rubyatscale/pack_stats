@@ -7,35 +7,17 @@ on:
   pull_request:
 
 jobs:
-  rspec:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby:
-          - '3.3'
-          - '3.4'
-          - '4.0'
-    env:
-      BUNDLE_GEMFILE: Gemfile
-    name: "RSpec tests: Ruby ${{ matrix.ruby }}"
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Ruby ${{ matrix.ruby }}
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          ruby-version: ${{ matrix.ruby }}
-      - name: Run tests
-        run: bundle exec rspec
-  static_type_check:
-    name: "Type Check"
+  call-workflow-from-shared-config:
+    uses: rubyatscale/shared-config/.github/workflows/ci.yml@main
+    secrets: inherit
+  rubyfmt:
+    name: "Rubyfmt"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          ruby-version: '4.0'
-      - name: Run static type checks
-        run: bundle exec srb tc
+      - uses: actions/checkout@v7
+      - name: Install rubyfmt
+        run: |
+          curl -sL "https://github.com/fables-tales/rubyfmt/releases/download/v0.14.1/rubyfmt-v0.14.1-Linux-x86_64.tar.gz" | tar xz
+          sudo install -m 755 tmp/releases/v0.14.1-Linux/rubyfmt /usr/local/bin/rubyfmt
+      - name: Check formatting
+        run: rubyfmt --check lib/ spec/ Rakefile pack_stats.gemspec Gemfile
