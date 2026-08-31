@@ -18,9 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Install rubyfmt
-        run: |
-          curl -sL "https://github.com/fables-tales/rubyfmt/releases/download/v0.14.1/rubyfmt-v0.14.1-Linux-x86_64.tar.gz" | tar xz
-          sudo install -m 755 tmp/releases/v0.14.1-Linux/rubyfmt /usr/local/bin/rubyfmt
-      - name: Check formatting
-        run: rubyfmt --check lib/ spec/ Rakefile pack_stats.gemspec Gemfile
+      - name: Rubyfmt
+        uses: rubyatscale/rubyfmt-action@v1
+        with:
+          paths: |
+            lib/
+            spec/
+            Rakefile
+            pack_stats.gemspec
+            Gemfile
