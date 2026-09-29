@@ -11,15 +11,17 @@ permissions:
 
 jobs:
   call-workflow-from-shared-config:
-    uses: rubyatscale/shared-config/.github/workflows/ci.yml@main
+    uses: rubyatscale/shared-config/.github/workflows/ci.yml@main # zizmor: ignore[unpinned-uses,secrets-inherit] internal reusable workflow tracked at @main by convention so shared-config updates propagate automatically; its ci.yml reads SLACK_WEBHOOK_URL but declares no workflow_call secrets, so inherit is the only way to pass it
     secrets: inherit
   rubyfmt:
     name: "Rubyfmt"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Rubyfmt
-        uses: rubyatscale/rubyfmt-action@v1
+        uses: rubyatscale/rubyfmt-action@cf0cfc65bb8cab4c628ffea8662892598a48d6d3 # v1.0.0
         with:
           paths: |
             lib/
