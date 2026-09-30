@@ -1,13 +1,12 @@
 PATH
   remote: .
   specs:
-    pack_stats (0.2.1)
+    pack_stats (0.2.2)
       code_ownership
       code_teams
       dogapi
       packs
       parse_packwerk
-      rubocop-packs
       sorbet-runtime
 
 GEM
@@ -186,15 +185,6 @@ GEM
       rubocop-sorbet (>= 0.13.0)
       smart_todo
       thor
-    rubocop-packs (0.0.45)
-      activesupport
-      base64
-      bigdecimal
-      packs-specification
-      parse_packwerk
-      rubocop (~> 1.0)
-      rubocop-sorbet (>= 0.8.4)
-      sorbet-runtime
     rubocop-performance (1.27.0)
       lint_roller (~> 1.1)
       rubocop (>= 1.89.0, < 2.0)
