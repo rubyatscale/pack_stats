@@ -1,8 +1,6 @@
 # typed: strict
 # frozen_string_literal: true
 
-require "rubocop-packs"
-
 module PackStats
   module Private
     module Metrics
